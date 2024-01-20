@@ -6,6 +6,7 @@ import { LoginWithGoogle } from "./pages/LoginWithGoogle";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { supabase } from "./supabase/config";
 import Navbar from "./pages/Navbar";
+import Footer from "./pages/Footer";
 
 const App = () => {
   const navigate = useNavigate();
@@ -35,6 +36,7 @@ const App = () => {
       // subscription.uns
     };
   }, [navigate]);
+  
 
   return (
     <>
@@ -45,6 +47,7 @@ const App = () => {
         <Route element={<DoctorSignup />} path="/doctor" />
         <Route element={<Details />} path="/details" />
       </Routes>
+      <Footer />
     </>
   );
 };

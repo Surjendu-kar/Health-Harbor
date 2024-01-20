@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../supabase/config";
 import { useNavigate } from "react-router-dom";
 import { User } from "@supabase/supabase-js";
+import { Box } from "@mui/material";
 
 function Home() {
   const [user, setUser] = useState<User | null>(null);
@@ -29,22 +30,12 @@ function Home() {
   }, [user, navigate]);
 
   console.log(user);
-  
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
-  };
 
   return (
-    <div>
-      {user && (
-        <div>
-          <img src={user.user_metadata?.avatar_url} alt="" />
-          <button onClick={handleLogout}>Logout</button>
-        </div>
-      )}
+    <Box height={"100vh"}>
+      {user && <Box></Box>}
       Home
-    </div>
+    </Box>
   );
 }
 

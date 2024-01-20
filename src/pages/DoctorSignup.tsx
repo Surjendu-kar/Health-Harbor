@@ -17,6 +17,7 @@ import { ButtonProps } from "@mui/material/Button";
 import Qualification from "../components/Qualification";
 import Experiences from "../components/Experiences";
 import TimeSlot from "../components/TimeSlot";
+import { useNavigate } from "react-router-dom";
 
 const ProfileTitle = styled("h1")(() => ({
   margin: 0,
@@ -71,6 +72,8 @@ function DoctorSignup() {
 
     getUser();
   }, []);
+
+ 
 
   return (
     <MainContainer>
@@ -189,7 +192,7 @@ function DoctorSignup() {
           </Box>
           <Typography sx={{ fontSize: "0.9rem" }}>About</Typography>
           <TextField fullWidth></TextField>
-          
+
           <button type="submit">Submit</button>
         </form>
       </Info>

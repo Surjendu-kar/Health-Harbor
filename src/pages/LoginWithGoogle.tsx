@@ -63,13 +63,8 @@ export function LoginWithGoogle() {
 
   return (
     <>
-      {!user ? (
+      {!user && (
         <button onClick={handleLoginWithGoogle}>Login with Google</button>
-      ) : (
-        <div>
-          <img src={user.user_metadata?.avatar_url} alt="" />
-          <button onClick={handleLogout}>Logout</button>
-        </div>
       )}
 
       {user && !selectedRole && (

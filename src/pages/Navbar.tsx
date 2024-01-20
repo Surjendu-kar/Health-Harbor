@@ -1,17 +1,21 @@
-import { Typography, Box, Avatar } from "@mui/material";
+import { Typography, Box, Avatar, Button } from "@mui/material";
 import { styled } from "@mui/system";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { supabase } from "../supabase/config";
+import { User } from "@supabase/supabase-js";
+import LottieAnimation from "../components/LottieAnimation";
 
 const NavContainer = styled(Box)(() => ({
   display: "flex",
   justifyContent: "space-around",
-  alignItems: "center", // Ensure vertical alignment
+  alignItems: "center",
   marginTop: "1rem",
   marginBottom: "2rem",
 }));
 
 const Logo = styled(Typography)(() => ({
-    // fontSize
+  // fontSize
 }));
 
 const StyledLink = styled(Link)(({ theme }) => ({
@@ -25,10 +29,30 @@ const StyledAvatar = styled(Avatar)(() => ({
 }));
 
 const Navbar = () => {
+  const [user, setUser] = useState<User | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUser(user);
+    };
+
+    getUser();
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+  };
+
   return (
     <NavContainer>
-      <Box>
-        <Logo>All in One Healthcare</Logo>
+      <Box sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
+        <LottieAnimation />
+        <Logo onClick={() => navigate("/")}>All in One Healthcare</Logo>
       </Box>
       <Box>
         <StyledLink to="/">Home</StyledLink>
@@ -37,8 +61,21 @@ const Navbar = () => {
         <StyledLink to="">Contact</StyledLink>
       </Box>
 
-      <Box component={Link} to={"/doctor"}>
-        <StyledAvatar src="/broken-image.jpg" />
+      <Box
+        component={Link}
+        to={"/doctor"}
+        sx={{ display: "flex", alignItems: "center", gap: 4 }}
+      >
+        <StyledAvatar src={user?.user_metadata?.avatar_url} />
+        {user && (
+          <Typography
+            onClick={handleLogout}
+            variant="p"
+            sx={{ textDecoration: "none" }}
+          >
+            Logout
+          </Typography>
+        )}
       </Box>
     </NavContainer>
   );
