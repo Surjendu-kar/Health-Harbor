@@ -71,11 +71,13 @@ const Navbar = () => {
         />
         {user && (
           <>
-            <Typography variant="h4" sx={{ fontFamily: "none" }}>/</Typography>
+            <Typography variant="h4" sx={{ fontFamily: "none" }}>
+              /
+            </Typography>
             <Typography
               onClick={handleLogout}
               variant="p"
-              sx={{ textDecoration: "none", color: "#000" }}
+              sx={{ textDecoration: "none", color: "#000", cursor: "pointer" }}
             >
               Logout
             </Typography>
