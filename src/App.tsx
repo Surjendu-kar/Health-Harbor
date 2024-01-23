@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import Details from "./pages/Details";
 import ProfileDetails from "./pages/profile/ProfileDetails";
 import Home from "./pages/homePage/Home";
-import { LoginWithGoogle } from "./pages/LoginWithGoogle";
+import { LoginWithGoogle } from "./pages/loginPage/LoginWithGoogle";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { supabase } from "./supabase/config";
 import Navbar from "./components/header/Navbar";

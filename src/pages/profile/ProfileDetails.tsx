@@ -270,7 +270,7 @@ function ProfileDetails() {
               sx={{ marginTop: 0 }}
             />
           </SelectOption>
-          {/* </NameBox> */}
+
           {/* Qualification Section */}
           <Box>
             <ColorButton onClick={handleAddQualification} variant="contained">
@@ -286,6 +286,7 @@ function ProfileDetails() {
               />
             ))}
           </Box>
+          
           {/* Experience Section */}
           <Box>
             <ColorButton onClick={handleAddExperience} variant="contained">
