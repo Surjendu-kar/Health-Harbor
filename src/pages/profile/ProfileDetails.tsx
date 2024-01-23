@@ -15,7 +15,7 @@ import {
 import { purple } from "@mui/material/colors";
 import { ButtonProps } from "@mui/material/Button";
 import Qualification from "../../components/qualification/Qualification";
-import Experiences from "../../components/experiences/Experiences";
+import Experiences from "../../components/Experiences/Experiences";
 import TimeSlot from "../../components/timesolt/TimeSlot";
 import Sidebar from "./sidebar/Sidebar";
 
@@ -323,7 +323,7 @@ function ProfileDetails() {
             type="submit"
             variant="contained"
             color="primary"
-            // disabled={!isFormValid}
+          // disabled={!isFormValid}
           >
             Submit
           </ColorButton>
