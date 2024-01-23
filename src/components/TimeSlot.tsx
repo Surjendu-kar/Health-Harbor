@@ -51,6 +51,7 @@ function TimeSlot() {
             label="Day"
             value={day}
             onChange={(e) => setDay(e.target.value)}
+            sx={{ backgroundColor: "#fff" }}
           >
             <MenuItem value="sunday">Sunday</MenuItem>
             <MenuItem value="monday">Monday</MenuItem>
@@ -72,6 +73,7 @@ function TimeSlot() {
             value={startTime}
             onChange={handleStartTimeChange}
             renderInput={(props) => <TextField {...props} />}
+            sx={{ backgroundColor: "#fff" }}
           />
         </Box>
 
@@ -82,6 +84,7 @@ function TimeSlot() {
             value={endTime}
             onChange={handleEndTimeChange}
             renderInput={(props) => <TextField {...props} />}
+            sx={{ backgroundColor: "#fff" }}
           />
         </Box>
       </LocalizationProvider>

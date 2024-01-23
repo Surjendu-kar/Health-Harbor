@@ -12,17 +12,21 @@ const NavContainer = styled(Box)(() => ({
   alignItems: "center",
   paddingTop: "0.5rem",
   paddingBottom: "0.5rem",
-  backgroundColor: "#f0eeea",
-}));
-
-const Logo = styled(Typography)(() => ({
-  // fontSize
+  backgroundColor: "#929dff",
 }));
 
 const StyledLink = styled(Link)(({ theme }) => ({
   margin: theme.spacing(0, 2),
   textDecoration: "none",
   color: "#000",
+  fontSize: "17px",
+
+  transition: "color 0.3s ease-in-out, font-size 0.3s ease-in-out",
+
+  "&:hover": {
+    color: "#fff",
+    fontSize: "19px",
+  },
 }));
 
 const StyledAvatar = styled(Avatar)(() => ({
@@ -32,7 +36,6 @@ const StyledAvatar = styled(Avatar)(() => ({
 
 const Navbar = () => {
   const [user, setUser] = useState<User | null>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const getUser = async () => {
@@ -54,7 +57,7 @@ const Navbar = () => {
     <NavContainer>
       <Box sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
         <LottieAnimation />
-        <Logo onClick={() => navigate("/")}>All in One Healthcare</Logo>
+        <StyledLink to="/">All in One Healthcare</StyledLink>
       </Box>
       <Box>
         <StyledLink to="/">Home</StyledLink>
@@ -77,7 +80,12 @@ const Navbar = () => {
             <Typography
               onClick={handleLogout}
               variant="p"
-              sx={{ textDecoration: "none", color: "#000", cursor: "pointer" }}
+              sx={{
+                textDecoration: "none",
+                color: "#000",
+                cursor: "pointer",
+                fontSize: "17px",
+              }}
             >
               Logout
             </Typography>

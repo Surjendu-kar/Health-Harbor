@@ -15,8 +15,9 @@ import {
 import { purple } from "@mui/material/colors";
 import { ButtonProps } from "@mui/material/Button";
 import Qualification from "../components/Qualification";
-import Experiences from "../components/Experiences";
+import Experiences from "../components/Experiences/Experiences";
 import TimeSlot from "../components/TimeSlot";
+import Sidebar from "../components/Sidebar";
 
 const ProfileTitle = styled("h1")(() => ({
   margin: 0,
@@ -28,7 +29,7 @@ const ProfileTitle = styled("h1")(() => ({
 const MainContainer = styled(Box)(() => ({
   width: "100%",
   display: "flex",
-  justifyContent: "space-around",
+  justifyContent: "center",
   marginTop: "2rem",
 }));
 
@@ -37,22 +38,40 @@ const Info = styled(Box)(() => ({
 }));
 
 const TitleTextField = styled(TextField)(() => ({
-  marginBottom: "1.5rem",
+  marginTop: "1.5rem",
   display: "block",
+  backgroundColor: "#fff",
 }));
 
 const SelectOption = styled(Box)(() => ({
   display: "flex",
+  marginTop: "1.5rem",
   gap: 10,
 }));
 
 const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
+  boxShadow: "1px 4px 8px rgba(0, 0, 0, 0.3)", 
+
   color: theme.palette.getContrastText(purple[500]),
-  backgroundColor: purple[500],
+  backgroundColor: '#6a79ff',
   "&:hover": {
-    backgroundColor: purple[700],
+    backgroundColor: '#5162ff',
   },
+  marginTop: "1.5rem",
 }));
+
+interface IQualification {
+  startDate?: string;
+  endDate?: string;
+  degree?: string;
+  university?: string;
+}
+interface IExperience {
+  startDate?: string;
+  endDate?: string;
+  position?: string;
+  hospital?: string;
+}
 
 function DoctorSignup() {
   const [user, setUser] = useState<User | null>(null);
@@ -63,9 +82,11 @@ function DoctorSignup() {
   const [price, setPrice] = useState("");
   const [gender, setGender] = useState("");
   const [specialization, setSpecialization] = useState("");
-  const [qualifications, setQualifications] = useState([]);
-  const [experiences, setExperiences] = useState([]);
+  const [qualifications, setQualifications] = useState<IQualification[]>([]);
+  const [experiences, setExperiences] = useState<IExperience[]>([]);
   const [timeSlot, setTimeSlot] = useState(null);
+  const [about, setAbout] = useState("");
+
   const [isFormValid, setIsFormValid] = useState(false);
 
   useEffect(() => {
@@ -119,9 +140,27 @@ function DoctorSignup() {
     setQualifications([...qualifications, {}]); // Update with a new default qualification object
   };
 
+  const handleQualificationChange = (
+    index: number,
+    qualificationData: IQualification
+  ) => {
+    const newQualifications = [...qualifications];
+    newQualifications[index] = qualificationData;
+    setQualifications(newQualifications);
+  };
+
   // Handler for adding a new experience
   const handleAddExperience = () => {
     setExperiences([...experiences, {}]); // Update with a new default experience object
+  };
+
+  const handleExperienceChange = (
+    index: number,
+    experienceData: IExperience
+  ) => {
+    const newExperiences = [...experiences];
+    newExperiences[index] = experienceData;
+    setExperiences(newExperiences);
   };
 
   // Handler for setting a new time slot
@@ -133,6 +172,9 @@ function DoctorSignup() {
 
   return (
     <MainContainer>
+      {/* <Box> */}
+      <Sidebar />
+      {/* </Box> */}
       <Info>
         <ProfileTitle>Profile Information</ProfileTitle>
         <form onSubmit={handleSubmit}>
@@ -164,7 +206,11 @@ function DoctorSignup() {
             onChange={handlePhoneChange}
             fullWidth
           />
-          {phoneError && <div style={{ color: "red" }}>{phoneError}</div>}
+          {phoneError && (
+            <Typography variant="inherit" sx={{ color: "red" }}>
+              {phoneError}
+            </Typography>
+          )}
           <TitleTextField
             required
             value={bio}
@@ -184,6 +230,7 @@ function DoctorSignup() {
                 value={gender}
                 label="gender"
                 onChange={(e) => setGender(e.target.value)}
+                sx={{ backgroundColor: "#fff" }}
               >
                 <MenuItem value="male">Male</MenuItem>
                 <MenuItem value="female">Female</MenuItem>
@@ -201,6 +248,7 @@ function DoctorSignup() {
                 value={specialization}
                 label="specialization"
                 onChange={(e) => setSpecialization(e.target.value)}
+                sx={{ backgroundColor: "#fff" }}
               >
                 <MenuItem value="cardiology">Cardiology</MenuItem>
                 <MenuItem value="dentist">Dentist</MenuItem>
@@ -219,42 +267,44 @@ function DoctorSignup() {
               label="Ticket Price"
               fullWidth
               onChange={(e) => setPrice(e.target.value)}
+              sx={{ marginTop: 0 }}
             />
           </SelectOption>
           {/* </NameBox> */}
           {/* Qualification Section */}
           <Box>
-            <ColorButton
-              onClick={handleAddQualification}
-              variant="contained"
-              sx={{ mb: 2 }}
-            >
+            <ColorButton onClick={handleAddQualification} variant="contained">
               Add Qualification
             </ColorButton>
             {qualifications.map((qualification, index) => (
-              <Qualification key={index} />
+              <Qualification
+                key={index}
+                qualification={qualification}
+                onQualificationChange={(qualificationData) =>
+                  handleQualificationChange(index, qualificationData)
+                }
+              />
             ))}
           </Box>
           {/* Experience Section */}
           <Box>
-            <ColorButton
-              onClick={handleAddExperience}
-              variant="contained"
-              sx={{ mb: 2 }}
-            >
+            <ColorButton onClick={handleAddExperience} variant="contained">
               Add Experience
             </ColorButton>
             {experiences.map((experience, index) => (
-              <Experiences key={index} />
+              <Experiences
+                key={index}
+                experience={experience}
+                onExperienceChange={(experienceData) =>
+                  handleExperienceChange(index, experienceData)
+                }
+              />
             ))}
           </Box>
+
           {/* TimeSlot Section */}
           <Box>
-            <ColorButton
-              onClick={handleSetTimeSlot}
-              variant="contained"
-              sx={{ mb: 2 }}
-            >
+            <ColorButton onClick={handleSetTimeSlot} variant="contained">
               Set TimeSlot
             </ColorButton>
             {timeSlot && <TimeSlot />}
@@ -263,14 +313,17 @@ function DoctorSignup() {
           <Typography sx={{ fontSize: "0.9rem", marginTop: "1rem" }}>
             About
           </Typography>
-          <TextField fullWidth></TextField>
+          <TextField
+            fullWidth
+            onChange={(e) => setAbout(e.target.value)}
+            sx={{ backgroundColor: "#fff" }}
+          ></TextField>
 
           <ColorButton
             type="submit"
             variant="contained"
             color="primary"
-            disabled={!isFormValid}
-            sx={{ marginTop: "1rem" }}
+            // disabled={!isFormValid}
           >
             Submit
           </ColorButton>

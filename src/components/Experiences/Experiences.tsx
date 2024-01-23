@@ -8,32 +8,28 @@ const TitleTextField = styled(TextField)(() => ({
   display: "block",
   backgroundColor: "#fff",
 }));
-
 const Text = styled(Typography)(() => ({
   margin: "1.5rem 0 0.5rem 0",
   fontSize: "0.9rem",
 }));
-
-interface IQualification {
+interface IExperience {
   startDate?: string;
   endDate?: string;
-  degree?: string;
-  university?: string;
-}
-interface IQualificationProps {
-  qualification: IQualification;
-  onQualificationChange: (qualification: IQualification) => void;
+  position?: string;
+  hospital?: string;
 }
 
-function Qualification({
-  qualification,
-  onQualificationChange,
-}: IQualificationProps) {
-  const handleFieldChange = (field, value) => {
-    onQualificationChange({ ...qualification, [field]: value });
+interface IExperienceProps {
+  experience: IExperience;
+  onExperienceChange: (experience: IExperience) => void;
+}
+
+function Experiences({ experience, onExperienceChange }: IExperienceProps) {
+  const handleFieldChange = (field: keyof IExperience, value: string) => {
+    onExperienceChange({ ...experience, [field]: value });
   };
 
-  const handleDateChange = (field, date) => {
+  const handleDateChange = (field: keyof IExperience, date: Dayjs | null) => {
     handleFieldChange(field, date ? date.format("YYYY-MM-DD") : "");
   };
 
@@ -43,7 +39,7 @@ function Qualification({
         <Text>Starting Date</Text>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
-            value={qualification.startDate}
+            value={experience.startDate}
             onChange={(newDate) => handleDateChange("startDate", newDate)}
             renderInput={(params) => <TitleTextField {...params} />}
             sx={{ backgroundColor: "#fff" }}
@@ -54,38 +50,37 @@ function Qualification({
         <Text>Ending Date</Text>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
-            value={qualification.endDate}
+            value={experience.endDate}
             onChange={(newDate) => handleDateChange("endDate", newDate)}
             renderInput={(params) => <TitleTextField {...params} />}
             sx={{ backgroundColor: "#fff" }}
           />
         </LocalizationProvider>
       </Box>
-
       <Box>
-        <Text>Degree</Text>
+        <Text>Position</Text>
         <TitleTextField
           required
-          value={qualification.degree || ""}
-          id="degree"
-          label="required"
+          value={experience.position || ""}
+          id="position"
+          label="Position"
           fullWidth
-          onChange={(e) => handleFieldChange("degree", e.target.value)}
+          onChange={(e) => handleFieldChange("position", e.target.value)}
         />
       </Box>
       <Box>
-        <Text>University</Text>
+        <Text>Hospital</Text>
         <TitleTextField
           required
-          value={qualification.university || ""}
-          id="university"
-          label="required"
+          value={experience.hospital || ""}
+          id="hospital"
+          label="Hospital"
           fullWidth
-          onChange={(e) => handleFieldChange("university", e.target.value)}
+          onChange={(e) => handleFieldChange("hospital", e.target.value)}
         />
       </Box>
     </Box>
   );
 }
 
-export default Qualification;
+export default Experiences;
