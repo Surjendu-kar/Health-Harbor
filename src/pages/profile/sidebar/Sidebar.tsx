@@ -44,7 +44,7 @@ const DeleteAc = styled(TextStyle)(() => ({
   },
 }));
 
-function Sidebar() {
+function Sidebar({ onMenuSelect }) {
   const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
   useEffect(() => {
@@ -61,15 +61,17 @@ function Sidebar() {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     setUser(null);
-    navigate("./login");
+    navigate("/");
   };
 
   return (
     <MainContainer>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
-        <TextStyle>Overview</TextStyle>
-        <TextStyle>Appointments</TextStyle>
-        <TextStyle>Profile</TextStyle>
+        <TextStyle onClick={() => onMenuSelect("overview")}>Overview</TextStyle>
+        <TextStyle onClick={() => onMenuSelect("appointments")}>
+          Appointments
+        </TextStyle>
+        <TextStyle onClick={() => onMenuSelect("profile")}>Profile</TextStyle>
       </Box>
       <Box sx={{ display: "flex", flexDirection: "column", mt: "2rem" }}>
         {user && <LogOut onClick={handleLogout}>Logout</LogOut>}

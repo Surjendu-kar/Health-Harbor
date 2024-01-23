@@ -72,25 +72,6 @@ const Navbar = () => {
           to={"/profile"}
           src={user?.user_metadata?.avatar_url}
         />
-        {user && (
-          <>
-            <Typography variant="h4" sx={{ fontFamily: "none" }}>
-              /
-            </Typography>
-            <Typography
-              onClick={handleLogout}
-              variant="p"
-              sx={{
-                textDecoration: "none",
-                color: "#000",
-                cursor: "pointer",
-                fontSize: "17px",
-              }}
-            >
-              Logout
-            </Typography>
-          </>
-        )}
       </Box>
     </NavContainer>
   );
