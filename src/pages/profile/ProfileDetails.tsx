@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../supabase/config";
+import { supabase } from "../../supabase/config";
 import { User } from "@supabase/supabase-js";
 import {
   Box,
@@ -14,10 +14,10 @@ import {
 } from "@mui/material";
 import { purple } from "@mui/material/colors";
 import { ButtonProps } from "@mui/material/Button";
-import Qualification from "../components/Qualification";
-import Experiences from "../components/Experiences/Experiences";
-import TimeSlot from "../components/TimeSlot";
-import Sidebar from "../components/Sidebar";
+import Qualification from "../../components/qualification/Qualification";
+import Experiences from "../../components/experiences/Experiences";
+import TimeSlot from "../../components/timesolt/TimeSlot";
+import Sidebar from "./sidebar/Sidebar";
 
 const ProfileTitle = styled("h1")(() => ({
   margin: 0,
@@ -50,12 +50,12 @@ const SelectOption = styled(Box)(() => ({
 }));
 
 const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
-  boxShadow: "1px 4px 8px rgba(0, 0, 0, 0.3)", 
+  boxShadow: "1px 4px 8px rgba(0, 0, 0, 0.3)",
 
   color: theme.palette.getContrastText(purple[500]),
-  backgroundColor: '#6a79ff',
+  backgroundColor: "#6a79ff",
   "&:hover": {
-    backgroundColor: '#5162ff',
+    backgroundColor: "#5162ff",
   },
   marginTop: "1.5rem",
 }));
@@ -73,7 +73,7 @@ interface IExperience {
   hospital?: string;
 }
 
-function DoctorSignup() {
+function ProfileDetails() {
   const [user, setUser] = useState<User | null>(null);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -333,4 +333,4 @@ function DoctorSignup() {
   );
 }
 
-export default DoctorSignup;
+export default ProfileDetails;

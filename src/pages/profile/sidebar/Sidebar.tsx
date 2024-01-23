@@ -1,6 +1,6 @@
 import { Box, Typography, styled } from "@mui/material";
 import { useEffect, useState } from "react";
-import { supabase } from "../supabase/config";
+import { supabase } from "../../../supabase/config";
 import { User } from "@supabase/supabase-js";
 import { useNavigate } from "react-router-dom";
 
@@ -11,7 +11,7 @@ const MainContainer = styled(Box)(() => ({
   borderRadius: "10px",
   backgroundColor: "white",
   textAlign: "center",
-  boxShadow: "1px 4px 8px rgba(0, 0, 0, 0.1)", 
+  boxShadow: "1px 4px 8px rgba(0, 0, 0, 0.1)",
 }));
 
 const TextStyle = styled(Typography)(() => ({

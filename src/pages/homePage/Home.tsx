@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../supabase/config";
+import { supabase } from "../../supabase/config";
 import { useNavigate } from "react-router-dom";
 import { User } from "@supabase/supabase-js";
 import { Box } from "@mui/material";

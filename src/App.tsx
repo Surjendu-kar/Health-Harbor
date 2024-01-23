@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import Details from "./pages/Details";
-import DoctorSignup from "./pages/DoctorSignup";
-import Home from "./pages/Home";
+import ProfileDetails from "./pages/profile/ProfileDetails";
+import Home from "./pages/homePage/Home";
 import { LoginWithGoogle } from "./pages/LoginWithGoogle";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { supabase } from "./supabase/config";
-import Navbar from "./pages/Navbar";
-import Footer from "./pages/Footer";
+import Navbar from "./components/header/Navbar";
+import Footer from "./components/footer/Footer";
 
 const App = () => {
   const navigate = useNavigate();
@@ -36,7 +36,6 @@ const App = () => {
       // subscription.uns
     };
   }, [navigate]);
-  
 
   return (
     <>
@@ -44,7 +43,7 @@ const App = () => {
       <Routes>
         <Route element={<Home />} path="/" />
         <Route element={<LoginWithGoogle />} path="/login" />
-        <Route element={<DoctorSignup />} path="/doctor" />
+        <Route element={<ProfileDetails />} path="/profile" />
         <Route element={<Details />} path="/details" />
       </Routes>
       <Footer />

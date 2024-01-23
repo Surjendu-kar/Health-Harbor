@@ -2,9 +2,9 @@ import { Typography, Box, Avatar } from "@mui/material";
 import { styled } from "@mui/system";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { supabase } from "../supabase/config";
+import { supabase } from "../../supabase/config";
 import { User } from "@supabase/supabase-js";
-import LottieAnimation from "../components/LottieAnimation";
+import LottieAnimation from "../lottieAnimation/LottieAnimation";
 
 const NavContainer = styled(Box)(() => ({
   display: "flex",
@@ -69,7 +69,7 @@ const Navbar = () => {
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
         <StyledAvatar
           component={Link}
-          to={"/doctor"}
+          to={"/profile"}
           src={user?.user_metadata?.avatar_url}
         />
         {user && (

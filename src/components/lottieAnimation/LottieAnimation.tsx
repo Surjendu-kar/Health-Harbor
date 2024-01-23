@@ -1,6 +1,6 @@
 import { useRef, useEffect } from "react";
 import Lottie from "lottie-web";
-import animationData from "../assets/Animation - 1705777251875.json";
+import animationData from "../../assets/Animation - 1705777251875.json";
 import { AnimationItem } from "lottie-web";
 
 const LottieAnimation = () => {
