@@ -6,11 +6,7 @@ import defaultImg from "../../../assets/defaultImg.jpg";
 
 const MainContainer = styled(Box)(() => ({
   width: "50%",
-  marginTop: "2rem",
-}));
-const ImgName = styled(Box)(() => ({
-  width: "50%",
-  marginTop: "2rem",
+  margin: "2rem 0",
 }));
 
 const Img = styled("img")(() => ({
@@ -38,11 +34,7 @@ function OverView() {
       {/* Img & Name */}
       <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
         {/* Img */}
-        <Img
-          // src={user?.user_metadata?.avatar_url || defaultImg}
-          src={defaultImg}
-          alt="uimg"
-        />
+        <Img src={user?.user_metadata?.avatar_url || defaultImg} alt="uimg" />
         <Box>
           {/* Name */}
           <Typography>{user?.user_metadata?.full_name}</Typography>
