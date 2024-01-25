@@ -11,20 +11,20 @@ const NavContainer = styled(Box)(() => ({
   justifyContent: "space-around",
   alignItems: "center",
   padding: "0.5rem 0",
-  backgroundColor: "#929dff",
+  backgroundColor: "#1D2B53",
 }));
 
 const StyledLink = styled(Link)(({ theme }) => ({
   margin: theme.spacing(0, 2),
   textDecoration: "none",
-  color: "#000",
+  color: "#fff",
   fontSize: "17px",
+  letterSpacing: "1.5px",
 
   transition: "color 0.3s ease-in-out, font-size 0.3s ease-in-out",
 
   "&:hover": {
-    color: "#fff",
-    fontSize: "19px",
+    fontSize: "20px",
   },
 }));
 
@@ -45,13 +45,15 @@ const Navbar = () => {
     };
 
     getUser();
-  }, []);
+  }, [user]);
 
   return (
     <NavContainer>
       <Box sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
         <LottieAnimation />
-        <StyledLink to="/">All in One Healthcare</StyledLink>
+        <StyledLink to="/" sx={{ fontSize: "19px", margin: "0" }}>
+          All in One Healthcare
+        </StyledLink>
       </Box>
       <Box>
         <StyledLink to="/">Home</StyledLink>
@@ -60,13 +62,15 @@ const Navbar = () => {
         <StyledLink to="">Contact</StyledLink>
       </Box>
 
-      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-        <StyledAvatar
-          component={Link}
-          to={"/profile"}
-          src={user?.user_metadata?.avatar_url}
-        />
-      </Box>
+      {user && (
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <StyledAvatar
+            component={Link}
+            to={"/profile"}
+            src={user?.user_metadata?.avatar_url}
+          />
+        </Box>
+      )}
     </NavContainer>
   );
 };

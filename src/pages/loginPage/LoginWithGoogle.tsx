@@ -51,7 +51,7 @@ export function LoginWithGoogle() {
       if (selectedRole === "User") {
         navigate("/");
       } else if (selectedRole === "Doctor") {
-        navigate("/doctor");
+        navigate("/profile");
       }
     }
   }, [user, selectedRole, navigate]);

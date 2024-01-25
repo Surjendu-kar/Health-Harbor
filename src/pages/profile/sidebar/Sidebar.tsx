@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 const MainContainer = styled(Box)(() => ({
   margin: "2rem 5rem",
   padding: "2rem",
-  height: "20rem",
+  maxHeight: "20rem",
   borderRadius: "10px",
   backgroundColor: "white",
   textAlign: "center",
@@ -20,7 +20,7 @@ const TextStyle = styled(Typography)(() => ({
   borderRadius: "5px",
   transition: "background-color 0.3s",
   "&:hover": {
-    backgroundColor: "#8793ff",
+    backgroundColor: "#4e5d8e",
     color: "#fff",
   },
 }));
@@ -73,10 +73,12 @@ function Sidebar({ onMenuSelect }) {
         </TextStyle>
         <TextStyle onClick={() => onMenuSelect("profile")}>Profile</TextStyle>
       </Box>
-      <Box sx={{ display: "flex", flexDirection: "column", mt: "2rem" }}>
-        {user && <LogOut onClick={handleLogout}>Logout</LogOut>}
-        <DeleteAc>Delete Account</DeleteAc>
-      </Box>
+      {user && (
+        <Box sx={{ display: "flex", flexDirection: "column", mt: "2rem" }}>
+          <LogOut onClick={handleLogout}>Logout</LogOut>
+          <DeleteAc>Delete Account</DeleteAc>
+        </Box>
+      )}
     </MainContainer>
   );
 }
