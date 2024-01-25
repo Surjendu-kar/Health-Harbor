@@ -44,7 +44,7 @@ function Footer() {
           <Title>
             The primary objective of a consultant is to use expert knowledge and
             skill to diagnose and treat patients while retaining ultimate
-            clinical responsibility for their care. We are EasyDoc here for help
+            clinical responsibility for their care. We are 'All in One Healthcare' here for help
             you.
           </Title>
         </Container>
