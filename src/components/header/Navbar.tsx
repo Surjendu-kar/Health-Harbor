@@ -1,7 +1,7 @@
-import { Typography, Box, Avatar } from "@mui/material";
+import { Box, Avatar } from "@mui/material";
 import { styled } from "@mui/system";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { supabase } from "../../supabase/config";
 import { User } from "@supabase/supabase-js";
 import LottieAnimation from "../lottieAnimation/LottieAnimation";
@@ -10,8 +10,7 @@ const NavContainer = styled(Box)(() => ({
   display: "flex",
   justifyContent: "space-around",
   alignItems: "center",
-  paddingTop: "0.5rem",
-  paddingBottom: "0.5rem",
+  padding: "0.5rem 0",
   backgroundColor: "#929dff",
 }));
 
@@ -47,11 +46,6 @@ const Navbar = () => {
 
     getUser();
   }, []);
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
-  };
 
   return (
     <NavContainer>

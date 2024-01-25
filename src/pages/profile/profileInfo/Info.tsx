@@ -27,6 +27,7 @@ const ProfileTitle = styled("h1")(() => ({
 
 const MainContainer = styled(Box)(() => ({
   width: "50%",
+  margin: "2rem 0",
 }));
 
 const TitleTextField = styled(TextField)(() => ({
