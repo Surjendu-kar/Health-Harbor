@@ -15,7 +15,9 @@ const Img = styled("img")(() => ({
 const Contain = styled(Typography)(() => ({
   margin: "1rem 0",
 }));
-
+const Title = styled(Typography)(() => ({
+  fontSize: "1.1rem",
+}));
 type DoctorInfo = {
   id: number;
   name: string;
@@ -58,18 +60,18 @@ function OverView({
         <Box>
           {/* About */}
           <Contain>
-            <Typography>About of {user?.user_metadata?.full_name}</Typography>
+            <Title>About of {user?.user_metadata?.full_name}</Title>
             <Typography>{fetchedData.about}</Typography>
           </Contain>
 
           {/* Education */}
           <Contain>
-            <Typography>Education</Typography>
+            <Title>Education</Title>
           </Contain>
 
           {/* Experience */}
           <Contain>
-            <Typography>Experience</Typography>
+            <Title>Experience</Title>
           </Contain>
         </Box>
       )}
