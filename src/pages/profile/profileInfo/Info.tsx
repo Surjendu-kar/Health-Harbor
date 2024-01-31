@@ -17,6 +17,8 @@ import { supabase } from "../../../supabase/config";
 import Qualification from "../../../components/qualification/Qualification";
 import Experiences from "../../../components/Experiences/Experiences";
 import TimeSlot from "../../../components/timesolt/TimeSlot";
+import InsertData from "../../../supabase/InsertData";
+import FetchData from "../../../supabase/FetchData";
 
 const ProfileTitle = styled("h1")(() => ({
   margin: 0,
@@ -65,6 +67,20 @@ interface IExperience {
   position?: string;
   hospital?: string;
 }
+type DoctorInfo = {
+  id: number;
+  name: string;
+  email: string;
+  phoneNo: string;
+  bio: string;
+  gender: string;
+  specialization: string;
+  price: number;
+  qualifications: string[];
+  experiences: string[];
+  timeSlot: string[];
+  about: string;
+};
 
 function Info() {
   const [user, setUser] = useState<User | null>(null);
@@ -77,8 +93,9 @@ function Info() {
   const [specialization, setSpecialization] = useState("");
   const [qualifications, setQualifications] = useState<IQualification[]>([]);
   const [experiences, setExperiences] = useState<IExperience[]>([]);
-  const [timeSlot, setTimeSlot] = useState(null);
+  const [timeSlots, setTimeSlots] = useState([]);
   const [about, setAbout] = useState("");
+  const [fetchedData, setFetchedData] = useState<DoctorInfo | null>(null);
 
   const [isFormValid, setIsFormValid] = useState(false);
 
@@ -95,7 +112,7 @@ function Info() {
 
   useEffect(() => {
     checkFormValidity();
-  }, [phone, qualifications, experiences, timeSlot]);
+  }, [phone, qualifications, experiences, timeSlots]);
 
   const handlePhoneChange = (e) => {
     const value = e.target.value;
@@ -110,7 +127,7 @@ function Info() {
       phone.length === 10 &&
       qualifications.length > 0 &&
       experiences.length > 0 &&
-      timeSlot !== null;
+      timeSlots !== null;
     setIsFormValid(isValid);
   };
 
@@ -118,16 +135,42 @@ function Info() {
     event.preventDefault();
     if (!isFormValid) return;
 
-    console.log("Name:", name);
-    console.log("Phone:", phone);
-    console.log("Bio:", bio);
-    console.log("Price:", price);
-    console.log("Gender:", gender);
-    console.log("Specialization:", specialization);
-    console.log("Qualifications:", qualifications);
-    console.log("Experiences:", experiences);
-    console.log("TimeSlot:", timeSlot);
+    const newDoctor = {
+      name: name,
+      email: user?.email,
+      phoneno: phone,
+      bio: bio,
+      gender: gender,
+      specialization: specialization,
+      price: price,
+      qualifications: qualifications,
+      experiences: experiences,
+      timeSlot: timeSlots,
+      about: about,
+    };
+    console.log(newDoctor);
+
+    InsertData(newDoctor); // Insert data to the database
   };
+
+  useEffect(() => {
+    // Only fetch data if it hasn't been fetched yet
+    if (!fetchedData && user?.email) {
+      const fetchData = async () => {
+        const { data, error } = await FetchData({ userEmail: user.email });
+        if (error) {
+          console.error("Error fetching data:", error);
+        } else {
+          setFetchedData(data[0]);
+        }
+      };
+
+      fetchData();
+    }
+  }, [user?.email, fetchedData]);
+
+  // console.log("userData", fetchedData);
+
   // Handler for adding a new qualification
   const handleAddQualification = () => {
     setQualifications([...qualifications, {}]); // Update with a new default qualification object
@@ -156,23 +199,35 @@ function Info() {
     setExperiences(newExperiences);
   };
 
+  const createTimeSlot = (day = "", startTime = null, endTime = null) => ({
+    day,
+    startTime,
+    endTime,
+  });
+
   // Handler for setting a new time slot
-  const handleSetTimeSlot = () => {
-    if (!timeSlot) {
-      setTimeSlot({}); // Set a default time slot structure
-    }
+  const handleAddTimeSlot = () => {
+    setTimeSlots([...timeSlots, createTimeSlot()]);
   };
+
+  const handleTimeSlotChange = (index, updatedSlot) => {
+    const newTimeSlots = [...timeSlots];
+    newTimeSlots[index] = updatedSlot;
+    setTimeSlots(newTimeSlots);
+  };
+
   return (
     <MainContainer>
       <ProfileTitle>Profile Information</ProfileTitle>
       <form onSubmit={handleSubmit}>
         <TitleTextField
           required
-          value={name}
+          value={fetchedData ? fetchedData.name : name}
           id="name"
           label="Name"
           onChange={(e) => setName(e.target.value)}
           fullWidth
+          disabled={!!fetchedData}
         />
         {user && (
           <TitleTextField
@@ -188,11 +243,12 @@ function Info() {
         )}
         <TitleTextField
           required
-          value={phone}
+          value={fetchedData ? fetchedData.phoneno : phone}
           id="phone"
           label="Phone"
           onChange={handlePhoneChange}
           fullWidth
+          disabled={!!fetchedData}
         />
         {phoneError && (
           <Typography variant="inherit" sx={{ color: "red" }}>
@@ -201,21 +257,22 @@ function Info() {
         )}
         <TitleTextField
           required
-          value={bio}
+          value={fetchedData ? fetchedData.bio : bio}
           id="bio"
           label="Bio"
           onChange={(e) => setBio(e.target.value)}
           fullWidth
+          disabled={!!fetchedData}
         />
 
         <SelectOption>
-          <FormControl fullWidth>
+          <FormControl fullWidth disabled={!!fetchedData}>
             <InputLabel id="demo-simple-select-label">Gender*</InputLabel>
             <Select
               required
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={gender}
+              value={fetchedData ? fetchedData.gender : gender}
               label="gender"
               onChange={(e) => setGender(e.target.value)}
               sx={{ backgroundColor: "#fff" }}
@@ -225,7 +282,7 @@ function Info() {
             </Select>
           </FormControl>
 
-          <FormControl fullWidth>
+          <FormControl fullWidth disabled={!!fetchedData}>
             <InputLabel id="demo-simple-select-label">
               Specialization*
             </InputLabel>
@@ -233,7 +290,7 @@ function Info() {
               required
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={specialization}
+              value={fetchedData ? fetchedData.specialization : specialization}
               label="specialization"
               onChange={(e) => setSpecialization(e.target.value)}
               sx={{ backgroundColor: "#fff" }}
@@ -250,12 +307,13 @@ function Info() {
 
           <TitleTextField
             required
-            value={price}
+            value={fetchedData ? fetchedData.price : price}
             id="price"
             label="Ticket Price"
             fullWidth
             onChange={(e) => setPrice(e.target.value)}
             sx={{ marginTop: 0 }}
+            disabled={!!fetchedData}
           />
         </SelectOption>
         {/* </NameBox> */}
@@ -292,10 +350,18 @@ function Info() {
 
         {/* TimeSlot Section */}
         <Box>
-          <ColorButton onClick={handleSetTimeSlot} variant="contained">
-            Set TimeSlot
+          <ColorButton onClick={handleAddTimeSlot} variant="contained">
+            Add TimeSlot
           </ColorButton>
-          {timeSlot && <TimeSlot />}
+          {timeSlots.map((slot, index) => (
+            <TimeSlot
+              key={index}
+              slot={slot}
+              onTimeSlotChange={(updatedSlot) =>
+                handleTimeSlotChange(index, updatedSlot)
+              }
+            />
+          ))}
         </Box>
 
         <Typography sx={{ fontSize: "0.9rem", marginTop: "1rem" }}>
@@ -305,13 +371,15 @@ function Info() {
           fullWidth
           onChange={(e) => setAbout(e.target.value)}
           sx={{ backgroundColor: "#fff" }}
+          value={fetchedData ? fetchedData.about : about}
+          disabled={!!fetchedData}
         ></TextField>
 
         <ColorButton
           type="submit"
           variant="contained"
           color="primary"
-          // disabled={!isFormValid}
+          disabled={!isFormValid}
         >
           Submit
         </ColorButton>

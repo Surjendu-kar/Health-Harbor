@@ -4,6 +4,11 @@ import { Box, TextField, Typography, styled } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { User } from "@supabase/supabase-js";
+import { supabase } from "../../supabase/config";
+import { useEffect, useState } from "react";
+import FetchData from "../../supabase/FetchData";
+import dayjs from "dayjs";
 
 const TitleTextField = styled(TextField)(() => ({
   marginBottom: "1.5rem",
@@ -25,8 +30,25 @@ interface IExperienceProps {
   experience: IExperience;
   onExperienceChange: (experience: IExperience) => void;
 }
+type DoctorInfo = {
+  id: number;
+  name: string;
+  email: string;
+  phoneNo: string;
+  bio: string;
+  gender: string;
+  specialization: string;
+  price: number;
+  qualifications: string[];
+  experiences: string[];
+  timeSlot: string[];
+  about: string;
+};
 
 function Experiences({ experience, onExperienceChange }: IExperienceProps) {
+  const [user, setUser] = useState<User | null>(null);
+  const [fetchedData, setFetchedData] = useState<DoctorInfo | null>(null);
+
   const handleFieldChange = (field: keyof IExperience, value: string) => {
     onExperienceChange({ ...experience, [field]: value });
   };
@@ -35,16 +57,47 @@ function Experiences({ experience, onExperienceChange }: IExperienceProps) {
     handleFieldChange(field, date ? date.format("YYYY-MM-DD") : "");
   };
 
+  useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUser(user);
+    };
+
+    getUser();
+  }, []);
+
+  useEffect(() => {
+    if (!fetchedData && user?.email) {
+      const fetchData = async () => {
+        const { data, error } = await FetchData({ userEmail: user.email });
+        if (error) {
+          console.error("Error fetching data:", error);
+        } else {
+          setFetchedData(data[0]);
+        }
+      };
+
+      fetchData();
+    }
+  }, [user?.email, fetchedData]);
+
   return (
     <Box sx={{ display: "flex", width: "100%", gap: "1rem" }}>
       <Box>
         <Text>Starting Date</Text>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
-            value={experience.startDate}
+            value={
+              fetchedData && fetchedData.experiences
+                ? dayjs(JSON.parse(fetchedData.experiences)[0].startDate)
+                : experience.startDate
+            }
             onChange={(newDate) => handleDateChange("startDate", newDate)}
             renderInput={(params) => <TitleTextField {...params} />}
             sx={{ backgroundColor: "#fff" }}
+            disabled={!!fetchedData}
           />
         </LocalizationProvider>
       </Box>
@@ -52,33 +105,48 @@ function Experiences({ experience, onExperienceChange }: IExperienceProps) {
         <Text>Ending Date</Text>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
-            value={experience.endDate}
+            value={
+              fetchedData && fetchedData.experiences
+                ? dayjs(JSON.parse(fetchedData.experiences)[0].endDate)
+                : experience.endDate
+            }
             onChange={(newDate) => handleDateChange("endDate", newDate)}
             renderInput={(params) => <TitleTextField {...params} />}
             sx={{ backgroundColor: "#fff" }}
+            disabled={!!fetchedData}
           />
         </LocalizationProvider>
       </Box>
       <Box>
-        <Text>Position</Text>
+        <Text>Position*</Text>
         <TitleTextField
           required
-          value={experience.position || ""}
+          value={
+            fetchedData && fetchedData.experiences
+              ? JSON.parse(fetchedData.experiences)[0].position
+              : experience.position
+          }
           id="position"
-          label="Position"
+          // label="required"
           fullWidth
           onChange={(e) => handleFieldChange("position", e.target.value)}
+          disabled={!!fetchedData}
         />
       </Box>
       <Box>
-        <Text>Hospital</Text>
+        <Text>Hospital*</Text>
         <TitleTextField
           required
-          value={experience.hospital || ""}
+          value={
+            fetchedData && fetchedData.experiences
+              ? JSON.parse(fetchedData.experiences)[0].hospital
+              : experience.hospital
+          }
           id="hospital"
-          label="Hospital"
+          // label="required"
           fullWidth
           onChange={(e) => handleFieldChange("hospital", e.target.value)}
+          disabled={!!fetchedData}
         />
       </Box>
     </Box>

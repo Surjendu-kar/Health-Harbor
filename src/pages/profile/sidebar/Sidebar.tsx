@@ -4,6 +4,7 @@ import { supabase } from "../../../supabase/config";
 import { User } from "@supabase/supabase-js";
 import { useNavigate } from "react-router-dom";
 
+
 const MainContainer = styled(Box)(() => ({
   margin: "2rem 5rem",
   padding: "2rem",

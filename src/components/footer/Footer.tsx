@@ -24,6 +24,12 @@ const MailLink = styled("a")(() => ({
   textDecoration: "none",
   display: "block",
   color: "#57535c",
+  fontSize: "1rem",
+  transition: "color 0.3s ease-in-out, font-size 0.3s ease-in-out",
+
+  "&:hover": {
+    fontSize: "1.1rem",
+  },
 }));
 
 function Footer() {
@@ -44,8 +50,8 @@ function Footer() {
           <Title>
             The primary objective of a consultant is to use expert knowledge and
             skill to diagnose and treat patients while retaining ultimate
-            clinical responsibility for their care. We are 'All in One Healthcare' here for help
-            you.
+            clinical responsibility for their care. We are 'All in One
+            Healthcare' here for help you.
           </Title>
         </Container>
 

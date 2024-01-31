@@ -1,6 +1,6 @@
 // import { useCallback, useEffect, useState } from "react";
-// import { supabase } from "./supabase/config";
-// import { LoginWithGoogle } from "./pages/LoginWithGoogle";
+// import { supabase } from "../supabase/config";
+
 
 // type Todo = {
 //   title: string;
@@ -13,7 +13,8 @@
 
 //   const getData = async () => {
 //     const { data } = await supabase.from("todo").select("*");
-
+//     console.log(data);
+    
 //     setTodos(data as Todo[]);
 //   };
 
@@ -67,7 +68,7 @@
 
 //   return (
 //     <>
-//       <ul>
+//       {/* <ul>
 //         {todos.map((todo) => (
 //           <li
 //             className={todo.is_complete === true ? "done" : undefined}
@@ -77,10 +78,10 @@
 //             {todo.title}
 //           </li>
 //         ))}
-//       </ul>
+//       </ul> */}
 
 
-//       <LoginWithGoogle />
+//       {/* <LoginWithGoogle /> */}
 //     </>
 //   );
 // };
