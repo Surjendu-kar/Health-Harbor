@@ -13,7 +13,7 @@ const TextStyle = styled("p")(() => ({
   fontSize: "12px",
   padding: "0.5rem 0",
 }));
-function Appointments() {
+function Appointments({ user }) {
   return (
     <MainContainer>
       <Heading>

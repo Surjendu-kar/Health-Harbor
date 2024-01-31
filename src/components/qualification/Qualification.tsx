@@ -4,10 +4,6 @@ import { Box, TextField, Typography, styled } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { User } from "@supabase/supabase-js";
-import { supabase } from "../../supabase/config";
-import { useEffect, useState } from "react";
-import FetchData from "../../supabase/FetchData";
 import dayjs from "dayjs";
 
 const TitleTextField = styled(TextField)(() => ({
@@ -30,6 +26,7 @@ interface IQualification {
 interface IQualificationProps {
   qualification: IQualification;
   onQualificationChange: (qualification: IQualification) => void;
+  fetchedData: DoctorInfo | null;
 }
 
 type DoctorInfo = {
@@ -50,10 +47,8 @@ type DoctorInfo = {
 function Qualification({
   qualification,
   onQualificationChange,
+  fetchedData,
 }: IQualificationProps) {
-  const [user, setUser] = useState<User | null>(null);
-  const [fetchedData, setFetchedData] = useState<DoctorInfo | null>(null);
-
   const handleFieldChange = (field, value) => {
     onQualificationChange({ ...qualification, [field]: value });
   };
@@ -61,32 +56,6 @@ function Qualification({
   const handleDateChange = (field, date) => {
     handleFieldChange(field, date ? date.format("YYYY-MM-DD") : "");
   };
-
-  useEffect(() => {
-    const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setUser(user);
-    };
-
-    getUser();
-  }, []);
-
-  useEffect(() => {
-    if (!fetchedData && user?.email) {
-      const fetchData = async () => {
-        const { data, error } = await FetchData({ userEmail: user.email });
-        if (error) {
-          console.error("Error fetching data:", error);
-        } else {
-          setFetchedData(data[0]);
-        }
-      };
-
-      fetchData();
-    }
-  }, [user?.email, fetchedData]);
 
   return (
     <Box sx={{ display: "flex", width: "100%", gap: "1rem" }}>

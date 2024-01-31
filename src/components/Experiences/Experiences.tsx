@@ -4,10 +4,6 @@ import { Box, TextField, Typography, styled } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { User } from "@supabase/supabase-js";
-import { supabase } from "../../supabase/config";
-import { useEffect, useState } from "react";
-import FetchData from "../../supabase/FetchData";
 import dayjs from "dayjs";
 
 const TitleTextField = styled(TextField)(() => ({
@@ -29,6 +25,7 @@ interface IExperience {
 interface IExperienceProps {
   experience: IExperience;
   onExperienceChange: (experience: IExperience) => void;
+  fetchedData: DoctorInfo | null;
 }
 type DoctorInfo = {
   id: number;
@@ -45,10 +42,11 @@ type DoctorInfo = {
   about: string;
 };
 
-function Experiences({ experience, onExperienceChange }: IExperienceProps) {
-  const [user, setUser] = useState<User | null>(null);
-  const [fetchedData, setFetchedData] = useState<DoctorInfo | null>(null);
-
+function Experiences({
+  experience,
+  onExperienceChange,
+  fetchedData,
+}: IExperienceProps) {
   const handleFieldChange = (field: keyof IExperience, value: string) => {
     onExperienceChange({ ...experience, [field]: value });
   };
@@ -56,32 +54,6 @@ function Experiences({ experience, onExperienceChange }: IExperienceProps) {
   const handleDateChange = (field: keyof IExperience, date: Dayjs | null) => {
     handleFieldChange(field, date ? date.format("YYYY-MM-DD") : "");
   };
-
-  useEffect(() => {
-    const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setUser(user);
-    };
-
-    getUser();
-  }, []);
-
-  useEffect(() => {
-    if (!fetchedData && user?.email) {
-      const fetchData = async () => {
-        const { data, error } = await FetchData({ userEmail: user.email });
-        if (error) {
-          console.error("Error fetching data:", error);
-        } else {
-          setFetchedData(data[0]);
-        }
-      };
-
-      fetchData();
-    }
-  }, [user?.email, fetchedData]);
 
   return (
     <Box sx={{ display: "flex", width: "100%", gap: "1rem" }}>

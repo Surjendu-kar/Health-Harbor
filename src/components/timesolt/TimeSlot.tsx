@@ -13,10 +13,7 @@ import dayjs from "dayjs";
 import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { styled } from "@mui/system";
-import { User } from "@supabase/supabase-js";
-import { supabase } from "../../supabase/config";
 import { useEffect, useState } from "react";
-import FetchData from "../../supabase/FetchData";
 
 const Text = styled(Typography)(() => ({
   margin: "1.5rem 0 0.5rem 0",
@@ -44,11 +41,15 @@ type DoctorInfo = {
   about: string;
 };
 
-function TimeSlot({ slot, onTimeSlotChange }) {
+function TimeSlot({
+  slot,
+  onTimeSlotChange,
+  fetchedData,
+}: {
+  fetchedData: DoctorInfo | null;
+}) {
   const [timeSlot, setTimeSlot] = useState(slot || createTimeSlot());
   const [isComplete, setIsComplete] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
-  const [fetchedData, setFetchedData] = useState<DoctorInfo | null>(null);
 
   const handleDayChange = (event) => {
     setTimeSlot({ ...timeSlot, day: event.target.value });
@@ -75,32 +76,6 @@ function TimeSlot({ slot, onTimeSlotChange }) {
     }
     onTimeSlotChange(timeSlot);
   }, [timeSlot, onTimeSlotChange]);
-
-  useEffect(() => {
-    const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setUser(user);
-    };
-
-    getUser();
-  }, []);
-
-  useEffect(() => {
-    if (!fetchedData && user?.email) {
-      const fetchData = async () => {
-        const { data, error } = await FetchData({ userEmail: user.email });
-        if (error) {
-          console.error("Error fetching data:", error);
-        } else {
-          setFetchedData(data[0]);
-        }
-      };
-
-      fetchData();
-    }
-  }, [user?.email, fetchedData]);
 
   return (
     <Box sx={{ display: "flex", width: "100%", gap: "1rem" }}>

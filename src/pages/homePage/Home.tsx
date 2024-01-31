@@ -14,20 +14,17 @@ function Home() {
         data: { user },
       } = await supabase.auth.getUser();
       setUser(user);
+
+      // Navigate to login if there is no user
+      if (!user) {
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+      }
     };
 
     getUser();
-  }, []);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!user) {
-        navigate("/login");
-      }
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [user, navigate]);
+  }, [navigate]);
 
   console.log(user);
 

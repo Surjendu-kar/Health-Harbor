@@ -45,7 +45,7 @@ const Navbar = () => {
     };
 
     getUser();
-  }, [user]);
+  }, []);
 
   return (
     <NavContainer>
@@ -67,7 +67,7 @@ const Navbar = () => {
           <StyledAvatar
             component={Link}
             to={"/profile"}
-            src={user?.user_metadata?.avatar_url}
+            src={user ? user?.user_metadata?.avatar_url : ""}
           />
         </Box>
       )}

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { User } from "@supabase/supabase-js";
 import {
   Box,
   Button,
@@ -13,12 +12,12 @@ import {
 } from "@mui/material";
 import { purple } from "@mui/material/colors";
 import { ButtonProps } from "@mui/material/Button";
-import { supabase } from "../../../supabase/config";
 import Qualification from "../../../components/qualification/Qualification";
 import Experiences from "../../../components/Experiences/Experiences";
 import TimeSlot from "../../../components/timesolt/TimeSlot";
 import InsertData from "../../../supabase/InsertData";
 import FetchData from "../../../supabase/FetchData";
+import { User } from "@supabase/supabase-js";
 
 const ProfileTitle = styled("h1")(() => ({
   margin: 0,
@@ -82,8 +81,13 @@ type DoctorInfo = {
   about: string;
 };
 
-function Info() {
-  const [user, setUser] = useState<User | null>(null);
+function Info({
+  user,
+  fetchedData,
+}: {
+  user: User | null;
+  fetchedData: DoctorInfo | null;
+}) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [phoneError, setPhoneError] = useState("");
@@ -95,20 +99,7 @@ function Info() {
   const [experiences, setExperiences] = useState<IExperience[]>([]);
   const [timeSlots, setTimeSlots] = useState([]);
   const [about, setAbout] = useState("");
-  const [fetchedData, setFetchedData] = useState<DoctorInfo | null>(null);
-
   const [isFormValid, setIsFormValid] = useState(false);
-
-  useEffect(() => {
-    const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setUser(user);
-    };
-
-    getUser();
-  }, []);
 
   useEffect(() => {
     checkFormValidity();
@@ -152,24 +143,6 @@ function Info() {
 
     InsertData(newDoctor); // Insert data to the database
   };
-
-  useEffect(() => {
-    // Only fetch data if it hasn't been fetched yet
-    if (!fetchedData && user?.email) {
-      const fetchData = async () => {
-        const { data, error } = await FetchData({ userEmail: user.email });
-        if (error) {
-          console.error("Error fetching data:", error);
-        } else {
-          setFetchedData(data[0]);
-        }
-      };
-
-      fetchData();
-    }
-  }, [user?.email, fetchedData]);
-
-  // console.log("userData", fetchedData);
 
   // Handler for adding a new qualification
   const handleAddQualification = () => {
@@ -326,6 +299,7 @@ function Info() {
             <Qualification
               key={index}
               qualification={qualification}
+              fetchedData={fetchedData}
               onQualificationChange={(qualificationData) =>
                 handleQualificationChange(index, qualificationData)
               }
@@ -341,6 +315,7 @@ function Info() {
             <Experiences
               key={index}
               experience={experience}
+              fetchedData={fetchedData}
               onExperienceChange={(experienceData) =>
                 handleExperienceChange(index, experienceData)
               }
@@ -357,6 +332,7 @@ function Info() {
             <TimeSlot
               key={index}
               slot={slot}
+              fetchedData={fetchedData}
               onTimeSlotChange={(updatedSlot) =>
                 handleTimeSlotChange(index, updatedSlot)
               }
