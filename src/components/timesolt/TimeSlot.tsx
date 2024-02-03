@@ -9,11 +9,13 @@ import {
   Typography,
   TextField,
 } from "@mui/material";
-import dayjs from "dayjs";
 import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { styled } from "@mui/system";
 import { useEffect, useState } from "react";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
 
 const Text = styled(Typography)(() => ({
   margin: "1.5rem 0 0.5rem 0",
@@ -77,6 +79,13 @@ function TimeSlot({
     onTimeSlotChange(timeSlot);
   }, [timeSlot, onTimeSlotChange]);
 
+  useEffect(() => {
+    onTimeSlotChange(timeSlot);
+  }, [timeSlot, onTimeSlotChange]);
+  // useEffect(() => {
+  //   onTimeSlotChange(timeSlot);
+  // }, [timeSlot]);
+
   return (
     <Box sx={{ display: "flex", width: "100%", gap: "1rem" }}>
       {/* Day Box */}
@@ -95,7 +104,7 @@ function TimeSlot({
             }
             onChange={handleDayChange}
             sx={{ backgroundColor: "#fff" }}
-            disabled={!!fetchedData}
+            // disabled={timeSlot}
           >
             <MenuItem value="sunday">Sunday</MenuItem>
             <MenuItem value="monday">Monday</MenuItem>
@@ -114,13 +123,20 @@ function TimeSlot({
         <Box width={"30%"}>
           <Text>Starting Time</Text>
           <TimePicker
+            // Example of adjusting the TimePicker value assignment
             value={
               fetchedData && fetchedData.timeSlot
                 ? dayjs(
                     JSON.parse(fetchedData.timeSlot)[0].startTime,
                     "HH:mm:ss"
-                  )
-                : timeSlot.startTime
+                  ).isValid()
+                  ? dayjs(
+                      JSON.parse(fetchedData.timeSlot)[0].startTime,
+                      "HH:mm:ss"
+                    )
+                  : null
+                : timeSlot.startTime &&
+                  dayjs(timeSlot.startTime, "HH:mm:ss").isValid()
                 ? dayjs(timeSlot.startTime, "HH:mm:ss")
                 : null
             }
@@ -128,7 +144,7 @@ function TimeSlot({
             renderInput={(props) => (
               <TextField {...props} placeholder="Select time" />
             )}
-            disabled={!!fetchedData}
+            // disabled={timeSlot}
             sx={{ backgroundColor: "#fff" }}
           />
         </Box>
@@ -137,10 +153,20 @@ function TimeSlot({
         <Box width={"30%"}>
           <Text>Ending Time</Text>
           <TimePicker
+            // Example of adjusting the TimePicker value assignment
             value={
               fetchedData && fetchedData.timeSlot
-                ? dayjs(JSON.parse(fetchedData.timeSlot)[0].endTime, "HH:mm:ss")
-                : timeSlot.endTime
+                ? dayjs(
+                    JSON.parse(fetchedData.timeSlot)[0].endTime,
+                    "HH:mm:ss"
+                  ).isValid()
+                  ? dayjs(
+                      JSON.parse(fetchedData.timeSlot)[0].endTime,
+                      "HH:mm:ss"
+                    )
+                  : null
+                : timeSlot.endTime &&
+                  dayjs(timeSlot.endTime, "HH:mm:ss").isValid()
                 ? dayjs(timeSlot.endTime, "HH:mm:ss")
                 : null
             }
@@ -148,7 +174,7 @@ function TimeSlot({
             renderInput={(props) => (
               <TextField {...props} placeholder="Select time" />
             )}
-            disabled={!!fetchedData}
+            // disabled={timeSlot}
             sx={{ backgroundColor: "#fff" }}
           />
         </Box>
