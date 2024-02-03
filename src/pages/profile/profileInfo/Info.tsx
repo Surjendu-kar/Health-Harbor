@@ -16,14 +16,20 @@ import Qualification from "../../../components/qualification/Qualification";
 import Experiences from "../../../components/Experiences/Experiences";
 import TimeSlot from "../../../components/timesolt/TimeSlot";
 import InsertData from "../../../supabase/InsertData";
-import FetchData from "../../../supabase/FetchData";
 import { User } from "@supabase/supabase-js";
+import { Edit, Check } from "@mui/icons-material";
 
 const ProfileTitle = styled("h1")(() => ({
   margin: 0,
   padding: 0,
-  marginBottom: "2rem",
+  // marginBottom: "2rem",
   fontSize: "1.5rem",
+}));
+
+const ProfileTitleContainer = styled(Box)(() => ({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
 }));
 
 const MainContainer = styled(Box)(() => ({
@@ -70,7 +76,7 @@ type DoctorInfo = {
   id: number;
   name: string;
   email: string;
-  phoneNo: string;
+  phoneno: string;
   bio: string;
   gender: string;
   specialization: string;
@@ -100,6 +106,7 @@ function Info({
   const [timeSlots, setTimeSlots] = useState([]);
   const [about, setAbout] = useState("");
   const [isFormValid, setIsFormValid] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   useEffect(() => {
     checkFormValidity();
@@ -134,8 +141,8 @@ function Info({
       gender: gender,
       specialization: specialization,
       price: price,
-      qualifications: qualifications,
-      experiences: experiences,
+      qualifications: JSON.stringify(qualifications),
+      experiences: JSON.stringify(experiences),
       timeSlot: timeSlots,
       about: about,
     };
@@ -144,9 +151,9 @@ function Info({
     InsertData(newDoctor); // Insert data to the database
   };
 
-  // Handler for adding a new qualification
+  // use to open Qualification
   const handleAddQualification = () => {
-    setQualifications([...qualifications, {}]); // Update with a new default qualification object
+    setQualifications([...qualifications, {}]);
   };
 
   const handleQualificationChange = (
@@ -158,9 +165,9 @@ function Info({
     setQualifications(newQualifications);
   };
 
-  // Handler for adding a new experience
+  // use to open Experience
   const handleAddExperience = () => {
-    setExperiences([...experiences, {}]); // Update with a new default experience object
+    setExperiences([...experiences, {}]);
   };
 
   const handleExperienceChange = (
@@ -172,15 +179,25 @@ function Info({
     setExperiences(newExperiences);
   };
 
-  const createTimeSlot = (day = "", startTime = null, endTime = null) => ({
-    day,
-    startTime,
-    endTime,
-  });
+  // handle qualifications,experiences,timeSlot
 
-  // Handler for setting a new time slot
+  useEffect(() => {
+    if (fetchedData) {
+      if (fetchedData.qualifications) {
+        setQualifications(JSON.parse(fetchedData.qualifications));
+      }
+      if (fetchedData.experiences) {
+        setExperiences(JSON.parse(fetchedData.experiences));
+      }
+      if (fetchedData.timeSlot) {
+        const parsedTimeSlots = JSON.parse(fetchedData.timeSlot);
+        setTimeSlots(parsedTimeSlots);
+      }
+    }
+  }, [fetchedData]);
+
   const handleAddTimeSlot = () => {
-    setTimeSlots([...timeSlots, createTimeSlot()]);
+    setTimeSlots([...timeSlots, { day: "", startTime: null, endTime: null }]);
   };
 
   const handleTimeSlotChange = (index, updatedSlot) => {
@@ -189,9 +206,61 @@ function Info({
     setTimeSlots(newTimeSlots);
   };
 
+  // useEffect(() => {
+  //   if (fetchedData) {
+  //     setName(fetchedData.name);
+  //     setPhone(fetchedData.phoneno);
+  //     setBio(fetchedData.bio);
+  //     setGender(fetchedData.gender);
+  //     setSpecialization(fetchedData.specialization);
+  //     setPrice(fetchedData.price);
+  //     setAbout(fetchedData.about)
+  //   }
+  // }, [fetchedData]);
+
+  useEffect(() => {
+    if (fetchedData) {
+      setQualifications([...qualifications, {}]);
+      setExperiences([...experiences, {}]);
+    }
+  }, []);
+
+  const toggleEditMode = () => {
+    setIsEditMode(!isEditMode);
+    if (isEditMode) {
+      // Here, you can implement the logic to handle the submission of edited details
+      // For example, you could call an update function to save the edited details to the database
+    }
+  };
+
   return (
     <MainContainer>
-      <ProfileTitle>Profile Information</ProfileTitle>
+      <ProfileTitleContainer>
+        <ProfileTitle>Profile Information</ProfileTitle>
+        {fetchedData && (
+          <Button
+            onClick={toggleEditMode}
+            sx={{
+              color: "#1D2B53",
+              background: "#80808014",
+              borderRadius: "10px",
+              transition: "transform 0.3s ease",
+              ":hover": {
+                transform: "scale(1.15)",
+              },
+              "& .MuiButton-startIcon": {
+                transition: "transform 0.3s ease",
+                ":hover": {
+                  transform: "scale(1.2)",
+                },
+              },
+            }}
+          >
+            {isEditMode ? <Check /> : <Edit />}
+          </Button>
+        )}
+      </ProfileTitleContainer>
+
       <form onSubmit={handleSubmit}>
         <TitleTextField
           required
@@ -201,6 +270,7 @@ function Info({
           onChange={(e) => setName(e.target.value)}
           fullWidth
           disabled={!!fetchedData}
+          // disabled={!isEditMode}
         />
         {user && (
           <TitleTextField
@@ -222,6 +292,7 @@ function Info({
           onChange={handlePhoneChange}
           fullWidth
           disabled={!!fetchedData}
+          // disabled={!isEditMode}
         />
         {phoneError && (
           <Typography variant="inherit" sx={{ color: "red" }}>
@@ -236,10 +307,15 @@ function Info({
           onChange={(e) => setBio(e.target.value)}
           fullWidth
           disabled={!!fetchedData}
+          // disabled={!isEditMode}
         />
 
         <SelectOption>
-          <FormControl fullWidth disabled={!!fetchedData}>
+          <FormControl
+            fullWidth
+            disabled={!!fetchedData}
+            // disabled={!isEditMode}
+          >
             <InputLabel id="demo-simple-select-label">Gender*</InputLabel>
             <Select
               required
@@ -255,7 +331,11 @@ function Info({
             </Select>
           </FormControl>
 
-          <FormControl fullWidth disabled={!!fetchedData}>
+          <FormControl
+            fullWidth
+            disabled={!!fetchedData}
+            // disabled={!isEditMode}
+          >
             <InputLabel id="demo-simple-select-label">
               Specialization*
             </InputLabel>
@@ -267,6 +347,7 @@ function Info({
               label="specialization"
               onChange={(e) => setSpecialization(e.target.value)}
               sx={{ backgroundColor: "#fff" }}
+              disabled={!!fetchedData}
             >
               <MenuItem value="cardiology">Cardiology</MenuItem>
               <MenuItem value="dentist">Dentist</MenuItem>
@@ -287,9 +368,11 @@ function Info({
             onChange={(e) => setPrice(e.target.value)}
             sx={{ marginTop: 0 }}
             disabled={!!fetchedData}
+            // disabled={!isEditMode}
           />
         </SelectOption>
         {/* </NameBox> */}
+
         {/* Qualification Section */}
         <Box>
           <ColorButton onClick={handleAddQualification} variant="contained">
@@ -299,13 +382,14 @@ function Info({
             <Qualification
               key={index}
               qualification={qualification}
-              fetchedData={fetchedData}
               onQualificationChange={(qualificationData) =>
                 handleQualificationChange(index, qualificationData)
               }
+              fetchedData={fetchedData} // Explicitly passing null if no fetchedData
             />
           ))}
         </Box>
+
         {/* Experience Section */}
         <Box>
           <ColorButton onClick={handleAddExperience} variant="contained">
@@ -315,10 +399,10 @@ function Info({
             <Experiences
               key={index}
               experience={experience}
-              fetchedData={fetchedData}
-              onExperienceChange={(experienceData) =>
-                handleExperienceChange(index, experienceData)
+              onExperienceChange={(updatedExperience) =>
+                handleExperienceChange(index, updatedExperience)
               }
+              fetchedData={fetchedData} // Explicitly passing null if no fetchedData
             />
           ))}
         </Box>
@@ -330,9 +414,8 @@ function Info({
           </ColorButton>
           {timeSlots.map((slot, index) => (
             <TimeSlot
-              key={index}
+              key={index} // Here, ensure you have a proper key. Index as a key is not recommended for dynamic lists.
               slot={slot}
-              fetchedData={fetchedData}
               onTimeSlotChange={(updatedSlot) =>
                 handleTimeSlotChange(index, updatedSlot)
               }
@@ -349,6 +432,7 @@ function Info({
           sx={{ backgroundColor: "#fff" }}
           value={fetchedData ? fetchedData.about : about}
           disabled={!!fetchedData}
+          // disabled={!isEditMode}
         ></TextField>
 
         <ColorButton
@@ -356,6 +440,7 @@ function Info({
           variant="contained"
           color="primary"
           disabled={!isFormValid}
+          // disabled={!isEditMode || !isFormValid}
         >
           Submit
         </ColorButton>
