@@ -58,8 +58,8 @@ const Navbar = () => {
       <Box>
         <StyledLink to="/">Home</StyledLink>
         <StyledLink to="">Find a Doctor</StyledLink>
-        <StyledLink to="">AI</StyledLink>
         <StyledLink to="">Services</StyledLink>
+        <StyledLink to="">About us</StyledLink>
         <StyledLink to="">Contact</StyledLink>
       </Box>
 
