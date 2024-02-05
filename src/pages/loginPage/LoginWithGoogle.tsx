@@ -67,16 +67,6 @@ export function LoginWithGoogle() {
         <button onClick={handleLoginWithGoogle}>Login with Google</button>
       )}
 
-      {user && !selectedRole && (
-        <div>
-          <button onClick={() => handleRoleSelection("User")}>
-            Continue as a User
-          </button>
-          <button onClick={() => handleRoleSelection("Doctor")}>
-            Continue as a Doctor
-          </button>
-        </div>
-      )}
     </>
   );
 }
