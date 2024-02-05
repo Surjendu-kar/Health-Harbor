@@ -52,7 +52,7 @@ const Navbar = () => {
       <Box sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
         <LottieAnimation />
         <StyledLink to="/" sx={{ fontSize: "19px", margin: "0" }}>
-          All in One Healthcare
+          HealthHarbor
         </StyledLink>
       </Box>
       <Box>
