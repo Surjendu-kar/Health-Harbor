@@ -45,7 +45,7 @@ function Footer() {
         <Container sx={{ width: "20%" }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <LottieAnimation />
-            <Heading>All in One Healthcare</Heading>
+            <Heading>HealthHarbor</Heading>
           </Box>
           <Title>
             The primary objective of a consultant is to use expert knowledge and
