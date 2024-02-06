@@ -92,7 +92,16 @@ function OverView({
           {/* About */}
           <Contain>
             <Heading sx={{ marginBottom: "0.25rem" }}>
-              About of {user?.user_metadata?.full_name}
+              About of{" "}
+              <Typography
+                sx={{
+                  display: "inline",
+                  color: "#009cff",
+                  fontSize: "1.15rem",
+                }}
+              >
+                {user?.user_metadata?.full_name}
+              </Typography>
             </Heading>
             <Title>{fetchedData.about}</Title>
           </Contain>
