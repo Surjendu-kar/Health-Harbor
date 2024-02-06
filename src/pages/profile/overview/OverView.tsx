@@ -161,7 +161,7 @@ function OverView({
                     // flexBasis: "30%",
                     backgroundColor: "#deeaff8f",
                     borderRadius: "10px",
-                    padding: "1.5rem 5rem 1.5rem 3rem",
+                    padding: "1.5rem 10rem 1.5rem 3rem",
                   }}
                 >
                   <DateText sx={{ color: "#009cff" }}>

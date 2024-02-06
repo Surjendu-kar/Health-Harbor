@@ -18,6 +18,8 @@ import TimeSlot from "../../../components/timesolt/TimeSlot";
 import InsertData from "../../../supabase/InsertData";
 import { User } from "@supabase/supabase-js";
 import { Edit, Check } from "@mui/icons-material";
+import UpdateData from "../../../supabase/UpdateData";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const ProfileTitle = styled("h1")(() => ({
   margin: 0,
@@ -106,7 +108,9 @@ function Info({
   const [timeSlots, setTimeSlots] = useState([]);
   const [about, setAbout] = useState("");
   const [isFormValid, setIsFormValid] = useState(false);
-  const [isEditMode, setIsEditMode] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(!fetchedData);
+  const [changes, setChanges] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     checkFormValidity();
@@ -129,10 +133,7 @@ function Info({
     setIsFormValid(isValid);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (!isFormValid) return;
-
+  const insertData = async () => {
     const newDoctor = {
       name: name,
       email: user?.email,
@@ -140,15 +141,35 @@ function Info({
       bio: bio,
       gender: gender,
       specialization: specialization,
-      price: price,
+      price: parseInt(price, 10),
       qualifications: JSON.stringify(qualifications),
       experiences: JSON.stringify(experiences),
-      timeSlot: timeSlots,
+      timeSlot: JSON.stringify(timeSlots),
       about: about,
     };
     console.log(newDoctor);
+    await InsertData(newDoctor);
+    setIsLoading(false);
+  };
 
-    InsertData(newDoctor); // Insert data to the database
+  const updateData = async () => {
+    await UpdateData(user?.email, changes);
+    setChanges({});
+    setIsLoading(false);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!isFormValid) return;
+
+    setIsLoading(true);
+
+    if (isEditMode) {
+      await updateData();
+    } else {
+      await insertData();
+    }
+    setIsEditMode(false);
   };
 
   // use to open Qualification
@@ -206,14 +227,27 @@ function Info({
     setTimeSlots(newTimeSlots);
   };
 
-  
+  // useEffect(() => {
+  //   if (fetchedData) {
+  //     setQualifications([...qualifications, {}]);
+  //     setExperiences([...experiences, {}]);
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (fetchedData) {
-      setQualifications([...qualifications, {}]);
-      setExperiences([...experiences, {}]);
+      setName(fetchedData.name);
+      setPhone(fetchedData.phoneno);
+      setBio(fetchedData.bio);
+      setPrice(fetchedData.price);
+      setSpecialization(fetchedData.specialization);
+      setGender(fetchedData.gender);
+      setQualifications(JSON.parse(fetchedData.qualifications || "[]"));
+      setExperiences(JSON.parse(fetchedData.experiences || "[]"));
+      setTimeSlots(JSON.parse(fetchedData.timeSlot || "[]"));
+      setAbout(fetchedData.about);
     }
-  }, []);
+  }, [fetchedData]);
 
   const toggleEditMode = () => {
     setIsEditMode(!isEditMode);
@@ -254,13 +288,13 @@ function Info({
       <form onSubmit={handleSubmit}>
         <TitleTextField
           required
-          value={fetchedData ? fetchedData.name : name}
+          value={name}
           id="name"
           label="Name"
           onChange={(e) => setName(e.target.value)}
           fullWidth
-          disabled={!!fetchedData}
-          // disabled={!isEditMode}
+          // disabled={!!fetchedData}
+          disabled={!isEditMode}
         />
         {user && (
           <TitleTextField
@@ -276,13 +310,13 @@ function Info({
         )}
         <TitleTextField
           required
-          value={fetchedData ? fetchedData.phoneno : phone}
+          value={phone}
           id="phone"
           label="Phone"
           onChange={handlePhoneChange}
           fullWidth
-          disabled={!!fetchedData}
-          // disabled={!isEditMode}
+          // disabled={!!fetchedData}
+          disabled={!isEditMode}
         />
         {phoneError && (
           <Typography variant="inherit" sx={{ color: "red" }}>
@@ -291,27 +325,27 @@ function Info({
         )}
         <TitleTextField
           required
-          value={fetchedData ? fetchedData.bio : bio}
+          value={bio}
           id="bio"
           label="Bio"
           onChange={(e) => setBio(e.target.value)}
           fullWidth
-          disabled={!!fetchedData}
-          // disabled={!isEditMode}
+          // disabled={!!fetchedData}
+          disabled={!isEditMode}
         />
 
         <SelectOption>
           <FormControl
             fullWidth
-            disabled={!!fetchedData}
-            // disabled={!isEditMode}
+            // disabled={!!fetchedData}
+            disabled={!isEditMode}
           >
             <InputLabel id="demo-simple-select-label">Gender*</InputLabel>
             <Select
               required
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={fetchedData ? fetchedData.gender : gender}
+              value={gender}
               label="gender"
               onChange={(e) => setGender(e.target.value)}
               sx={{ backgroundColor: "#fff" }}
@@ -323,8 +357,8 @@ function Info({
 
           <FormControl
             fullWidth
-            disabled={!!fetchedData}
-            // disabled={!isEditMode}
+            // disabled={!!fetchedData}
+            disabled={!isEditMode}
           >
             <InputLabel id="demo-simple-select-label">
               Specialization*
@@ -333,11 +367,11 @@ function Info({
               required
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={fetchedData ? fetchedData.specialization : specialization}
+              value={specialization}
               label="specialization"
               onChange={(e) => setSpecialization(e.target.value)}
               sx={{ backgroundColor: "#fff" }}
-              disabled={!!fetchedData}
+              // disabled={!!fetchedData}
             >
               <MenuItem value="cardiology">Cardiology</MenuItem>
               <MenuItem value="dentist">Dentist</MenuItem>
@@ -351,14 +385,14 @@ function Info({
 
           <TitleTextField
             required
-            value={fetchedData ? fetchedData.price : price}
+            value={price}
             id="price"
             label="Ticket Price"
             fullWidth
             onChange={(e) => setPrice(e.target.value)}
             sx={{ marginTop: 0 }}
-            disabled={!!fetchedData}
-            // disabled={!isEditMode}
+            // disabled={!!fetchedData}
+            disabled={!isEditMode}
           />
         </SelectOption>
         {/* </NameBox> */}
@@ -375,7 +409,7 @@ function Info({
               onQualificationChange={(qualificationData) =>
                 handleQualificationChange(index, qualificationData)
               }
-              fetchedData={fetchedData} 
+              fetchedData={fetchedData}
             />
           ))}
         </Box>
@@ -420,20 +454,21 @@ function Info({
           fullWidth
           onChange={(e) => setAbout(e.target.value)}
           sx={{ backgroundColor: "#fff" }}
-          value={fetchedData ? fetchedData.about : about}
-          disabled={!!fetchedData}
-          // disabled={!isEditMode}
+          value={about}
+          // disabled={!!fetchedData}
+          disabled={!isEditMode}
         ></TextField>
 
         <ColorButton
           type="submit"
           variant="contained"
           color="primary"
-          disabled={!isFormValid}
+          disabled={isEditMode || !isFormValid || isLoading}
           // disabled={!isEditMode || !isFormValid}
         >
           Submit
         </ColorButton>
+        {isLoading && <CircularProgress />}
       </form>
     </MainContainer>
   );
