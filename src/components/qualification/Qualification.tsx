@@ -102,7 +102,6 @@ function Qualification({
               : qualification.degree
           }
           id="degree"
-          // label="required"
           fullWidth
           onChange={(e) => handleFieldChange("degree", e.target.value)}
           disabled={!!fetchedData}
@@ -118,7 +117,6 @@ function Qualification({
               : qualification.university
           }
           id="university"
-          // label="required"
           fullWidth
           onChange={(e) => handleFieldChange("university", e.target.value)}
           disabled={!!fetchedData}
