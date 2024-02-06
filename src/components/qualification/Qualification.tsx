@@ -72,6 +72,7 @@ function Qualification({
             renderInput={(params) => <TitleTextField {...params} />}
             sx={{ backgroundColor: "#fff" }}
             disabled={!!fetchedData}
+            
           />
         </LocalizationProvider>
       </Box>
@@ -117,6 +118,7 @@ function Qualification({
               : qualification.university
           }
           id="university"
+          // label="required"
           fullWidth
           onChange={(e) => handleFieldChange("university", e.target.value)}
           disabled={!!fetchedData}

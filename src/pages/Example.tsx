@@ -87,3 +87,54 @@
 // };
 
 // export default Example;
+
+
+// const handleSubmit = async (event) => {
+//     event.preventDefault();
+//     if (!isFormValid) return;
+
+//     if (isEditMode) {
+//       // In edit mode, call UpdateData with changes
+//       await UpdateData(user?.email, changes);
+//       setIsEditMode(false); // Exit edit mode after update
+//       setChanges({}); // Reset changes after successful update
+//     } else {
+//       // Insert new doctor logic
+//       const newDoctor = {
+//         name: name,
+//         email: user?.email,
+//         phoneno: phone,
+//         bio: bio,
+//         gender: gender,
+//         specialization: specialization,
+//         price: price,
+//         qualifications: JSON.stringify(qualifications),
+//         experiences: JSON.stringify(experiences),
+//         timeSlot: JSON.stringify(timeSlots),
+//         about: about,
+//       };
+//       console.log(newDoctor);
+//       await InsertData(newDoctor); // Insert data to the database
+//     }
+//   };
+
+// useEffect(() => {
+//     if (fetchedData) {
+//       setName(fetchedData.name);
+//       setPhone(fetchedData.phoneno);
+//       setBio(fetchedData.bio);
+//       setPrice(fetchedData.price);
+//       setSpecialization(fetchedData.specialization);
+//       setGender(fetchedData.gender);
+//       setQualifications(JSON.parse(fetchedData.qualifications || "[]"));
+//       setExperiences(JSON.parse(fetchedData.experiences || "[]"));
+//       setTimeSlots(JSON.parse(fetchedData.timeSlot || "[]"));
+//       setAbout(fetchedData.about);
+//     }
+//   }, [fetchedData]);
+
+// const toggleEditMode = () => {
+//     if (fetchedData) {
+//       setIsEditMode((prevMode) => !prevMode);
+//     }
+//   };

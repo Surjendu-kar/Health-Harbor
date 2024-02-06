@@ -206,14 +206,27 @@ function Info({
     setTimeSlots(newTimeSlots);
   };
 
-  
+  // useEffect(() => {
+  //   if (fetchedData) {
+  //     setQualifications([...qualifications, {}]);
+  //     setExperiences([...experiences, {}]);
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (fetchedData) {
-      setQualifications([...qualifications, {}]);
-      setExperiences([...experiences, {}]);
+      setName(fetchedData.name);
+      setPhone(fetchedData.phoneno);
+      setBio(fetchedData.bio);
+      setPrice(fetchedData.price);
+      setSpecialization(fetchedData.specialization);
+      setGender(fetchedData.gender);
+      setQualifications(JSON.parse(fetchedData.qualifications || "[]"));
+      setExperiences(JSON.parse(fetchedData.experiences || "[]"));
+      setTimeSlots(JSON.parse(fetchedData.timeSlot || "[]"));
+      setAbout(fetchedData.about);
     }
-  }, []);
+  }, [fetchedData]);
 
   const toggleEditMode = () => {
     setIsEditMode(!isEditMode);
@@ -254,7 +267,7 @@ function Info({
       <form onSubmit={handleSubmit}>
         <TitleTextField
           required
-          value={fetchedData ? fetchedData.name : name}
+          value={name}
           id="name"
           label="Name"
           onChange={(e) => setName(e.target.value)}
@@ -276,7 +289,7 @@ function Info({
         )}
         <TitleTextField
           required
-          value={fetchedData ? fetchedData.phoneno : phone}
+          value={phone}
           id="phone"
           label="Phone"
           onChange={handlePhoneChange}
@@ -291,7 +304,7 @@ function Info({
         )}
         <TitleTextField
           required
-          value={fetchedData ? fetchedData.bio : bio}
+          value={bio}
           id="bio"
           label="Bio"
           onChange={(e) => setBio(e.target.value)}
@@ -311,7 +324,7 @@ function Info({
               required
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={fetchedData ? fetchedData.gender : gender}
+              value={gender}
               label="gender"
               onChange={(e) => setGender(e.target.value)}
               sx={{ backgroundColor: "#fff" }}
@@ -333,7 +346,7 @@ function Info({
               required
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={fetchedData ? fetchedData.specialization : specialization}
+              value={specialization}
               label="specialization"
               onChange={(e) => setSpecialization(e.target.value)}
               sx={{ backgroundColor: "#fff" }}
@@ -351,7 +364,7 @@ function Info({
 
           <TitleTextField
             required
-            value={fetchedData ? fetchedData.price : price}
+            value={price}
             id="price"
             label="Ticket Price"
             fullWidth
@@ -375,7 +388,7 @@ function Info({
               onQualificationChange={(qualificationData) =>
                 handleQualificationChange(index, qualificationData)
               }
-              fetchedData={fetchedData} 
+              fetchedData={fetchedData}
             />
           ))}
         </Box>
@@ -420,7 +433,7 @@ function Info({
           fullWidth
           onChange={(e) => setAbout(e.target.value)}
           sx={{ backgroundColor: "#fff" }}
-          value={fetchedData ? fetchedData.about : about}
+          value={about}
           disabled={!!fetchedData}
           // disabled={!isEditMode}
         ></TextField>
