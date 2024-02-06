@@ -206,17 +206,7 @@ function Info({
     setTimeSlots(newTimeSlots);
   };
 
-  // useEffect(() => {
-  //   if (fetchedData) {
-  //     setName(fetchedData.name);
-  //     setPhone(fetchedData.phoneno);
-  //     setBio(fetchedData.bio);
-  //     setGender(fetchedData.gender);
-  //     setSpecialization(fetchedData.specialization);
-  //     setPrice(fetchedData.price);
-  //     setAbout(fetchedData.about)
-  //   }
-  // }, [fetchedData]);
+  
 
   useEffect(() => {
     if (fetchedData) {
@@ -385,7 +375,7 @@ function Info({
               onQualificationChange={(qualificationData) =>
                 handleQualificationChange(index, qualificationData)
               }
-              fetchedData={fetchedData} // Explicitly passing null if no fetchedData
+              fetchedData={fetchedData} 
             />
           ))}
         </Box>
