@@ -27,11 +27,10 @@ function Home() {
     getUser();
   }, [navigate]);
 
-  console.log(user);
+  // console.log(user);
 
   return (
     <Box height={"100vh"}>
-      {user && <Box></Box>}
       <HeroSection />
     </Box>
   );

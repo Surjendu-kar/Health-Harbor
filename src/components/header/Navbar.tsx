@@ -31,6 +31,12 @@ const StyledLink = styled(Link)(({ theme }) => ({
 const StyledAvatar = styled(Avatar)(() => ({
   width: "36px",
   height: "36px",
+  border: "2px solid white",
+  transition: "box-shadow 0.3s ease-in-out",
+  "&:hover": {
+    boxShadow:
+      "0 4px 8px 0 rgba(255, 255, 255, 0.52), 0 6px 20px 0 rgba(255, 255, 255, 0.19)",
+  },
 }));
 
 const Navbar = () => {
