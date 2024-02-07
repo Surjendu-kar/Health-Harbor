@@ -4,7 +4,7 @@ async function UpdateData(userEmail, updates) {
   try {
     const { data, error } = await supabase
       .from("doctorInfo")
-      .update(updates) // Pass the updates object directly
+      .update(updates)
       .eq("email", userEmail);
       
     console.log(data);
