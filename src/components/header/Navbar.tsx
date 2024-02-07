@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../../supabase/config";
 import { User } from "@supabase/supabase-js";
-import LottieAnimation from "../lottieAnimation/LottieAnimation";
+import LogoAnimation from "../lottieAnimation/LogoAnimation";
 
 const NavContainer = styled(Box)(() => ({
   display: "flex",
@@ -50,7 +50,7 @@ const Navbar = () => {
   return (
     <NavContainer>
       <Box sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
-        <LottieAnimation />
+        <LogoAnimation />
         <StyledLink to="/" sx={{ fontSize: "19px", margin: "0" }}>
           HealthHarbor
         </StyledLink>

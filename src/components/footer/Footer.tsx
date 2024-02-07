@@ -1,5 +1,5 @@
 import { Box, Typography, styled } from "@mui/material";
-import LottieAnimation from "../lottieAnimation/LottieAnimation";
+import LogoAnimation from "../lottieAnimation/LogoAnimation";
 
 const MainContainer = styled(Box)(() => ({
   marginTop: "5rem",
@@ -44,7 +44,7 @@ function Footer() {
       >
         <Container sx={{ width: "20%" }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <LottieAnimation />
+            <LogoAnimation />
             <Heading>HealthHarbor</Heading>
           </Box>
           <Title>

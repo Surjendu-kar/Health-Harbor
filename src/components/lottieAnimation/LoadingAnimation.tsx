@@ -1,9 +1,9 @@
 import { useRef, useEffect } from "react";
 import Lottie from "lottie-web";
-import animationData from "../../assets/Animation - 1705777251875.json";
+import animationData from "../../assets/Animation - 1707317749384.json";
 import { AnimationItem } from "lottie-web";
 
-const LottieAnimation = () => {
+const LogoAnimation = () => {
   const animBox = useRef<HTMLDivElement | null>(null);
   const animationInstance = useRef<AnimationItem | null>(null);
 
@@ -17,14 +17,12 @@ const LottieAnimation = () => {
         autoplay: true,
       });
     }
-
-    // Cleanup function
     return () => {
       animationInstance.current?.destroy();
     };
   }, []);
 
-  return <div style={{ width: "50px" }} ref={animBox} />;
+  return <div style={{ width: "300px" }} ref={animBox} />;
 };
 
-export default LottieAnimation;
+export default LogoAnimation;
