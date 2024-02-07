@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Box, styled } from "@mui/material";
-
+import { Box, styled, keyframes } from "@mui/material";
 import Sidebar from "./sidebar/Sidebar";
 import Info from "./profileInfo/Info";
 import { User } from "@supabase/supabase-js";
@@ -9,6 +8,7 @@ import { supabase } from "../../supabase/config";
 import OverView from "./overview/OverView";
 import Appointments from "./appointments/Appointments";
 import FetchData from "../../supabase/FetchData";
+import LoadingAnimation from "../../components/lottieAnimation/LoadingAnimation";
 
 const MainContainer = styled(Box)(() => ({
   width: "100%",
@@ -31,11 +31,22 @@ type DoctorInfo = {
   timeSlot: string[];
   about: string;
 };
+const blurOut = keyframes`
+  from {
+    filter: blur(6px);
+    opacity: 0;
+  }
+  to {
+    filter: blur(0);
+    opacity: 1;
+  }
+`;
 
 function ProfileDetails() {
   const [user, setUser] = useState<User | null>(null);
   const [activeComponent, setActiveComponent] = useState("overview");
   const [fetchedData, setFetchedData] = useState<DoctorInfo | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // fetch user login info
@@ -50,13 +61,11 @@ function ProfileDetails() {
   }, []);
 
   useEffect(() => {
-    //fetch from supabase
     if (!fetchedData && user?.email) {
       const fetchData = async () => {
         const { data, error } = await FetchData({ userEmail: user.email });
-        if (error) {
-          console.error("Error fetching data:", error);
-        } else {
+        setIsLoading(false); // Update loading state
+        if (!error) {
           setFetchedData(data[0]);
         }
       };
@@ -69,8 +78,28 @@ function ProfileDetails() {
     setActiveComponent(component);
   };
 
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: "10rem",
+        }}
+      >
+        <LoadingAnimation />
+      </Box>
+    );
+  }
+
   return (
-    <MainContainer>
+    <MainContainer
+      sx={{
+        animation: !isLoading ? `${blurOut} 0.5s ease-out forwards` : "none",
+        width: "100%",
+      }}
+    >
       <Sidebar onMenuSelect={handleMenuSelect} />
       {activeComponent === "overview" && (
         <OverView user={user} fetchedData={fetchedData} />
