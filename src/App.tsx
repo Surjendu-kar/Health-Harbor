@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import Details from "./pages/Details";
 import ProfileDetails from "./pages/profile/ProfileDetails";
 import Home from "./pages/homePage/Home";
 import { LoginWithGoogle } from "./pages/loginPage/LoginWithGoogle";
@@ -7,6 +6,10 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import { supabase } from "./supabase/config";
 import Navbar from "./components/header/Navbar";
 import Footer from "./components/footer/Footer";
+import FindDoctor from "./pages/find a doctor/FindDoctor";
+import Service from "./pages/servicePage/Service";
+import AboutUs from "./pages/aboutUsPage/AboutUs";
+import Contact from "./pages/contactPage/Contact";
 
 const App = () => {
   const navigate = useNavigate();
@@ -43,8 +46,11 @@ const App = () => {
       <Routes>
         <Route element={<Home />} path="/" />
         <Route element={<LoginWithGoogle />} path="/login" />
+        <Route element={<FindDoctor />} path="/find-doctor" />
+        <Route element={<Service />} path="/service" />
+        <Route element={<AboutUs />} path="/about-us" />
+        <Route element={<Contact />} path="/contact" />
         <Route element={<ProfileDetails />} path="/profile" />
-        <Route element={<Details />} path="/details" />
       </Routes>
       <Footer />
     </>

@@ -3,6 +3,7 @@ import { supabase } from "../../supabase/config";
 import { useNavigate } from "react-router-dom";
 import { User } from "@supabase/supabase-js";
 import { Box } from "@mui/material";
+import HeroSection from "./heroSection/HeroSection";
 
 function Home() {
   const [user, setUser] = useState<User | null>(null);
@@ -31,7 +32,7 @@ function Home() {
   return (
     <Box height={"100vh"}>
       {user && <Box></Box>}
-      Home
+      <HeroSection />
     </Box>
   );
 }

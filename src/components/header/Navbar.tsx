@@ -57,10 +57,10 @@ const Navbar = () => {
       </Box>
       <Box>
         <StyledLink to="/">Home</StyledLink>
-        <StyledLink to="">Find a Doctor</StyledLink>
-        <StyledLink to="">Services</StyledLink>
-        <StyledLink to="">About us</StyledLink>
-        <StyledLink to="">Contact</StyledLink>
+        <StyledLink to="/find-doctor">Find a Doctor</StyledLink>
+        <StyledLink to="/service">Services</StyledLink>
+        <StyledLink to="/about-us">About us</StyledLink>
+        <StyledLink to="/contact">Contact</StyledLink>
       </Box>
 
       {user && (
