@@ -57,7 +57,7 @@ const Navbar = () => {
       </Box>
       <Box>
         <StyledLink to="/">Home</StyledLink>
-        <StyledLink to="/find-doctor">Find a Doctor</StyledLink>
+        <StyledLink to="/find-a-doctor">Find a Doctor</StyledLink>
         <StyledLink to="/service">Services</StyledLink>
         <StyledLink to="/about-us">About us</StyledLink>
         <StyledLink to="/contact">Contact</StyledLink>

@@ -46,7 +46,7 @@ const App = () => {
       <Routes>
         <Route element={<Home />} path="/" />
         <Route element={<LoginWithGoogle />} path="/login" />
-        <Route element={<FindDoctor />} path="/find-doctor" />
+        <Route element={<FindDoctor />} path="/find-a-doctor" />
         <Route element={<Service />} path="/service" />
         <Route element={<AboutUs />} path="/about-us" />
         <Route element={<Contact />} path="/contact" />
