@@ -1,4 +1,4 @@
-import { Box, Typography, styled } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import LogoAnimation from "../lottieAnimation/LogoAnimation";
 
 const MainContainer = styled(Box)(({ theme }) => ({
@@ -69,8 +69,8 @@ const Title = styled("p")(({ theme }) => ({
     letterSpacing: "0.25px",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.35rem",
-    letterSpacing: "0.2px",
+    fontSize: "0.2rem",
+    letterSpacing: "0.25px",
   },
 }));
 
@@ -92,8 +92,8 @@ const MailLink = styled("a")(({ theme }) => ({
     letterSpacing: "0.5px",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.35rem",
-    letterSpacing: "0.2px",
+    fontSize: "0.2rem",
+    letterSpacing: "0.25px",
   },
 }));
 
@@ -117,7 +117,7 @@ const ReserveTitle = styled("p")(({ theme }) => ({
     letterSpacing: "1px",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.2rem",
+    fontSize: "0.35rem",
     letterSpacing: "0.5px",
   },
 }));
