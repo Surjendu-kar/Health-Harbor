@@ -24,7 +24,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 const ProfileTitle = styled("h1")(() => ({
   margin: 0,
   padding: 0,
-  // marginBottom: "2rem",
   fontSize: "1.5rem",
 }));
 
@@ -227,12 +226,6 @@ function Info({
     setTimeSlots(newTimeSlots);
   };
 
-  // useEffect(() => {
-  //   if (fetchedData) {
-  //     setQualifications([...qualifications, {}]);
-  //     setExperiences([...experiences, {}]);
-  //   }
-  // }, []);
 
   useEffect(() => {
     if (fetchedData) {
