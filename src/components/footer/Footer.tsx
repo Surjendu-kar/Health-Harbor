@@ -114,9 +114,11 @@ const ReserveTitle = styled("p")(({ theme }) => ({
   fontSize: "1rem",
   [theme.breakpoints.down("md")]: {
     fontSize: "0.7rem",
+    letterSpacing: "1px",
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "0.35rem",
+    letterSpacing: "0.5px",
   },
 }));
 
