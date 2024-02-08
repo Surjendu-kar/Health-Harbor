@@ -1,50 +1,134 @@
 import { Box, Typography, styled } from "@mui/material";
 import LogoAnimation from "../lottieAnimation/LogoAnimation";
 
-const MainContainer = styled(Box)(() => ({
+const MainContainer = styled(Box)(({ theme }) => ({
   marginTop: "5rem",
   backgroundColor: "#e1edff",
   width: "100%",
+  [theme.breakpoints.down("md")]: {
+    marginTop: "3rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    marginTop: "1rem",
+  },
 }));
+const SecondMainContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "space-around",
+  padding: "5rem 5rem 2rem 5rem",
+  [theme.breakpoints.down("md")]: {
+    padding: "3rem 3rem 1rem 3rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    padding: "0.5rem",
+  },
+}));
+
 const Container = styled(Box)(() => ({
   width: "10%",
 }));
-const Heading = styled("p")(() => ({
+
+const MedicineStyle = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  width: "50px",
+  height: "55px",
+  [theme.breakpoints.down("lg")]: {
+    width: "50px",
+    height: "50px",
+  },
+  [theme.breakpoints.down("md")]: {
+    width: "30px",
+    height: "30px",
+  },
+  [theme.breakpoints.down("sm")]: { width: "15px", height: "15px" },
+}));
+
+const Heading = styled("p")(({ theme }) => ({
   fontSize: "1.25rem",
   fontWeight: "bold",
   color: "#0A1D56",
   letterSpacing: "1.5px",
+
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.85rem",
+    letterSpacing: "1.25px",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.4rem",
+    letterSpacing: "1px",
+  },
 }));
-const Title = styled("p")(() => ({
+const Title = styled("p")(({ theme }) => ({
   fontSize: "1rem",
   color: "#57535c",
   letterSpacing: "0.35px",
+
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.65rem",
+    letterSpacing: "0.25px",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.35rem",
+    letterSpacing: "0.25px",
+  },
 }));
-const MailLink = styled("a")(() => ({
+
+const MailLink = styled("a")(({ theme }) => ({
   textDecoration: "none",
   display: "block",
   color: "#57535c",
   fontSize: "1rem",
+  letterSpacing: "1.5px",
+
   transition: "color 0.3s ease-in-out, font-size 0.3s ease-in-out",
 
   "&:hover": {
     fontSize: "1.1rem",
+  },
+
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.65rem",
+    letterSpacing: "0.5px",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.35rem",
+    letterSpacing: "0.25px",
+  },
+}));
+
+const ReserveSection = styled(Box)(({ theme }) => ({
+  textAlign: "center",
+  paddingBottom: "1rem",
+  [theme.breakpoints.down("md")]: {
+    paddingBottom: "0.45rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    paddingBottom: "0.2rem",
+  },
+}));
+
+const ReserveTitle = styled("p")(({ theme }) => ({
+  letterSpacing: "1.5px",
+  color: "#57535c",
+  fontSize: "1rem",
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.7rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.35rem",
   },
 }));
 
 function Footer() {
   return (
     <MainContainer>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-around",
-          padding: "5rem 5rem 2rem 5rem",
-        }}
-      >
+      <SecondMainContainer>
         <Container sx={{ width: "20%" }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <LogoAnimation />
+            <MedicineStyle>
+              <LogoAnimation />
+            </MedicineStyle>
             <Heading>HealthHarbor</Heading>
           </Box>
           <Title>
@@ -93,17 +177,12 @@ function Footer() {
             </MailLink>
           </Box>
         </Container>
-      </Box>
+      </SecondMainContainer>
 
-      <Box sx={{ textAlign: "center", paddingBottom: "1rem" }}>
+      <ReserveSection>
         <hr style={{ width: "60%", opacity: "0.3" }} />
-        <Typography
-          variant="p"
-          sx={{ letterSpacing: "1.5px", color: "#57535c" }}
-        >
-          All rights reserved @2024
-        </Typography>
-      </Box>
+        <ReserveTitle>All rights reserved @2024</ReserveTitle>
+      </ReserveSection>
     </MainContainer>
   );
 }
