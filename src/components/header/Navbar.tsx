@@ -69,6 +69,7 @@ const MedicineStyle = styled(Box)(({ theme }) => ({
 
 const LogoLink = styled(StyledLink)(({ theme }) => ({
   fontSize: "1.15rem",
+  margin: theme.spacing(0, 0.05),
   [theme.breakpoints.down("lg")]: {
     fontSize: "1.2rem",
   },
@@ -79,7 +80,6 @@ const LogoLink = styled(StyledLink)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     fontSize: "0.4rem",
     letterSpacing: "1px",
-    margin: theme.spacing(0, 0.05),
   },
 }));
 

@@ -64,7 +64,7 @@ function ProfileDetails() {
     if (!fetchedData && user?.email) {
       const fetchData = async () => {
         const { data, error } = await FetchData({ userEmail: user.email });
-        setIsLoading(false); // Update loading state
+        setIsLoading(false);
         if (!error) {
           setFetchedData(data[0]);
         }
@@ -96,7 +96,7 @@ function ProfileDetails() {
   return (
     <MainContainer
       sx={{
-        animation: !isLoading ? `${blurOut} 0.5s ease-out forwards` : "none",
+        animation: !isLoading ? `${blurOut} 0.4s ease-out forwards` : "none",
         width: "100%",
       }}
     >

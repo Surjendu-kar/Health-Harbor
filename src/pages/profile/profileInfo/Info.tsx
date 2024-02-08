@@ -244,10 +244,10 @@ function Info({
 
   const toggleEditMode = () => {
     setIsEditMode(!isEditMode);
-    if (isEditMode) {
-      // Here, you can implement the logic to handle the submission of edited details
-      // For example, you could call an update function to save the edited details to the database
-    }
+    // if (isEditMode) {
+    //   // Here, you can implement the logic to handle the submission of edited details
+    //   // For example, you could call an update function to save the edited details to the database
+    // }
   };
 
   return (
