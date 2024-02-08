@@ -70,7 +70,7 @@ const Title = styled("p")(({ theme }) => ({
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "0.35rem",
-    letterSpacing: "0.25px",
+    letterSpacing: "0.2px",
   },
 }));
 
@@ -93,7 +93,7 @@ const MailLink = styled("a")(({ theme }) => ({
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "0.35rem",
-    letterSpacing: "0.25px",
+    letterSpacing: "0.2px",
   },
 }));
 
@@ -117,7 +117,7 @@ const ReserveTitle = styled("p")(({ theme }) => ({
     letterSpacing: "1px",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.35rem",
+    fontSize: "0.2rem",
     letterSpacing: "0.5px",
   },
 }));
