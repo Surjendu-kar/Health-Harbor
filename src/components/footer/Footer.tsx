@@ -5,6 +5,9 @@ const MainContainer = styled(Box)(({ theme }) => ({
   marginTop: "5rem",
   backgroundColor: "#e1edff",
   width: "100%",
+  [theme.breakpoints.down("lg")]: {
+    marginTop: "4rem",
+  },
   [theme.breakpoints.down("md")]: {
     marginTop: "3rem",
   },
@@ -16,8 +19,11 @@ const SecondMainContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "space-around",
   padding: "5rem 5rem 2rem 5rem",
+  [theme.breakpoints.down("lg")]: {
+    padding: "2rem 2rem 1rem 2rem",
+  },
   [theme.breakpoints.down("md")]: {
-    padding: "3rem 3rem 1rem 3rem",
+    padding: "2rem 2rem 1rem 2rem",
   },
   [theme.breakpoints.down("sm")]: {
     padding: "0.5rem",
@@ -137,7 +143,7 @@ const ReserveTitle = styled("p")(({ theme }) => ({
     letterSpacing: "1px",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.35rem",
+    fontSize: "0.2rem",
     letterSpacing: "0.5px",
   },
 }));
