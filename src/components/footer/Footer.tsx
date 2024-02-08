@@ -34,8 +34,8 @@ const MedicineStyle = styled(Box)(({ theme }) => ({
   width: "50px",
   height: "55px",
   [theme.breakpoints.down("lg")]: {
-    width: "50px",
-    height: "50px",
+    width: "35px",
+    height: "35px",
   },
   [theme.breakpoints.down("md")]: {
     width: "30px",
@@ -50,9 +50,13 @@ const Heading = styled("p")(({ theme }) => ({
   color: "#0A1D56",
   letterSpacing: "1.5px",
 
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "1rem",
+    letterSpacing: "1.25px",
+  },
   [theme.breakpoints.down("md")]: {
     fontSize: "0.85rem",
-    letterSpacing: "1.25px",
+    letterSpacing: "1.05px",
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "0.35rem",
@@ -64,6 +68,10 @@ const Title = styled("p")(({ theme }) => ({
   color: "#57535c",
   letterSpacing: "0.35px",
 
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "0.7rem",
+    letterSpacing: "0.25px",
+  },
   [theme.breakpoints.down("md")]: {
     fontSize: "0.65rem",
     letterSpacing: "0.25px",
@@ -86,6 +94,10 @@ const MailLink = styled("a")(({ theme }) => ({
   "&:hover": {
     fontSize: "1.1rem",
   },
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "0.7rem",
+    letterSpacing: "0.9px",
+  },
 
   [theme.breakpoints.down("md")]: {
     fontSize: "0.65rem",
@@ -100,6 +112,9 @@ const MailLink = styled("a")(({ theme }) => ({
 const ReserveSection = styled(Box)(({ theme }) => ({
   textAlign: "center",
   paddingBottom: "1rem",
+  [theme.breakpoints.down("lg")]: {
+    paddingBottom: "0.5rem",
+  },
   [theme.breakpoints.down("md")]: {
     paddingBottom: "0.45rem",
   },
@@ -112,8 +127,13 @@ const ReserveTitle = styled("p")(({ theme }) => ({
   letterSpacing: "1.5px",
   color: "#57535c",
   fontSize: "1rem",
-  [theme.breakpoints.down("md")]: {
+
+  [theme.breakpoints.down("lg")]: {
     fontSize: "0.7rem",
+    letterSpacing: "1.25px",
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.65rem",
     letterSpacing: "1px",
   },
   [theme.breakpoints.down("sm")]: {
