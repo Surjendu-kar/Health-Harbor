@@ -34,19 +34,19 @@ const StyledLink = styled(Link)(({ theme }) => ({
     },
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.85rem",
+    fontSize: "0.7rem",
     letterSpacing: "1.2px",
     "&:hover": {
-      fontSize: "0.95rem",
+      fontSize: "0.85rem",
     },
     margin: theme.spacing(0, 1),
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.5rem",
+    fontSize: "0.35rem",
     letterSpacing: "1px",
-    margin: theme.spacing(0, 1),
+    margin: theme.spacing(0, 0.5),
     "&:hover": {
-      fontSize: "0.6rem",
+      fontSize: "0.45rem",
     },
   },
 }));
@@ -61,10 +61,10 @@ const MedicineStyle = styled(Box)(({ theme }) => ({
     height: "50px",
   },
   [theme.breakpoints.down("md")]: {
-    width: "35px",
-    height: "35px",
+    width: "30px",
+    height: "30px",
   },
-  [theme.breakpoints.down("sm")]: { width: "27px", height: "27px" },
+  [theme.breakpoints.down("sm")]: { width: "15px", height: "15px" },
 }));
 
 const LogoLink = styled(StyledLink)(({ theme }) => ({
@@ -73,13 +73,13 @@ const LogoLink = styled(StyledLink)(({ theme }) => ({
     fontSize: "1.2rem",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "1rem",
+    fontSize: "0.9rem",
     letterSpacing: "1.2px",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.6rem",
+    fontSize: "0.4rem",
     letterSpacing: "1px",
-    margin: theme.spacing(0, 1),
+    margin: theme.spacing(0, 0.05),
   },
 }));
 
@@ -98,12 +98,12 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
     height: "33px",
   },
   [theme.breakpoints.down("md")]: {
-    width: "30px",
-    height: "30px",
+    width: "22px",
+    height: "22px",
   },
   [theme.breakpoints.down("sm")]: {
-    width: "23px",
-    height: "23px",
+    width: "18px",
+    height: "18px",
     border: "1px solid white",
   },
 }));
