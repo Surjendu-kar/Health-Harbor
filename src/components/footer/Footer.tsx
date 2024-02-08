@@ -41,7 +41,7 @@ const MedicineStyle = styled(Box)(({ theme }) => ({
     width: "30px",
     height: "30px",
   },
-  [theme.breakpoints.down("sm")]: { width: "15px", height: "15px" },
+  [theme.breakpoints.down("sm")]: { width: "13px", height: "13px" },
 }));
 
 const Heading = styled("p")(({ theme }) => ({
@@ -55,7 +55,7 @@ const Heading = styled("p")(({ theme }) => ({
     letterSpacing: "1.25px",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.4rem",
+    fontSize: "0.35rem",
     letterSpacing: "1px",
   },
 }));
@@ -69,7 +69,7 @@ const Title = styled("p")(({ theme }) => ({
     letterSpacing: "0.25px",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.2rem",
+    fontSize: "0.23rem",
     letterSpacing: "0.25px",
   },
 }));
@@ -92,7 +92,7 @@ const MailLink = styled("a")(({ theme }) => ({
     letterSpacing: "0.5px",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.2rem",
+    fontSize: "0.23rem",
     letterSpacing: "0.25px",
   },
 }));
