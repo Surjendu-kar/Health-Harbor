@@ -6,12 +6,13 @@ import { supabase } from "../../supabase/config";
 import { User } from "@supabase/supabase-js";
 import LogoAnimation from "../lottieAnimation/LogoAnimation";
 
-const NavContainer = styled(Box)(({ theme }) => ({
+const NavContainer = styled(Box)(() => ({
   display: "flex",
   justifyContent: "space-around",
   alignItems: "center",
   padding: "0.5rem 0",
   backgroundColor: "#1D2B53",
+  width: "100%",
 }));
 
 const StyledLink = styled(Link)(({ theme }) => ({
@@ -33,11 +34,12 @@ const StyledLink = styled(Link)(({ theme }) => ({
     },
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.9rem",
+    fontSize: "0.85rem",
     letterSpacing: "1.2px",
     "&:hover": {
       fontSize: "0.95rem",
     },
+    margin: theme.spacing(0, 1),
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "0.5rem",
@@ -47,6 +49,22 @@ const StyledLink = styled(Link)(({ theme }) => ({
       fontSize: "0.6rem",
     },
   },
+}));
+
+const MedicineStyle = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  width: "50px",
+  height: "55px",
+  [theme.breakpoints.down("lg")]: {
+    width: "50px",
+    height: "50px",
+  },
+  [theme.breakpoints.down("md")]: {
+    width: "35px",
+    height: "35px",
+  },
+  [theme.breakpoints.down("sm")]: { width: "27px", height: "27px" },
 }));
 
 const LogoLink = styled(StyledLink)(({ theme }) => ({
@@ -84,8 +102,8 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
     height: "30px",
   },
   [theme.breakpoints.down("sm")]: {
-    width: "25px",
-    height: "25px",
+    width: "23px",
+    height: "23px",
     border: "1px solid white",
   },
 }));
@@ -107,10 +125,12 @@ const Navbar = () => {
   return (
     <NavContainer>
       <Box sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
-        <LogoAnimation />
+        <MedicineStyle>
+          <LogoAnimation />
+        </MedicineStyle>
         <LogoLink to="/">HealthHarbor</LogoLink>
       </Box>
-      <Box>
+      <Box sx={{ display: "flex" }}>
         <StyledLink to="/">Home</StyledLink>
         <StyledLink to="/find-a-doctor">Find a Doctor</StyledLink>
         <StyledLink to="/service">Services</StyledLink>
