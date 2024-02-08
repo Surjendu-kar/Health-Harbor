@@ -7,7 +7,7 @@ function HeroSection() {
     fontSize: "3rem",
   }));
   const Title = styled(Typography)(() => ({
-    fontSize: "1.5rem",
+    fontSize: "1.2rem",
   }));
 
   return (
@@ -20,14 +20,37 @@ function HeroSection() {
         border: "1px solid black",
       }}
     >
-      <Box>
+      <Box
+        sx={{
+          // display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+
+          "@keyframes scrollAnimation": {
+            "0%": {
+              transform: "translateX(-50%)",
+              opacity: 0,
+            },
+            "100%": {
+              transform: "translateX(0)",
+              opacity: 1,
+            },
+          },
+          animation: "scrollAnimation 1s ease-out forwards",
+        }}
+      >
         <Heading>Welcome to HealthHarbor</Heading>
         <Title>Find and manage your healthcare appointments with ease.</Title>
-        <Button onClick={() => navigate("/find-a-doctor")}>
+        <Button
+          variant="contained"
+          onClick={() => navigate("/find-a-doctor")}
+          sx={{ width: "200px", marginTop: "1rem" }}
+        >
           Find a Doctor
         </Button>
       </Box>
-      <Box>img</Box>
+
+      <Box>{/* Image Section */}</Box>
     </Box>
   );
 }

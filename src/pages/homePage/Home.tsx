@@ -32,7 +32,9 @@ function Home() {
   return (
     <Box height={"100vh"}>
       {user && <Box></Box>}
-      {/* <HeroSection /> */}
+      <Box>
+        <HeroSection />
+      </Box>
     </Box>
   );
 }
