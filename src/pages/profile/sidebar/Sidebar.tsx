@@ -4,30 +4,75 @@ import { supabase } from "../../../supabase/config";
 import { User } from "@supabase/supabase-js";
 import { useNavigate } from "react-router-dom";
 
-
-const MainContainer = styled(Box)(() => ({
+const MainContainer = styled(Box)(({ theme }) => ({
   margin: "2rem 5rem",
   padding: "2rem",
-  maxHeight: "20rem",
+  height: "30%",
   borderRadius: "10px",
   backgroundColor: "white",
   textAlign: "center",
   boxShadow: "1px 4px 8px rgba(0, 0, 0, 0.1)",
+
+  [theme.breakpoints.down("lg")]: {
+    margin: "0rem 3rem",
+    padding: "1.5rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    margin: "0rem 2.5rem",
+    padding: "1rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    margin: "0rem 1rem",
+    padding: "0.5rem",
+  },
+}));
+const FirstContainer = styled(Box)(() => ({
+  display: "flex",
+  flexDirection: "column",
+}));
+const SecondContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  marginTop: "2rem",
+  [theme.breakpoints.down("lg")]: {
+    marginTop: "1.5rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    marginTop: "1rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    marginTop: "0.5rem",
+  },
 }));
 
-const TextStyle = styled(Typography)(() => ({
+const TextStyle = styled(Typography)(({ theme }) => ({
   cursor: "pointer",
   padding: "1rem 4rem",
+  fontSize: "1rem",
   borderRadius: "5px",
   transition: "background-color 0.3s",
   "&:hover": {
     backgroundColor: "#4e5d8e",
     color: "#fff",
   },
+
+  [theme.breakpoints.down("lg")]: {
+    padding: "0.8rem 3rem",
+    fontSize: "0.8rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    padding: "0.6rem 2rem",
+    fontSize: "0.6rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    padding: "0.3rem 0.8rem",
+    fontSize: "0.4rem",
+  },
 }));
 const LogOut = styled(TextStyle)(() => ({
   backgroundColor: "#000",
   color: "#fff",
+  fontSize: "1rem",
 
   "&:hover": {
     backgroundColor: "#fff",
@@ -35,13 +80,25 @@ const LogOut = styled(TextStyle)(() => ({
   },
 }));
 
-const DeleteAc = styled(TextStyle)(() => ({
+const DeleteAc = styled(TextStyle)(({ theme }) => ({
   backgroundColor: "red",
+  fontSize: "1rem",
   color: "#fff",
   marginTop: "0.5rem",
+
   "&:hover": {
     backgroundColor: "#fff",
     color: "#000",
+  },
+
+  [theme.breakpoints.down("lg")]: {
+    marginTop: "0.4rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    marginTop: "0.3rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    marginTop: "0.2rem",
   },
 }));
 
@@ -67,18 +124,18 @@ function Sidebar({ onMenuSelect }) {
 
   return (
     <MainContainer>
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
+      <FirstContainer>
         <TextStyle onClick={() => onMenuSelect("overview")}>Overview</TextStyle>
         <TextStyle onClick={() => onMenuSelect("appointments")}>
           Appointments
         </TextStyle>
         <TextStyle onClick={() => onMenuSelect("profile")}>Profile</TextStyle>
-      </Box>
+      </FirstContainer>
       {user && (
-        <Box sx={{ display: "flex", flexDirection: "column", mt: "2rem" }}>
+        <SecondContainer>
           <LogOut onClick={handleLogout}>Logout</LogOut>
           <DeleteAc>Delete Account</DeleteAc>
-        </Box>
+        </SecondContainer>
       )}
     </MainContainer>
   );

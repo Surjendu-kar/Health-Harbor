@@ -10,11 +10,20 @@ import Appointments from "./appointments/Appointments";
 import FetchData from "../../supabase/FetchData";
 import LoadingAnimation from "../../components/lottieAnimation/LoadingAnimation";
 
-const MainContainer = styled(Box)(() => ({
+const MainContainer = styled(Box)(({ theme }) => ({
   width: "100%",
   display: "flex",
   justifyContent: "center",
   marginTop: "2rem",
+  [theme.breakpoints.down("lg")]: {
+    marginTop: "1.7rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    marginTop: "1rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    marginTop: "0.5rem",
+  },
 }));
 
 type DoctorInfo = {
@@ -97,7 +106,6 @@ function ProfileDetails() {
     <MainContainer
       sx={{
         animation: !isLoading ? `${blurOut} 0.4s ease-out forwards` : "none",
-        width: "100%",
       }}
     >
       <Sidebar onMenuSelect={handleMenuSelect} />
