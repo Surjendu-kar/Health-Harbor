@@ -87,11 +87,29 @@ function TimeSlot({
   // }, [timeSlot]);
 
   return (
-    <Box sx={{ display: "flex", width: "100%", gap: "1rem" }}>
-      {/* Day Box */}
-      <Box width={"30%"}>
+    <Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-around",
+          alignItems: "center",
+          gap: "1rem",
+        }}
+      >
         <Text>Day</Text>
-        <FormControl fullWidth>
+        <Text>Starting Time</Text>
+        <Text>Ending Time</Text>
+      </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-around",
+          gap: "1rem",
+          width: "100%",
+        }}
+      >
+        <FormControl sx={{ flex: 1, minWidth: 120 }}>
           <InputLabel>Select</InputLabel>
           <Select
             labelId="demo-simple-select-label"
@@ -103,7 +121,7 @@ function TimeSlot({
                 : timeSlot.day
             }
             onChange={handleDayChange}
-            sx={{ backgroundColor: "#fff" }}
+            sx={{ backgroundColor: "#fff", width: "100%" }}
             // disabled={timeSlot}
           >
             <MenuItem value="sunday">Sunday</MenuItem>
@@ -115,70 +133,69 @@ function TimeSlot({
             <MenuItem value="saturday">Saturday</MenuItem>
           </Select>
         </FormControl>
-      </Box>
 
-      {/* Time Pickers Box */}
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        {/* Starting Time Box */}
-        <Box width={"30%"}>
-          <Text>Starting Time</Text>
-          <TimePicker
-            // Example of adjusting the TimePicker value assignment
-            value={
-              fetchedData && fetchedData.timeSlot
-                ? dayjs(
-                    JSON.parse(fetchedData.timeSlot)[0].startTime,
-                    "HH:mm:ss"
-                  ).isValid()
+        {/* Starting Time Picker */}
+        <Box sx={{ flex: 1 }}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <TimePicker
+              // Example of adjusting the TimePicker value assignment
+              value={
+                fetchedData && fetchedData.timeSlot
                   ? dayjs(
                       JSON.parse(fetchedData.timeSlot)[0].startTime,
                       "HH:mm:ss"
-                    )
+                    ).isValid()
+                    ? dayjs(
+                        JSON.parse(fetchedData.timeSlot)[0].startTime,
+                        "HH:mm:ss"
+                      )
+                    : null
+                  : timeSlot.startTime &&
+                    dayjs(timeSlot.startTime, "HH:mm:ss").isValid()
+                  ? dayjs(timeSlot.startTime, "HH:mm:ss")
                   : null
-                : timeSlot.startTime &&
-                  dayjs(timeSlot.startTime, "HH:mm:ss").isValid()
-                ? dayjs(timeSlot.startTime, "HH:mm:ss")
-                : null
-            }
-            onChange={handleStartTimeChange}
-            renderInput={(props) => (
-              <TextField {...props} placeholder="Select time" />
-            )}
-            // disabled={timeSlot}
-            sx={{ backgroundColor: "#fff" }}
-          />
+              }
+              onChange={handleStartTimeChange}
+              renderInput={(props) => (
+                <TextField {...props} placeholder="Select time" />
+              )}
+              // disabled={timeSlot}
+              sx={{ backgroundColor: "#fff", width: "100%" }}
+            />
+          </LocalizationProvider>
         </Box>
 
-        {/* Ending Time Box */}
-        <Box width={"30%"}>
-          <Text>Ending Time</Text>
-          <TimePicker
-            // Example of adjusting the TimePicker value assignment
-            value={
-              fetchedData && fetchedData.timeSlot
-                ? dayjs(
-                    JSON.parse(fetchedData.timeSlot)[0].endTime,
-                    "HH:mm:ss"
-                  ).isValid()
+        {/* Ending Time Picker */}
+        <Box sx={{ flex: 1 }}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <TimePicker
+              // Example of adjusting the TimePicker value assignment
+              value={
+                fetchedData && fetchedData.timeSlot
                   ? dayjs(
                       JSON.parse(fetchedData.timeSlot)[0].endTime,
                       "HH:mm:ss"
-                    )
+                    ).isValid()
+                    ? dayjs(
+                        JSON.parse(fetchedData.timeSlot)[0].endTime,
+                        "HH:mm:ss"
+                      )
+                    : null
+                  : timeSlot.endTime &&
+                    dayjs(timeSlot.endTime, "HH:mm:ss").isValid()
+                  ? dayjs(timeSlot.endTime, "HH:mm:ss")
                   : null
-                : timeSlot.endTime &&
-                  dayjs(timeSlot.endTime, "HH:mm:ss").isValid()
-                ? dayjs(timeSlot.endTime, "HH:mm:ss")
-                : null
-            }
-            onChange={handleEndTimeChange}
-            renderInput={(props) => (
-              <TextField {...props} placeholder="Select time" />
-            )}
-            // disabled={timeSlot}
-            sx={{ backgroundColor: "#fff" }}
-          />
+              }
+              onChange={handleEndTimeChange}
+              renderInput={(props) => (
+                <TextField {...props} placeholder="Select time" />
+              )}
+              // disabled={timeSlot}
+              sx={{ backgroundColor: "#fff", width: "100%" }}
+            />
+          </LocalizationProvider>
         </Box>
-      </LocalizationProvider>
+      </Box>
     </Box>
   );
 }

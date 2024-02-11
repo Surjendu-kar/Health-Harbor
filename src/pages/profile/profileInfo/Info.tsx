@@ -21,10 +21,18 @@ import { Edit, Check } from "@mui/icons-material";
 import UpdateData from "../../../supabase/UpdateData";
 import CircularProgress from "@mui/material/CircularProgress";
 
-const ProfileTitle = styled("h1")(() => ({
-  margin: 0,
-  padding: 0,
-  fontSize: "1.5rem",
+const MainContainer = styled(Box)(({ theme }) => ({
+  width: "50%",
+  margin: "2rem 0",
+  [theme.breakpoints.down("lg")]: {
+    margin: "0",
+  },
+  [theme.breakpoints.down("md")]: {
+    margin: "0",
+  },
+  [theme.breakpoints.down("sm")]: {
+    margin: "0",
+  },
 }));
 
 const ProfileTitleContainer = styled(Box)(() => ({
@@ -33,15 +41,87 @@ const ProfileTitleContainer = styled(Box)(() => ({
   justifyContent: "space-between",
 }));
 
-const MainContainer = styled(Box)(() => ({
-  width: "50%",
-  margin: "2rem 0",
+const EditBtn = styled(Button)(({ theme }) => ({
+  color: "#1D2B53",
+  background: "#80808014",
+  borderRadius: "10px",
+  transition: "transform 0.3s ease",
+  ":hover": {
+    transform: "scale(1.15)",
+  },
+  "& .MuiButton-startIcon": {
+    transition: "transform 0.3s ease",
+    ":hover": {
+      transform: "scale(1.2)",
+    },
+  },
+  [theme.breakpoints.down("lg")]: {
+    minWidth: "48px",
+    height: "28px",
+  },
+  [theme.breakpoints.down("md")]: {
+    maxWidth: "30px",
+    height: "20px",
+  },
+  [theme.breakpoints.down("sm")]: {
+    maxWidth: "12px",
+    height: "12px",
+  },
 }));
 
-const TitleTextField = styled(TextField)(() => ({
+const ProfileTitle = styled("h1")(({ theme }) => ({
+  margin: 0,
+  padding: 0,
+  fontSize: "1.5rem",
+  [theme.breakpoints.down("lg")]: { fontSize: "1.15rem" },
+  [theme.breakpoints.down("md")]: { fontSize: "0.9rem" },
+  [theme.breakpoints.down("sm")]: { fontSize: "0.7rem" },
+}));
+
+const TitleTextField = styled(TextField)(({ theme }) => ({
   marginTop: "1.5rem",
   display: "block",
   backgroundColor: "#fff",
+  "& .MuiInputBase-root": {
+    [theme.breakpoints.down("lg")]: {
+      fontSize: "0.95rem",
+      padding: "0px",
+    },
+    [theme.breakpoints.down("md")]: {
+      fontSize: "0.85rem",
+    },
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.6rem",
+    },
+  },
+  "& .MuiOutlinedInput-input": {
+    [theme.breakpoints.down("lg")]: {
+      height: "20px",
+    },
+    [theme.breakpoints.down("md")]: {
+      height: "10px",
+    },
+    [theme.breakpoints.down("sm")]: {
+      height: "0px",
+    },
+  },
+}));
+
+const ResponsiveSelect = styled(Select)(({ theme }) => ({
+  "& .MuiSelect-select": {
+    [theme.breakpoints.down("lg")]: {
+      fontSize: "0.95rem",
+      padding: "15px",
+    },
+    [theme.breakpoints.down("md")]: {
+      fontSize: "0.85rem",
+      padding: "10px",
+    },
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.6rem",
+      padding: "5px",
+    },
+  },
 }));
 
 const SelectOption = styled(Box)(() => ({
@@ -51,14 +131,27 @@ const SelectOption = styled(Box)(() => ({
 }));
 
 const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
+  fontSize: "1rem",
   boxShadow: "1px 4px 8px rgba(0, 0, 0, 0.3)",
-
+  marginTop: "1.5rem",
   color: theme.palette.getContrastText(purple[500]),
   backgroundColor: "#6a79ff",
   "&:hover": {
     backgroundColor: "#5162ff",
   },
-  marginTop: "1.5rem",
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "0.7rem",
+    padding: "8px 15px",
+  },
+
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.6rem",
+    padding: "6px 15px",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.5rem",
+    padding: "4px 10px",
+  },
 }));
 
 interface IQualification {
@@ -226,7 +319,6 @@ function Info({
     setTimeSlots(newTimeSlots);
   };
 
-
   useEffect(() => {
     if (fetchedData) {
       setName(fetchedData.name);
@@ -255,26 +347,9 @@ function Info({
       <ProfileTitleContainer>
         <ProfileTitle>Profile Information</ProfileTitle>
         {fetchedData && (
-          <Button
-            onClick={toggleEditMode}
-            sx={{
-              color: "#1D2B53",
-              background: "#80808014",
-              borderRadius: "10px",
-              transition: "transform 0.3s ease",
-              ":hover": {
-                transform: "scale(1.15)",
-              },
-              "& .MuiButton-startIcon": {
-                transition: "transform 0.3s ease",
-                ":hover": {
-                  transform: "scale(1.2)",
-                },
-              },
-            }}
-          >
+          <EditBtn onClick={toggleEditMode}>
             {isEditMode ? <Check /> : <Edit />}
-          </Button>
+          </EditBtn>
         )}
       </ProfileTitleContainer>
 
@@ -334,7 +409,7 @@ function Info({
             disabled={!isEditMode}
           >
             <InputLabel id="demo-simple-select-label">Gender*</InputLabel>
-            <Select
+            <ResponsiveSelect
               required
               labelId="demo-simple-select-label"
               id="demo-simple-select"
@@ -345,7 +420,7 @@ function Info({
             >
               <MenuItem value="male">Male</MenuItem>
               <MenuItem value="female">Female</MenuItem>
-            </Select>
+            </ResponsiveSelect>
           </FormControl>
 
           <FormControl
@@ -356,7 +431,7 @@ function Info({
             <InputLabel id="demo-simple-select-label">
               Specialization*
             </InputLabel>
-            <Select
+            <ResponsiveSelect
               required
               labelId="demo-simple-select-label"
               id="demo-simple-select"
@@ -373,7 +448,7 @@ function Info({
               <MenuItem value="neurology">Neurology</MenuItem>
               <MenuItem value="orthopedic">Orthopedic</MenuItem>
               <MenuItem value="stomach">Stomach</MenuItem>
-            </Select>
+            </ResponsiveSelect>
           </FormControl>
 
           <TitleTextField

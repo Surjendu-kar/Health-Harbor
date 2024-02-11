@@ -1,4 +1,4 @@
-import { Box, Button, Typography, styled } from "@mui/material";
+import { Box, Typography, styled } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 function HeroSection() {
@@ -8,6 +8,16 @@ function HeroSection() {
   }));
   const Title = styled(Typography)(() => ({
     fontSize: "1.2rem",
+  }));
+
+  const FindADoctor = styled(Typography)(() => ({
+    display: "inline",
+    fontSize: "1.25rem",
+    backgroundColor: "#deeaff8f",
+    padding: "1rem",
+    borderRadius: "10px",
+    lineHeight: 2.5,
+    cursor: "pointer",
   }));
 
   return (
@@ -41,13 +51,9 @@ function HeroSection() {
       >
         <Heading>Welcome to HealthHarbor</Heading>
         <Title>Find and manage your healthcare appointments with ease.</Title>
-        <Button
-          variant="contained"
-          onClick={() => navigate("/find-a-doctor")}
-          sx={{ width: "200px", marginTop: "1rem" }}
-        >
+        <FindADoctor onClick={() => navigate("/find-a-doctor")}>
           Find a Doctor
-        </Button>
+        </FindADoctor>
       </Box>
 
       <Box>{/* Image Section */}</Box>

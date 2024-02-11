@@ -70,6 +70,20 @@ const MedicineStyle = styled(Box)(({ theme }) => ({
 const LogoLink = styled(StyledLink)(({ theme }) => ({
   fontSize: "1.15rem",
   margin: theme.spacing(0, 0.05),
+  position: "relative",
+  "&::after": {
+    content: '""',
+    position: "absolute",
+    left: 0,
+    bottom: 0,
+    height: "3px",
+    width: "0%",
+    backgroundColor: "#fff",
+    transition: "all ease 1s",
+  },
+  "&:hover::after": {
+    width: "100%",
+  },
   [theme.breakpoints.down("lg")]: {
     fontSize: "1.2rem",
   },

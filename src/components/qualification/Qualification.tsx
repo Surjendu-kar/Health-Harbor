@@ -58,71 +58,87 @@ function Qualification({
   };
 
   return (
-    <Box sx={{ display: "flex", width: "100%", gap: "1rem" }}>
-      <Box>
+    <Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-around",
+          alignItems: "center",
+          gap: "1rem",
+        }}
+      >
         <Text>Starting Date</Text>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            value={
-              fetchedData && fetchedData.qualifications
-                ? dayjs(JSON.parse(fetchedData.qualifications)[0].startDate)
-                : qualification.startDate
-            }
-            onChange={(newDate) => handleDateChange("startDate", newDate)}
-            renderInput={(params) => <TitleTextField {...params} />}
-            sx={{ backgroundColor: "#fff" }}
-            disabled={!!fetchedData}
-            
-          />
-        </LocalizationProvider>
-      </Box>
-      <Box>
         <Text>Ending Date</Text>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            value={
-              fetchedData && fetchedData.qualifications
-                ? dayjs(JSON.parse(fetchedData.qualifications)[0].endDate)
-                : qualification.endDate
-            }
-            onChange={(newDate) => handleDateChange("endDate", newDate)}
-            renderInput={(params) => <TitleTextField {...params} />}
-            sx={{ backgroundColor: "#fff" }}
-            disabled={!!fetchedData}
-          />
-        </LocalizationProvider>
+        <Text>Degree</Text>
+        <Text>University</Text>
       </Box>
 
-      <Box>
-        <Text>Degree*</Text>
-        <TitleTextField
-          required
-          value={
-            fetchedData && fetchedData.qualifications
-              ? JSON.parse(fetchedData.qualifications)[0].degree
-              : qualification.degree
-          }
-          id="degree"
-          fullWidth
-          onChange={(e) => handleFieldChange("degree", e.target.value)}
-          disabled={!!fetchedData}
-        />
-      </Box>
-      <Box>
-        <Text>University*</Text>
-        <TitleTextField
-          required
-          value={
-            fetchedData && fetchedData.qualifications
-              ? JSON.parse(fetchedData.qualifications)[0].university
-              : qualification.university
-          }
-          id="university"
-          // label="required"
-          fullWidth
-          onChange={(e) => handleFieldChange("university", e.target.value)}
-          disabled={!!fetchedData}
-        />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-around",
+          gap: "1rem",
+        }}
+      >
+        <Box>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              value={
+                fetchedData && fetchedData.qualifications
+                  ? dayjs(JSON.parse(fetchedData.qualifications)[0].startDate)
+                  : qualification.startDate
+              }
+              sx={{ backgroundColor: "#fff" }}
+              onChange={(newDate) => handleDateChange("startDate", newDate)}
+              renderInput={(params) => <TitleTextField {...params} />}
+              disabled={!!fetchedData}
+            />
+          </LocalizationProvider>
+        </Box>
+        <Box>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              value={
+                fetchedData && fetchedData.qualifications
+                  ? dayjs(JSON.parse(fetchedData.qualifications)[0].endDate)
+                  : qualification.endDate
+              }
+              sx={{ backgroundColor: "#fff" }}
+              onChange={(newDate) => handleDateChange("endDate", newDate)}
+              renderInput={(params) => <TitleTextField {...params} />}
+              disabled={!!fetchedData}
+            />
+          </LocalizationProvider>
+        </Box>
+        <Box>
+          <TitleTextField
+            label="required"
+            required
+            fullWidth
+            value={
+              fetchedData && fetchedData.qualifications
+                ? JSON.parse(fetchedData.qualifications)[0].degree
+                : qualification.degree
+            }
+            onChange={(e) => handleFieldChange("degree", e.target.value)}
+            disabled={!!fetchedData}
+            sx={{ marginBottom: "1rem" }}
+          />
+        </Box>
+        <Box>
+          <TitleTextField
+            label="required"
+            fullWidth
+            required
+            value={
+              fetchedData && fetchedData.qualifications
+                ? JSON.parse(fetchedData.qualifications)[0].university
+                : qualification.university
+            }
+            onChange={(e) => handleFieldChange("university", e.target.value)}
+            disabled={!!fetchedData}
+          />
+        </Box>
       </Box>
     </Box>
   );

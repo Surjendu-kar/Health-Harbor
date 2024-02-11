@@ -56,71 +56,90 @@ function Experiences({
   };
 
   return (
-    <Box sx={{ display: "flex", width: "100%", gap: "1rem" }}>
-      <Box>
+    <Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-around",
+          alignItems: "center",
+          gap: "1rem",
+        }}
+      >
         <Text>Starting Date</Text>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            value={
-              fetchedData && fetchedData.experiences
-                ? dayjs(JSON.parse(fetchedData.experiences)[0].startDate)
-                : experience.startDate
-            }
-            onChange={(newDate) => handleDateChange("startDate", newDate)}
-            renderInput={(params) => <TitleTextField {...params} />}
-            sx={{ backgroundColor: "#fff" }}
-            disabled={!!fetchedData}
-          />
-        </LocalizationProvider>
-      </Box>
-      <Box>
         <Text>Ending Date</Text>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
+        <Text>Position</Text>
+        <Text>Hospital</Text>
+      </Box>
+      
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-around",
+          gap: "1rem",
+        }}
+      >
+        <Box>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              value={
+                fetchedData && fetchedData.experiences
+                  ? dayjs(JSON.parse(fetchedData.experiences)[0].startDate)
+                  : experience.startDate
+              }
+              onChange={(newDate) => handleDateChange("startDate", newDate)}
+              renderInput={(params) => <TitleTextField {...params} />}
+              sx={{ backgroundColor: "#fff" }}
+              disabled={!!fetchedData}
+            />
+          </LocalizationProvider>
+        </Box>
+        <Box>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              value={
+                fetchedData && fetchedData.experiences
+                  ? dayjs(JSON.parse(fetchedData.experiences)[0].endDate)
+                  : experience.endDate
+              }
+              onChange={(newDate) => handleDateChange("endDate", newDate)}
+              renderInput={(params) => <TitleTextField {...params} />}
+              sx={{ backgroundColor: "#fff" }}
+              disabled={!!fetchedData}
+            />
+          </LocalizationProvider>
+        </Box>
+        <Box>
+          <TitleTextField
+            required
             value={
               fetchedData && fetchedData.experiences
-                ? dayjs(JSON.parse(fetchedData.experiences)[0].endDate)
-                : experience.endDate
+                ? JSON.parse(fetchedData.experiences)[0].position
+                : experience.position
             }
-            onChange={(newDate) => handleDateChange("endDate", newDate)}
-            renderInput={(params) => <TitleTextField {...params} />}
-            sx={{ backgroundColor: "#fff" }}
+            id="position"
+            // label="required"
+            fullWidth
+            onChange={(e) => handleFieldChange("position", e.target.value)}
             disabled={!!fetchedData}
           />
-        </LocalizationProvider>
+        </Box>
+        <Box>
+          <TitleTextField
+            required
+            value={
+              fetchedData && fetchedData.experiences
+                ? JSON.parse(fetchedData.experiences)[0].hospital
+                : experience.hospital
+            }
+            id="hospital"
+            // label="required"
+            fullWidth
+            onChange={(e) => handleFieldChange("hospital", e.target.value)}
+            disabled={!!fetchedData}
+          />
+        </Box>
       </Box>
-      <Box>
-        <Text>Position*</Text>
-        <TitleTextField
-          required
-          value={
-            fetchedData && fetchedData.experiences
-              ? JSON.parse(fetchedData.experiences)[0].position
-              : experience.position
-          }
-          id="position"
-          // label="required"
-          fullWidth
-          onChange={(e) => handleFieldChange("position", e.target.value)}
-          disabled={!!fetchedData}
-        />
-      </Box>
-      <Box>
-        <Text>Hospital*</Text>
-        <TitleTextField
-          required
-          value={
-            fetchedData && fetchedData.experiences
-              ? JSON.parse(fetchedData.experiences)[0].hospital
-              : experience.hospital
-          }
-          id="hospital"
-          // label="required"
-          fullWidth
-          onChange={(e) => handleFieldChange("hospital", e.target.value)}
-          disabled={!!fetchedData}
-        />
-      </Box>
+
     </Box>
   );
 }
