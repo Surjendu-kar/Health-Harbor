@@ -12,9 +12,34 @@ const TitleTextField = styled(TextField)(() => ({
   backgroundColor: "#fff",
 }));
 
-const Text = styled(Typography)(() => ({
+const TextContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "space-around",
+  alignItems: "center",
+  gap: "1rem",
   margin: "1.5rem 0 0.5rem 0",
+
+  [theme.breakpoints.down("lg")]: {
+    margin: "1rem 0 0.3rem 0",
+  },
+  [theme.breakpoints.down("md")]: {
+    margin: "0.8rem 0 0.2rem 0",
+  },
+  [theme.breakpoints.down("sm")]: {
+    margin: "0.6rem 0 0.1rem 0",
+  },
+}));
+const Text = styled(Typography)(({ theme }) => ({
   fontSize: "0.9rem",
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "0.8rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.7rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.55rem",
+  },
 }));
 
 interface IQualification {
@@ -59,19 +84,12 @@ function Qualification({
 
   return (
     <Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-around",
-          alignItems: "center",
-          gap: "1rem",
-        }}
-      >
+      <TextContainer>
         <Text>Starting Date</Text>
         <Text>Ending Date</Text>
         <Text>Degree</Text>
         <Text>University</Text>
-      </Box>
+      </TextContainer>
 
       <Box
         sx={{

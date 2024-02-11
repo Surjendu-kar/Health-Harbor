@@ -82,6 +82,17 @@ const TitleTextField = styled(TextField)(({ theme }) => ({
   marginTop: "1.5rem",
   display: "block",
   backgroundColor: "#fff",
+
+  [theme.breakpoints.down("lg")]: {
+    marginTop: "1rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    marginTop: "0.9rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    marginTop: "0.7rem",
+  },
+
   "& .MuiInputBase-root": {
     [theme.breakpoints.down("lg")]: {
       fontSize: "0.95rem",
@@ -103,7 +114,21 @@ const TitleTextField = styled(TextField)(({ theme }) => ({
     },
     [theme.breakpoints.down("sm")]: {
       height: "0px",
+      padding: "15px",
     },
+  },
+}));
+const PriceTextField = styled(TitleTextField)(({ theme }) => ({
+  marginTop: "0rem",
+
+  [theme.breakpoints.down("lg")]: {
+    marginTop: "0rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    marginTop: "0rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    marginTop: "0rem",
   },
 }));
 
@@ -119,36 +144,49 @@ const ResponsiveSelect = styled(Select)(({ theme }) => ({
     },
     [theme.breakpoints.down("sm")]: {
       fontSize: "0.6rem",
-      padding: "5px",
+      padding: "3px",
     },
   },
 }));
 
-const SelectOption = styled(Box)(() => ({
+const SelectOption = styled(Box)(({ theme }) => ({
   display: "flex",
   marginTop: "1.5rem",
   gap: 10,
+  [theme.breakpoints.down("lg")]: {
+    marginTop: "1rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    marginTop: "0.9rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    marginTop: "0.7rem",
+  },
 }));
 
 const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
   fontSize: "1rem",
   boxShadow: "1px 4px 8px rgba(0, 0, 0, 0.3)",
   marginTop: "1.5rem",
+
   color: theme.palette.getContrastText(purple[500]),
   backgroundColor: "#6a79ff",
   "&:hover": {
     backgroundColor: "#5162ff",
   },
   [theme.breakpoints.down("lg")]: {
+    marginTop: "1rem",
     fontSize: "0.7rem",
     padding: "8px 15px",
   },
 
   [theme.breakpoints.down("md")]: {
+    marginTop: "0.9rem",
     fontSize: "0.6rem",
     padding: "6px 15px",
   },
   [theme.breakpoints.down("sm")]: {
+    marginTop: "0.8rem",
     fontSize: "0.5rem",
     padding: "4px 10px",
   },
@@ -451,7 +489,7 @@ function Info({
             </ResponsiveSelect>
           </FormControl>
 
-          <TitleTextField
+          <PriceTextField
             required
             value={price}
             id="price"
@@ -515,17 +553,17 @@ function Info({
           ))}
         </Box>
 
-        <Typography sx={{ fontSize: "0.9rem", marginTop: "1rem" }}>
+        <Typography sx={{ fontSize: "1rem", marginTop: "1.5rem" }}>
           About
         </Typography>
-        <TextField
+        <PriceTextField
           fullWidth
           onChange={(e) => setAbout(e.target.value)}
           sx={{ backgroundColor: "#fff" }}
           value={about}
           // disabled={!!fetchedData}
           disabled={!isEditMode}
-        ></TextField>
+        ></PriceTextField>
 
         <ColorButton
           type="submit"
