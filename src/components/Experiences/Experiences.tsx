@@ -11,9 +11,35 @@ const TitleTextField = styled(TextField)(() => ({
   display: "block",
   backgroundColor: "#fff",
 }));
-const Text = styled(Typography)(() => ({
+
+const TextContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "space-around",
+  alignItems: "center",
+  gap: "1rem",
   margin: "1.5rem 0 0.5rem 0",
+
+  [theme.breakpoints.down("lg")]: {
+    margin: "1rem 0 0.3rem 0",
+  },
+  [theme.breakpoints.down("md")]: {
+    margin: "0.8rem 0 0.2rem 0",
+  },
+  [theme.breakpoints.down("sm")]: {
+    margin: "0.6rem 0 0.1rem 0",
+  },
+}));
+const Text = styled(Typography)(({ theme }) => ({
   fontSize: "0.9rem",
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "0.8rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.7rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.55rem",
+  },
 }));
 interface IExperience {
   startDate?: string;
@@ -57,20 +83,13 @@ function Experiences({
 
   return (
     <Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-around",
-          alignItems: "center",
-          gap: "1rem",
-        }}
-      >
+      <TextContainer>
         <Text>Starting Date</Text>
         <Text>Ending Date</Text>
         <Text>Position</Text>
         <Text>Hospital</Text>
-      </Box>
-      
+      </TextContainer>
+
       <Box
         sx={{
           display: "flex",
@@ -139,7 +158,6 @@ function Experiences({
           />
         </Box>
       </Box>
-
     </Box>
   );
 }

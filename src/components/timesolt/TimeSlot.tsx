@@ -17,9 +17,35 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 
-const Text = styled(Typography)(() => ({
+const TextContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "space-around",
+  alignItems: "center",
+  gap: "1rem",
   margin: "1.5rem 0 0.5rem 0",
+
+  [theme.breakpoints.down("lg")]: {
+    margin: "1rem 0 0.3rem 0",
+  },
+  [theme.breakpoints.down("md")]: {
+    margin: "0.8rem 0 0.2rem 0",
+  },
+  [theme.breakpoints.down("sm")]: {
+    margin: "0.6rem 0 0.1rem 0",
+  },
+}));
+
+const Text = styled(Typography)(({ theme }) => ({
   fontSize: "0.9rem",
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "0.8rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.7rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.55rem",
+  },
 }));
 
 const createTimeSlot = (day = "", startTime = null, endTime = null) => ({
@@ -82,24 +108,14 @@ function TimeSlot({
   useEffect(() => {
     onTimeSlotChange(timeSlot);
   }, [timeSlot, onTimeSlotChange]);
-  // useEffect(() => {
-  //   onTimeSlotChange(timeSlot);
-  // }, [timeSlot]);
-
+  
   return (
     <Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-around",
-          alignItems: "center",
-          gap: "1rem",
-        }}
-      >
+      <TextContainer>
         <Text>Day</Text>
         <Text>Starting Time</Text>
         <Text>Ending Time</Text>
-      </Box>
+      </TextContainer>
 
       <Box
         sx={{
@@ -138,7 +154,6 @@ function TimeSlot({
         <Box sx={{ flex: 1 }}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <TimePicker
-              // Example of adjusting the TimePicker value assignment
               value={
                 fetchedData && fetchedData.timeSlot
                   ? dayjs(
@@ -169,7 +184,6 @@ function TimeSlot({
         <Box sx={{ flex: 1 }}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <TimePicker
-              // Example of adjusting the TimePicker value assignment
               value={
                 fetchedData && fetchedData.timeSlot
                   ? dayjs(
