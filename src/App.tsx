@@ -4,14 +4,12 @@ import Home from "./pages/homePage/Home";
 import { LoginWithGoogle } from "./pages/loginPage/LoginWithGoogle";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { supabase } from "./supabase/config";
-import About from "./pages/aboutPage/About";
-import Contact from "./pages/contactPage/Contact";
-import Navbar from "./components/header/Navbar";
-import Footer from "./components/footer/Footer";
 import FindDoctor from "./pages/find a doctor/FindDoctor";
 import Service from "./pages/servicePage/Service";
 import AboutUs from "./pages/aboutUsPage/AboutUs";
 import Contact from "./pages/contactPage/Contact";
+import Navbar from "./components/header/Navbar";
+import Footer from "./components/footer/Footer";
 
 const App = () => {
   const navigate = useNavigate();
