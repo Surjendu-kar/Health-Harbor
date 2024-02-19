@@ -5,6 +5,8 @@ import Home from "./pages/homePage/Home";
 import { LoginWithGoogle } from "./pages/loginPage/LoginWithGoogle";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { supabase } from "./supabase/config";
+import About from "./pages/aboutPage/About";
+import Contact from "./pages/contactPage/Contact";
 import Navbar from "./components/header/Navbar";
 import Footer from "./components/footer/Footer";
 
@@ -45,6 +47,8 @@ const App = () => {
         <Route element={<LoginWithGoogle />} path="/login" />
         <Route element={<ProfileDetails />} path="/profile" />
         <Route element={<Details />} path="/details" />
+        <Route element={<About />} path="/about" />
+        <Route element={<Contact />} path="/contact" />
       </Routes>
       <Footer />
     </>

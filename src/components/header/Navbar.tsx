@@ -60,7 +60,8 @@ const Navbar = () => {
         <StyledLink to="">Find a Doctor</StyledLink>
         <StyledLink to="">AI</StyledLink>
         <StyledLink to="">Services</StyledLink>
-        <StyledLink to="">Contact</StyledLink>
+        <StyledLink to="/about">About</StyledLink>
+        <StyledLink to="/contact">Contact</StyledLink>
       </Box>
 
       {user && (
