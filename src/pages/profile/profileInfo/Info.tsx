@@ -214,6 +214,8 @@ type DoctorInfo = {
   gender: string;
   specialization: string;
   price: number;
+  address: string;
+  city: string;
   qualifications: string[];
   experiences: string[];
   timeSlot: string[];
