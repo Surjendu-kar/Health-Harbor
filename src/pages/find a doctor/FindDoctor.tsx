@@ -22,9 +22,10 @@ function FindDoctor() {
             padding: "3px",
             border: "1px solid black",
             borderRadius: "20px",
+            marginTop: "1rem",
           }}
         >
-          <Input placeholder="Type something..." disableUnderline />
+          <Input placeholder="search city" disableUnderline />
           <span>| </span>
           <Select
             defaultValue=""

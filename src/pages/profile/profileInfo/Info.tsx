@@ -20,6 +20,7 @@ import { User } from "@supabase/supabase-js";
 import { Edit, Check } from "@mui/icons-material";
 import UpdateData from "../../../supabase/UpdateData";
 import CircularProgress from "@mui/material/CircularProgress";
+import LocationFields from "../../../components/locationFields/LocationFields";
 
 const MainContainer = styled(Box)(({ theme }) => ({
   width: "50%",
@@ -231,6 +232,8 @@ function Info({
   const [phoneError, setPhoneError] = useState("");
   const [bio, setBio] = useState("");
   const [price, setPrice] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
   const [gender, setGender] = useState("");
   const [specialization, setSpecialization] = useState("");
   const [qualifications, setQualifications] = useState<IQualification[]>([]);
@@ -272,6 +275,8 @@ function Info({
       gender: gender,
       specialization: specialization,
       price: parseInt(price, 10),
+      address: address,
+      city: city,
       qualifications: JSON.stringify(qualifications),
       experiences: JSON.stringify(experiences),
       timeSlot: JSON.stringify(timeSlots),
@@ -363,6 +368,8 @@ function Info({
       setPhone(fetchedData.phoneno);
       setBio(fetchedData.bio);
       setPrice(fetchedData.price);
+      setAddress(fetchedData.address);
+      setCity(fetchedData.city);
       setSpecialization(fetchedData.specialization);
       setGender(fetchedData.gender);
       setQualifications(JSON.parse(fetchedData.qualifications || "[]"));
@@ -501,7 +508,14 @@ function Info({
             disabled={!isEditMode}
           />
         </SelectOption>
-        {/* </NameBox> */}
+
+        <LocationFields
+          isEditMode={isEditMode}
+          setAddress={setAddress}
+          setCity={setCity}
+          address={address}
+          city={city}
+        />
 
         {/* Qualification Section */}
         <Box>
@@ -569,7 +583,7 @@ function Info({
           type="submit"
           variant="contained"
           color="primary"
-          disabled={isEditMode || !isFormValid || isLoading}
+          // disabled={isEditMode || !isFormValid || isLoading}
           // disabled={!isEditMode || !isFormValid}
         >
           Submit

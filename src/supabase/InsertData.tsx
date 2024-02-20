@@ -12,6 +12,8 @@ async function InsertData(doctorData) {
         gender: doctorData.gender,
         specialization: doctorData.specialization,
         price: doctorData.price,
+        address: doctorData.address,
+        city: doctorData.city,
         qualifications: doctorData.qualifications,
         experiences: doctorData.experiences,
         timeSlot: doctorData.timeSlot,
