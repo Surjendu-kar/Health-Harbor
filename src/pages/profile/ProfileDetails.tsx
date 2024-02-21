@@ -7,8 +7,8 @@ import { User } from "@supabase/supabase-js";
 import { supabase } from "../../supabase/config";
 import OverView from "./overview/OverView";
 import Appointments from "./appointments/Appointments";
-import FetchData from "../../supabase/FetchData";
 import LoadingAnimation from "../../components/lottieAnimation/LoadingAnimation";
+import FetchSpecificDoctor from "../../supabase/FetchSpecificDoctor";
 
 const MainContainer = styled(Box)(({ theme }) => ({
   width: "100%",
@@ -74,7 +74,7 @@ function ProfileDetails() {
   useEffect(() => {
     if (!fetchedData && user?.email) {
       const fetchData = async () => {
-        const { data, error } = await FetchData({ userEmail: user.email });
+        const { data, error } = await FetchSpecificDoctor({ userEmail: user.email });
         setIsLoading(false);
         if (!error) {
           setFetchedData(data[0]);

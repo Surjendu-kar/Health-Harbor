@@ -160,11 +160,13 @@ type DoctorInfo = {
   id: number;
   name: string;
   email: string;
-  phoneNo: string;
+  phoneno: string;
   bio: string;
   gender: string;
   specialization: string;
   price: number;
+  address: string;
+  city: string;
   qualifications: string[];
   experiences: string[];
   timeSlot: string[];
