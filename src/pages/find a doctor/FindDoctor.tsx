@@ -33,6 +33,8 @@ function FindDoctor() {
   const [user, setUser] = useState<User | null>(null);
   const [fetchedData, setFetchedData] = useState<DoctorInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [city, setCity] = useState("");
+  const [specialization, setSpecialization] = useState("");
 
   useEffect(() => {
     // fetch user login info
@@ -64,6 +66,28 @@ function FindDoctor() {
     console.log(fetchedData);
   }, [fetchedData]);
 
+  // Handle city input change
+  const handleCityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCity(event.target.value);
+  };
+
+  // Handle specialization select change
+  const handleSpecializationChange = (
+    event: React.ChangeEvent<{ value: unknown }>
+  ) => {
+    setSpecialization(event.target.value as string);
+  };
+
+  const handleSubmit = () => {
+    console.log(city, specialization);
+    const SearchData = fetchedData?.filter(
+      (each) =>
+        each.city.toLowerCase() === city.toLowerCase() &&
+        each.specialization.toLowerCase() === specialization.toLowerCase()
+    );
+    console.log(SearchData);
+  };
+
   return (
     <MainContainer>
       <Box
@@ -74,13 +98,16 @@ function FindDoctor() {
         }}
       >
         <Input
-          placeholder="search city"
+          value={city}
+          onChange={handleCityChange}
+          placeholder="Search city"
           disableUnderline
           sx={{ padding: "3px" }}
         />
         <span>| </span>
         <Select
-          defaultValue=""
+          value={specialization}
+          onChange={handleSpecializationChange}
           displayEmpty
           input={<Input disableUnderline />}
           renderValue={(selected) => {
@@ -105,6 +132,7 @@ function FindDoctor() {
         <Button
           variant="contained"
           startIcon={<SearchIcon />}
+          onClick={handleSubmit}
           sx={{
             backgroundColor: "#1D2B53",
             "&:hover": { backgroundColor: "#16324C" },
