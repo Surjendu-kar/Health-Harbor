@@ -1,6 +1,9 @@
-import { Box, Typography, styled } from "@mui/material";
+import { Box, TextField, Typography, styled } from "@mui/material";
 import defaultImg from "../../../assets/defaultImg.jpg";
 import { User } from "@supabase/supabase-js";
+import { Button } from "@mui/base";
+import { supabase } from "../../../supabase/config";
+import { useEffect, useState } from "react";
 
 const MainContainer = styled(Box)(({ theme }) => ({
   width: "50%",
@@ -180,6 +183,8 @@ function OverView({
   user: User;
   fetchedData: DoctorInfo | null;
 }) {
+  const [imgPath, setImgPath] = useState("");
+
   let qualificationsArray;
   if (fetchedData && typeof fetchedData.qualifications === "string") {
     try {
@@ -204,12 +209,62 @@ function OverView({
     experiencesArray = fetchedData.experiences;
   }
 
+  const handleFileInput = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    try {
+      const { data, error } = await supabase.storage
+        .from("user-profile-picture")
+        .upload(`avatar_${Date.now()}`, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (error) throw error;
+
+      // Assuming `data.Key` holds the path to the uploaded image.
+      if (data && data?.fullPath) {
+        // const fullPath = `${process.env.REACT_APP_SUPABASE_URL}/storage/v1/object/public/${data.Key}`;
+        const fullPath = `https://eraerhfcolqnyopznyyb.supabase.co/storage/v1/object/public/${data.fullPath}`; //store it in env
+        setImgPath(fullPath);
+      }
+
+      console.log("Upload successful", data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (imgPath) {
+      const updateImageInDatabase = async () => {
+        try {
+          const { data, error } = await supabase
+            .from("doctorInfo")
+            .update({ img: imgPath })
+            .eq("email", user?.email);
+
+          if (error) throw error;
+          console.log("Database update successful", data);
+        } catch (error) {
+          console.error("Error updating data:", error);
+        }
+      };
+
+      updateImageInDatabase();
+    }
+  }, [imgPath, user?.email]); // Add `user?.email` if it's not changing or consider dependencies that make sense
+
   return (
     <MainContainer>
       {/* Img & Name */}
       <ImgBox>
         {/* Img */}
-        <Img src={user?.user_metadata?.avatar_url || defaultImg} alt="uimg" />
+        {/* <Img src={user?.user_metadata?.avatar_url || defaultImg} alt="uimg" /> */}
+
+        <TextField type="file" onChange={handleFileInput} />
+
         {user && fetchedData && (
           <NameRatingBox>
             {/* Name */}
