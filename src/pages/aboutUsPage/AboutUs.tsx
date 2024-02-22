@@ -1,5 +1,4 @@
 import React from "react";
-
 import {
   Typography,
   Container,
@@ -9,7 +8,6 @@ import {
   CardMedia,
   CardContent,
 } from "@mui/material";
-
 import { styled } from "@mui/material/styles";
 
 // Images
@@ -30,6 +28,9 @@ const AboutCard = styled(Card)`
 `;
 
 function AboutUs() {
+  // Calculate the minimum height for CardMedia
+  const minHeight = 250;
+
   return (
     <Container maxWidth="lg">
       {/* Header */}
@@ -39,16 +40,16 @@ function AboutUs() {
             src={doctor}
             variant="circle"
             sx={{
-              width: { xs: 200, sm: 250, md: 300 },
-              height: { xs: 200, sm: 250, md: 300 },
-              boxShadow: 4
+              width: { xs: 150, sm: 200, md: 250 },
+              height: { xs: 150, sm: 200, md: 250 },
+              boxShadow: 4,
             }}
           />
         </Grid>
 
         <Grid item>
           <Typography
-            variant="h2"
+            variant="h3"
             align="left"
             mb={2}
             sx={{
@@ -59,14 +60,14 @@ function AboutUs() {
           >
             About Us
           </Typography>
-          <Typography sx={{fontWeight:600}}>
+          <Typography sx={{ fontWeight: 600 }}>
             Your guided pathway to quality, affordable healthcare.
           </Typography>
-          <Typography sx={{fontWeight:600}}>
+          <Typography sx={{ fontWeight: 600 }}>
             We're dedicated to revolutionizing healthcare management through
             innovative technology solutions.
           </Typography>
-          <Typography sx={{fontWeight:600}}>
+          <Typography sx={{ fontWeight: 600 }}>
             Streamlining processes for administrators, doctors, and patients.
           </Typography>
         </Grid>
@@ -76,7 +77,7 @@ function AboutUs() {
       <Grid container spacing={4} sx={{ mt: 2 }}>
         <Grid item xs={12} md={4}>
           <AboutCard>
-            <CardMedia component="img" height="250" image={team} />
+            <CardMedia component="img" height={minHeight} image={team} />
             <CardContent>
               <Typography variant="h5" gutterBottom>
                 Our Mission
@@ -89,21 +90,21 @@ function AboutUs() {
         </Grid>
         <Grid item xs={12} md={4}>
           <AboutCard>
-            <CardMedia component="img" height="250" image={history} />
+            <CardMedia component="img" height={minHeight} image={history} />
             <CardContent>
               <Typography variant="h5" gutterBottom>
                 What We Do
               </Typography>
               <Typography>
-                At HealthHarbor, we develop cutting-edge software solutions
-                tailored to the needs of modern healthcare organizations.
+                At HealthHarbor, we create innovative software for modern
+                healthcare needs.
               </Typography>
             </CardContent>
           </AboutCard>
         </Grid>
         <Grid item xs={12} md={4}>
           <AboutCard>
-            <CardMedia component="img" height="250" image={value} />
+            <CardMedia component="img" height={minHeight} image={value} />
             <CardContent>
               <Typography variant="h5" gutterBottom>
                 Our Core Values

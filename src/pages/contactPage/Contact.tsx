@@ -24,8 +24,8 @@ export default function ContactForm() {
         <Grid item xs={12} md={2}>
           <Box sx={{ p: 2, pt: 0 }}>
             <Typography
-              variant="h2"
-              align="right"
+              variant="h3"
+              align="left"
               sx={{
                 fontWeight: 700,
                 letterSpacing: 2,
