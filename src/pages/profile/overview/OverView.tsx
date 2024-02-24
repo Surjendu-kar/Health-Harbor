@@ -1,9 +1,9 @@
-import { Box, TextField, Typography, styled } from "@mui/material";
-import defaultImg from "../../../assets/defaultImg.jpg";
+import { Box, Button, Typography, styled } from "@mui/material";
+import defaultImg from "../../../assets/Default_pfp-removebg-preview.png";
 import { User } from "@supabase/supabase-js";
-import { Button } from "@mui/base";
 import { supabase } from "../../../supabase/config";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 const MainContainer = styled(Box)(({ theme }) => ({
   width: "50%",
@@ -19,14 +19,22 @@ const MainContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
+const ImgBox = styled(Box)(() => ({
+  display: "flex",
+  alignItems: "center",
+}));
+
 const Img = styled("img")(({ theme }) => ({
-  height: "150px",
-  width: "150px",
+  height: "140px",
+  width: "140px",
   borderRadius: "10px",
+  transition: "opacity 0.5s ease-in-out, filter 0.5s ease-in-out",
+  opacity: 1,
+  filter: "blur(0px)",
 
   [theme.breakpoints.down("lg")]: {
-    height: "120px",
-    width: "120px",
+    height: "110px",
+    width: "110px",
   },
   [theme.breakpoints.down("md")]: {
     height: "90px",
@@ -37,10 +45,45 @@ const Img = styled("img")(({ theme }) => ({
     width: "50px",
   },
 }));
-const ImgBox = styled(Box)(() => ({
-  display: "flex",
-  alignItems: "center",
+
+const ImgBtn = styled(Button)(({ theme }) => ({
+  letterSpacing: "0.7px",
+  padding: "0px 10px",
+  fontSize: "0.7rem",
+  backgroundColor: "#fff",
+  color: "#000",
+  ":hover": {
+    backgroundColor: "grey",
+    color: "#fff",
+  },
+  // Adjust CloudUploadIcon size based on breakpoints
+  "& .MuiSvgIcon-root": {
+    // Target the icon inside the button
+    fontSize: "1rem", // Default size
+    [theme.breakpoints.down("lg")]: {
+      fontSize: "0.9rem", // Adjust for large screens
+    },
+    [theme.breakpoints.down("md")]: {
+      fontSize: "0.6rem", // Adjust for medium screens
+    },
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.3rem", // Adjust for small screens
+    },
+  },
+  [theme.breakpoints.down("lg")]: {
+    padding: "0px 8px",
+    fontSize: "0.6rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    padding: "0",
+    fontSize: "0.4rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    padding: "0",
+    fontSize: "0.2rem",
+  },
 }));
+
 const NameRatingBox = styled(Box)(({ theme }) => ({
   marginLeft: "1rem",
   [theme.breakpoints.down("lg")]: {
@@ -183,7 +226,9 @@ function OverView({
   user: User;
   fetchedData: DoctorInfo | null;
 }) {
-  const [imgPath, setImgPath] = useState("");
+  const [imgPath, setImgPath] = useState(fetchedData?.img || defaultImg);
+  const [isLoading, setIsLoading] = useState(false);
+  const uploadRef = useRef<HTMLInputElement>(null);
 
   let qualificationsArray;
   if (fetchedData && typeof fetchedData.qualifications === "string") {
@@ -210,6 +255,7 @@ function OverView({
   }
 
   const handleFileInput = async (event) => {
+    setIsLoading(true);
     const file = event.target.files[0];
     if (!file) return;
 
@@ -223,7 +269,6 @@ function OverView({
 
       if (error) throw error;
 
-      // Assuming `data.Key` holds the path to the uploaded image.
       if (data && data?.fullPath) {
         // const fullPath = `${process.env.REACT_APP_SUPABASE_URL}/storage/v1/object/public/${data.Key}`;
         const fullPath = `https://eraerhfcolqnyopznyyb.supabase.co/storage/v1/object/public/${data.fullPath}`; //store it in env
@@ -233,11 +278,13 @@ function OverView({
       console.log("Upload successful", data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    if (imgPath) {
+    if (imgPath && imgPath !== fetchedData?.img) {
       const updateImageInDatabase = async () => {
         try {
           const { data, error } = await supabase
@@ -254,16 +301,50 @@ function OverView({
 
       updateImageInDatabase();
     }
-  }, [imgPath, user?.email]); // Add `user?.email` if it's not changing or consider dependencies that make sense
+  }, [imgPath, user?.email, fetchedData?.img]);
 
   return (
     <MainContainer>
       {/* Img & Name */}
       <ImgBox>
         {/* Img */}
-        {/* <Img src={user?.user_metadata?.avatar_url || defaultImg} alt="uimg" /> */}
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+          <Img
+            src={imgPath}
+            alt="profile-image"
+            style={{
+              opacity: isLoading ? 0.5 : 1,
+              filter: isLoading ? "blur(2px)" : "blur(0px)",
+            }}
+            onLoad={() => setIsLoading(false)}
+          />
 
-        <TextField type="file" onChange={handleFileInput} />
+          <label
+            htmlFor="upload-profile-img"
+            style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+          >
+            <input
+              type="file"
+              name="upload-img"
+              id="upload-profile-img"
+              style={{ display: "none" }}
+              onChange={handleFileInput}
+              ref={uploadRef}
+            />
+            <ImgBtn
+              variant="contained"
+              tabIndex={-1}
+              startIcon={<CloudUploadIcon />}
+              onClick={() => {
+                if (uploadRef?.current) {
+                  uploadRef.current.click();
+                }
+              }}
+            >
+              {!fetchedData?.img ? "Add photo" : "edit"}
+            </ImgBtn>
+          </label>
+        </Box>
 
         {user && fetchedData && (
           <NameRatingBox>
