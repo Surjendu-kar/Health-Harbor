@@ -341,7 +341,7 @@ function OverView({
                 }
               }}
             >
-              {!fetchedData?.img ? "Add photo" : "edit"}
+              {imgPath && imgPath !== defaultImg ? "Edit" : "Add photo"}
             </ImgBtn>
           </label>
         </Box>
