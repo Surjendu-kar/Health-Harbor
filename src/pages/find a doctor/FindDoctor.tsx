@@ -4,6 +4,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { User } from "@supabase/gotrue-js";
 import { supabase } from "../../supabase/config";
 import FetchAllDoctor from "./FetchAllDoctor";
+import DoctorCard from "../../components/doctorCard/DoctorCard";
 
 type DoctorInfo = {
   id: number;
@@ -20,9 +21,11 @@ type DoctorInfo = {
   experiences: string[];
   timeSlot: string[];
   about: string;
+  img: string;
 };
 
-const MainContainer = styled(Box)(() => ({
+const MainContainer = styled(Box)(() => ({}));
+const SearchBox = styled(Box)(() => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -35,6 +38,7 @@ function FindDoctor() {
   const [isLoading, setIsLoading] = useState(true);
   const [city, setCity] = useState("");
   const [specialization, setSpecialization] = useState("");
+  const [searchData, setSearchData] = useState<DoctorInfo[]>([]);
 
   useEffect(() => {
     // fetch user login info
@@ -80,67 +84,80 @@ function FindDoctor() {
 
   const handleSubmit = () => {
     console.log(city, specialization);
-    const SearchData = fetchedData?.filter(
+    const filteredData = fetchedData?.filter(
       (each) =>
-        each.city.toLowerCase() === city.toLowerCase() &&
-        each.specialization.toLowerCase() === specialization.toLowerCase()
+        (city == "" || each.city.toLowerCase() == city.toLowerCase()) &&
+        (specialization == "" ||
+          each.specialization.toLowerCase() == specialization.toLowerCase())
     );
-    console.log(SearchData);
+
+    console.log(filteredData);
+    setSearchData(filteredData || []);
   };
 
   return (
     <MainContainer>
-      <Box
-        sx={{
-          padding: "3px",
-          border: "1px solid black",
-          borderRadius: "20px",
-        }}
-      >
-        <Input
-          value={city}
-          onChange={handleCityChange}
-          placeholder="Search city"
-          disableUnderline
-          sx={{ padding: "3px" }}
-        />
-        <span>| </span>
-        <Select
-          value={specialization}
-          onChange={handleSpecializationChange}
-          displayEmpty
-          input={<Input disableUnderline />}
-          renderValue={(selected) => {
-            if (selected.length === 0) {
-              return <span>Select an option</span>;
-            }
-            return selected;
-          }}
-        >
-          <MenuItem value="">
-            <em>Select an option</em>
-          </MenuItem>
-          <MenuItem value="cardiology">Cardiology</MenuItem>
-          <MenuItem value="dentist">Dentist</MenuItem>
-          <MenuItem value="specialized">Specialized</MenuItem>
-          <MenuItem value="urology">Urology</MenuItem>
-          <MenuItem value="neurology">Neurology</MenuItem>
-          <MenuItem value="orthopedic">Orthopedic</MenuItem>
-          <MenuItem value="stomach">Stomach</MenuItem>
-        </Select>
-
-        <Button
-          variant="contained"
-          startIcon={<SearchIcon />}
-          onClick={handleSubmit}
+      <SearchBox>
+        <Box
           sx={{
-            backgroundColor: "#1D2B53",
-            "&:hover": { backgroundColor: "#16324C" },
+            padding: "3px",
+            border: "1px solid black",
             borderRadius: "20px",
+            backgroundColor: "#fff",
           }}
         >
-          Search
-        </Button>
+          <Input
+            value={city}
+            onChange={handleCityChange}
+            placeholder="Search city"
+            disableUnderline
+            sx={{ padding: "3px" }}
+          />
+          <span>| </span>
+          <Select
+            value={specialization}
+            onChange={handleSpecializationChange}
+            displayEmpty
+            input={<Input disableUnderline />}
+            renderValue={(selected) => {
+              if (selected.length === 0) {
+                return <span>Select an option</span>;
+              }
+              return selected;
+            }}
+          >
+            <MenuItem value="">
+              <em>Select an option</em>
+            </MenuItem>
+            <MenuItem value="cardiology">Cardiology</MenuItem>
+            <MenuItem value="dentist">Dentist</MenuItem>
+            <MenuItem value="specialized">Specialized</MenuItem>
+            <MenuItem value="urology">Urology</MenuItem>
+            <MenuItem value="neurology">Neurology</MenuItem>
+            <MenuItem value="orthopedic">Orthopedic</MenuItem>
+            <MenuItem value="stomach">Stomach</MenuItem>
+          </Select>
+
+          <Button
+            variant="contained"
+            startIcon={<SearchIcon />}
+            onClick={handleSubmit}
+            sx={{
+              backgroundColor: "#1D2B53",
+              "&:hover": { backgroundColor: "#16324C" },
+              borderRadius: "20px",
+            }}
+          >
+            Search
+          </Button>
+        </Box>
+      </SearchBox>
+
+      {/* Render the DoctorCard components based on the searchData */}
+      <Box sx={{ display: "flex" }}>
+        {searchData?.map((doctor) => (
+          <DoctorCard key={doctor.id} doctor={doctor} />
+        ))}
       </Box>
     </MainContainer>
   );
