@@ -116,8 +116,6 @@ const Rating = styled(Typography)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {},
 }));
 
-
-
 type DoctorInfo = {
   id: number;
   name: string;
@@ -145,30 +143,6 @@ function OverView({
   const [imgPath, setImgPath] = useState(fetchedData?.img || defaultImg);
   const [isLoading, setIsLoading] = useState(false);
   const uploadRef = useRef<HTMLInputElement>(null);
-
-  let qualificationsArray;
-  if (fetchedData && typeof fetchedData.qualifications === "string") {
-    try {
-      qualificationsArray = JSON.parse(fetchedData.qualifications);
-    } catch (error) {
-      console.error("Error parsing qualifications", error);
-      qualificationsArray = []; // Default to an empty array in case of error
-    }
-  } else if (fetchedData && Array.isArray(fetchedData.qualifications)) {
-    qualificationsArray = fetchedData.qualifications;
-  }
-
-  let experiencesArray;
-  if (fetchedData && typeof fetchedData.experiences === "string") {
-    try {
-      experiencesArray = JSON.parse(fetchedData.experiences);
-    } catch (error) {
-      console.error("Error parsing experiences", error);
-      experiencesArray = []; // Default to an empty array in case of error
-    }
-  } else if (fetchedData && Array.isArray(fetchedData.experiences)) {
-    experiencesArray = fetchedData.experiences;
-  }
 
   const handleFileInput = async (event) => {
     setIsLoading(true);
@@ -273,12 +247,7 @@ function OverView({
       </ImgBox>
 
       {user && fetchedData && (
-        <ViewDetails
-          user={user}
-          fetchedData={fetchedData}
-          qualificationsArray={qualificationsArray}
-          experiencesArray={experiencesArray}
-        />
+        <ViewDetails user={user} fetchedData={fetchedData} />
       )}
     </MainContainer>
   );

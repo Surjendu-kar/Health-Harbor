@@ -84,12 +84,31 @@ const DateText = styled(Typography)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: { fontSize: "0.45rem" },
 }));
 
-function ViewDetails({
-  user,
-  fetchedData,
-  qualificationsArray,
-  experiencesArray,
-}) {
+function ViewDetails({ user, fetchedData }) {
+  let qualificationsArray;
+  if (fetchedData && typeof fetchedData.qualifications === "string") {
+    try {
+      qualificationsArray = JSON.parse(fetchedData.qualifications);
+    } catch (error) {
+      console.error("Error parsing qualifications", error);
+      qualificationsArray = []; // Default to an empty array in case of error
+    }
+  } else if (fetchedData && Array.isArray(fetchedData.qualifications)) {
+    qualificationsArray = fetchedData.qualifications;
+  }
+
+  let experiencesArray;
+  if (fetchedData && typeof fetchedData.experiences === "string") {
+    try {
+      experiencesArray = JSON.parse(fetchedData.experiences);
+    } catch (error) {
+      console.error("Error parsing experiences", error);
+      experiencesArray = []; // Default to an empty array in case of error
+    }
+  } else if (fetchedData && Array.isArray(fetchedData.experiences)) {
+    experiencesArray = fetchedData.experiences;
+  }
+
   return (
     <Box>
       {/* About */}
