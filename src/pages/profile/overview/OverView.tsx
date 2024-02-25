@@ -4,6 +4,7 @@ import { User } from "@supabase/supabase-js";
 import { supabase } from "../../../supabase/config";
 import { useEffect, useRef, useState } from "react";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import ViewDetails from "../../../components/viewDetails/ViewDetails";
 
 const MainContainer = styled(Box)(({ theme }) => ({
   width: "50%",
@@ -230,30 +231,6 @@ function OverView({
   const [isLoading, setIsLoading] = useState(false);
   const uploadRef = useRef<HTMLInputElement>(null);
 
-  let qualificationsArray;
-  if (fetchedData && typeof fetchedData.qualifications === "string") {
-    try {
-      qualificationsArray = JSON.parse(fetchedData.qualifications);
-    } catch (error) {
-      console.error("Error parsing qualifications", error);
-      qualificationsArray = []; // Default to an empty array in case of error
-    }
-  } else if (fetchedData && Array.isArray(fetchedData.qualifications)) {
-    qualificationsArray = fetchedData.qualifications;
-  }
-
-  let experiencesArray;
-  if (fetchedData && typeof fetchedData.experiences === "string") {
-    try {
-      experiencesArray = JSON.parse(fetchedData.experiences);
-    } catch (error) {
-      console.error("Error parsing experiences", error);
-      experiencesArray = []; // Default to an empty array in case of error
-    }
-  } else if (fetchedData && Array.isArray(fetchedData.experiences)) {
-    experiencesArray = fetchedData.experiences;
-  }
-
   const handleFileInput = async (event) => {
     setIsLoading(true);
     const file = event.target.files[0];
@@ -356,75 +333,7 @@ function OverView({
         )}
       </ImgBox>
 
-      {user && fetchedData && (
-        <Box>
-          {/* About */}
-          <Contain>
-            <Heading>About</Heading>
-            <Title>{fetchedData.about}</Title>
-          </Contain>
-
-          {/* Education */}
-          <Contain>
-            <Heading>Education</Heading>
-            <Box>
-              {qualificationsArray &&
-                qualificationsArray.map((qualification, index) => (
-                  <EducationBox key={index}>
-                    <DateText sx={{ color: "#009cff" }}>
-                      {new Date(qualification.startDate).toLocaleDateString(
-                        "en-US",
-                        { year: "numeric", month: "short" }
-                      )}{" "}
-                      -{" "}
-                      {qualification.endDate
-                        ? new Date(qualification.endDate).toLocaleDateString(
-                            "en-US",
-                            { year: "numeric", month: "short" }
-                          )
-                        : "Present"}
-                    </DateText>
-                    <Title>
-                      {qualification.degree}, {qualification.university}
-                    </Title>
-                  </EducationBox>
-                ))}
-            </Box>
-          </Contain>
-
-          {/* Experience */}
-          <Contain>
-            <Heading>Experience</Heading>
-            <Box
-              sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                justifyContent: "space-between",
-              }}
-            >
-              {experiencesArray.map((experience, index) => (
-                <ExperienceBox key={index} sx={{}}>
-                  <DateText sx={{ color: "#009cff" }}>
-                    {new Date(experience.startDate).toLocaleDateString(
-                      "en-US",
-                      { year: "numeric", month: "short" }
-                    )}{" "}
-                    -{" "}
-                    {experience.endDate
-                      ? new Date(experience.endDate).toLocaleDateString(
-                          "en-US",
-                          { year: "numeric", month: "short" }
-                        )
-                      : "Present"}
-                  </DateText>
-                  <Title>{experience.position}</Title>
-                  <Title>{experience.hospital}</Title>
-                </ExperienceBox>
-              ))}
-            </Box>
-          </Contain>
-        </Box>
-      )}
+      {user && fetchedData && <ViewDetails fetchedData={fetchedData} />}
     </MainContainer>
   );
 }
