@@ -66,7 +66,7 @@ export function LoginWithGoogle() {
       {!user && (
         <button onClick={handleLoginWithGoogle}>Login with Google</button>
       )}
-
+      <button onClick={() => navigate("/signup")}>signup</button>
     </>
   );
 }
