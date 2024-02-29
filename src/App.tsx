@@ -11,6 +11,7 @@ import Contact from "./pages/contactPage/Contact";
 import Navbar from "./components/header/Navbar";
 import Footer from "./components/footer/Footer";
 import Signup from "./pages/loginSignupPage/Signup";
+import DoctorDetails from "./pages/find a doctor/DoctorDetails";
 
 const App = () => {
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ const App = () => {
         <Route element={<LoginWithGoogle />} path="/login" />
         <Route element={<Signup />} path="/signup" />
         <Route element={<FindDoctor />} path="/find-a-doctor" />
+        <Route element={<DoctorDetails />} path="/doctor-details" />
         <Route element={<Service />} path="/service" />
         <Route element={<AboutUs />} path="/about-us" />
         <Route element={<Contact />} path="/contact" />

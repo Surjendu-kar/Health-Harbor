@@ -1,11 +1,13 @@
 // DoctorCard.js
 import React from "react";
 import { Card, CardMedia, CardContent, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const DoctorCard = ({ doctor }) => {
   const qualificationsArray = JSON.parse(doctor.qualifications);
   const degrees = qualificationsArray.map((q) => q.degree).join(", ");
   // const universities = qualificationsArray.map((q) => q.university).join(", ");
+  const navigate = useNavigate();
 
   const universityComponents = qualificationsArray.map((q, index) => (
     <Typography key={index} variant="body2" color="text.secondary">
@@ -14,7 +16,10 @@ const DoctorCard = ({ doctor }) => {
   ));
 
   return (
-    <Card sx={{ maxWidth: 345, m: 2, borderRadius: "5px" }}>
+    <Card
+      sx={{ maxWidth: 345, m: 2, borderRadius: "5px" }}
+      onClick={() => navigate("/doctor-details")}
+    >
       <CardMedia
         component="img"
         height="200"
