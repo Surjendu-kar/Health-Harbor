@@ -68,6 +68,7 @@ const ExperienceBox = styled(Box)(({ theme }) => ({
     padding: "0.3rem 1rem 0.3rem 1rem",
     flexDirection: "column",
     alignItems: "start",
+    marginBottom: "0rem",
     width: "100%",
     ".MuiTypography-root": {
       textAlign: "left",
@@ -153,6 +154,7 @@ function ViewDetails({ fetchedData }) {
             display: "flex",
             flexWrap: "wrap",
             justifyContent: "space-between",
+            gap: 1,
           }}
         >
           {experiencesArray &&

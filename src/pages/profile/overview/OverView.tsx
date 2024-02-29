@@ -1,8 +1,8 @@
-import { Box, Button, Typography, styled } from "@mui/material";
+import { Box, Button, Rating, Typography, styled } from "@mui/material";
 import defaultImg from "../../../assets/Default_pfp-removebg-preview.png";
 import { User } from "@supabase/supabase-js";
 import { supabase } from "../../../supabase/config";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import ViewDetails from "../../../components/viewDetails/ViewDetails";
 
@@ -97,6 +97,7 @@ const NameRatingBox = styled(Box)(({ theme }) => ({
     marginLeft: "0.3rem",
   },
 }));
+
 const Name = styled(Typography)(({ theme }) => ({
   fontSize: "1rem",
   [theme.breakpoints.down("lg")]: {
@@ -109,98 +110,18 @@ const Name = styled(Typography)(({ theme }) => ({
     fontSize: "0.5rem",
   },
 }));
-const Rating = styled(Typography)(({ theme }) => ({
-  fontSize: "1rem",
-  [theme.breakpoints.down("lg")]: {},
-  [theme.breakpoints.down("md")]: {},
-  [theme.breakpoints.down("sm")]: {},
-}));
 
-const Contain = styled(Typography)(() => ({
-  margin: "1rem 0",
-}));
-
-const Heading = styled(Typography)(({ theme }) => ({
-  fontSize: "1.05rem",
-  marginBottom: "0.5rem",
-
-  [theme.breakpoints.down("lg")]: {
-    fontSize: "0.95rem",
-    marginBottom: "0.3rem",
-  },
-  [theme.breakpoints.down("md")]: {
-    fontSize: "0.85rem",
-    marginBottom: "0.2rem",
-  },
-  [theme.breakpoints.down("sm")]: {
-    fontSize: "0.55rem",
-    marginBottom: "0.1rem",
-  },
-}));
-
-const Title = styled(Typography)(({ theme }) => ({
-  fontSize: "0.85rem",
-  [theme.breakpoints.down("lg")]: { fontSize: "0.7rem" },
-  [theme.breakpoints.down("md")]: { fontSize: "0.6rem" },
-  [theme.breakpoints.down("sm")]: { fontSize: "0.35rem" },
-}));
-
-const EducationBox = styled(Box)(({ theme }) => ({
-  padding: "1rem 7rem 1rem 3rem",
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  backgroundColor: "#deeaff8f",
-  borderRadius: "10px",
-  marginTop: "1rem",
-
-  [theme.breakpoints.down("lg")]: {
-    padding: "0.8rem 4.5rem 0.8rem 2rem",
-    marginTop: "0.7rem",
-  },
-  [theme.breakpoints.down("md")]: {
-    padding: "0.7rem 1.5rem 0.7rem 1.5rem",
-    marginTop: "0.5rem",
-    borderRadius: "5px",
-  },
-  [theme.breakpoints.down("sm")]: {
-    padding: "0.3rem 1rem 0.3rem 1rem",
-    marginTop: "0.3rem",
-  },
-}));
-
-const ExperienceBox = styled(Box)(({ theme }) => ({
-  backgroundColor: "#deeaff8f",
-  borderRadius: "10px",
-  padding: "1.5rem 7rem 1.5rem 3rem",
-  marginBottom: "0.3rem",
-
-  [theme.breakpoints.down("lg")]: {
-    padding: "1.15rem 4.5rem 1.15rem 2rem",
-  },
-  [theme.breakpoints.down("md")]: {
-    padding: "1rem 1.3rem 1rem 1.5rem",
-    borderRadius: "5px",
-  },
-  [theme.breakpoints.down("sm")]: {
-    padding: "0.3rem 1rem 0.3rem 1rem",
-    flexDirection: "column",
-    alignItems: "start",
-    width: "100%",
-    ".MuiTypography-root": {
-      // Target all Typography components inside ExperienceBox
-      textAlign: "left",
-      width: "100%",
-    },
-  },
-}));
-
-const DateText = styled(Typography)(({ theme }) => ({
+const ResponsiveRating = styled(Rating)(({ theme }) => ({
   fontSize: "0.9rem",
-  fontWeight: "bold",
-  [theme.breakpoints.down("lg")]: { fontSize: "0.8rem" },
-  [theme.breakpoints.down("md")]: { fontSize: "0.7rem" },
-  [theme.breakpoints.down("sm")]: { fontSize: "0.45rem" },
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "0.8rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.6rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.4rem",
+  },
 }));
 
 type DoctorInfo = {
@@ -229,6 +150,8 @@ function OverView({
 }) {
   const [imgPath, setImgPath] = useState(fetchedData?.img || defaultImg);
   const [isLoading, setIsLoading] = useState(false);
+  const [value, setValue] = React.useState<number | null>(2);
+
   const uploadRef = useRef<HTMLInputElement>(null);
 
   const handleFileInput = async (event) => {
@@ -295,32 +218,6 @@ function OverView({
             }}
             onLoad={() => setIsLoading(false)}
           />
-
-          <label
-            htmlFor="upload-profile-img"
-            style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
-          >
-            <input
-              type="file"
-              name="upload-img"
-              id="upload-profile-img"
-              style={{ display: "none" }}
-              onChange={handleFileInput}
-              ref={uploadRef}
-            />
-            <ImgBtn
-              variant="contained"
-              tabIndex={-1}
-              startIcon={<CloudUploadIcon />}
-              onClick={() => {
-                if (uploadRef?.current) {
-                  uploadRef.current.click();
-                }
-              }}
-            >
-              {imgPath && imgPath !== defaultImg ? "Edit" : "Add photo"}
-            </ImgBtn>
-          </label>
         </Box>
 
         {user && fetchedData && (
@@ -328,10 +225,36 @@ function OverView({
             {/* Name */}
             <Name>{user?.user_metadata?.full_name}</Name>
             {/* Rating */}
-            {/* <Rating>Rating ..</Rating> */}
+            <ResponsiveRating name="read-only" value={value} readOnly />
           </NameRatingBox>
         )}
       </ImgBox>
+
+      <label
+        htmlFor="upload-profile-img"
+        style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+      >
+        <input
+          type="file"
+          name="upload-img"
+          id="upload-profile-img"
+          style={{ display: "none" }}
+          onChange={handleFileInput}
+          ref={uploadRef}
+        />
+        <ImgBtn
+          variant="contained"
+          tabIndex={-1}
+          startIcon={<CloudUploadIcon />}
+          onClick={() => {
+            if (uploadRef?.current) {
+              uploadRef.current.click();
+            }
+          }}
+        >
+          {imgPath && imgPath !== defaultImg ? "Edit" : "Add photo"}
+        </ImgBtn>
+      </label>
 
       {user && fetchedData && <ViewDetails fetchedData={fetchedData} />}
     </MainContainer>
