@@ -16,10 +16,7 @@ const DoctorCard = ({ doctor }) => {
   ));
 
   return (
-    <Card
-      sx={{ maxWidth: 345, m: 2, borderRadius: "5px" }}
-      onClick={() => navigate("/doctor-details")}
-    >
+    <Card sx={{ maxWidth: 345, m: 2, borderRadius: "5px" }}>
       <CardMedia
         component="img"
         height="200"
