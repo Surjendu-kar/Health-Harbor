@@ -153,7 +153,6 @@ function FindDoctor() {
         </Box>
       </SearchBox>
 
-      {/* Render the DoctorCard components based on the searchData */}
       <Box sx={{ display: "flex" }}>
         {searchData?.map((doctor) => (
           <DoctorCard key={doctor.id} doctor={doctor} />
