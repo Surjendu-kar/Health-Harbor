@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ViewDetails from "../../components/viewDetails/ViewDetails";
-import { Box, Rating, Typography, styled } from "@mui/material";
+import { Box, Rating, Typography, styled, Button } from "@mui/material";
 
 const MainContainer = styled(Box)({
   display: "flex",
@@ -13,7 +13,6 @@ const Container = styled(Box)(({ theme }) => ({
 }));
 
 const ImgContainer = styled(Box)(({ theme }) => ({
-  margin: "2rem 0",
   display: "flex",
   alignItems: "center",
 
@@ -114,6 +113,93 @@ const ResponsiveRating = styled(Rating)(({ theme }) => ({
   },
 }));
 
+const Appointment = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  padding: "1rem",
+  border: "1px solid black",
+  borderRadius: "7px",
+  [theme.breakpoints.down("lg")]: {
+    padding: "0.8rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    padding: "0.5rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    padding: "0.25rem",
+  },
+}));
+
+const TicketPriceContainer = styled(Typography)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "space-between",
+  marginBottom: "1rem",
+  [theme.breakpoints.down("lg")]: {
+    marginBottom: "0.75rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    marginBottom: "0.35rem",
+  },
+  [theme.breakpoints.down("sm")]: { marginBottom: "0.2rem" },
+}));
+
+const Price = styled(Typography)(({ theme }) => ({
+  fontWeight: "bold",
+  letterSpacing: "1px",
+  fontSize: "0.95rem",
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "0.85rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.7rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.4rem",
+  },
+}));
+
+const TimeSoltHeading = styled(Typography)(({ theme }) => ({
+  fontSize: "1rem",
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "0.9rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.7rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.4rem",
+  },
+}));
+const TimeSoltContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  gap: theme.spacing(8),
+  [theme.breakpoints.down("lg")]: {
+    gap: theme.spacing(6),
+  },
+  [theme.breakpoints.down("md")]: {
+    gap: theme.spacing(3),
+  },
+  [theme.breakpoints.down("sm")]: {
+    gap: theme.spacing(1),
+  },
+}));
+
+const Solts = styled(Typography)(({ theme }) => ({
+  fontSize: "0.9rem",
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "0.8rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.65rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.35rem",
+  },
+}));
+
 const DetailContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   margin: "2.5rem 0 2rem 0",
@@ -141,7 +227,7 @@ const StyleText = styled(Typography)(({ theme, selected }) => ({
     height: "1px",
     width: "100%",
     transition: "all ease 0.3s",
-    backgroundColor: selected ? "#000" : "#dadadab5", // Change based on selected prop
+    backgroundColor: selected ? "#000" : "#dadadab5",
   },
 
   "&:hover::after": {
@@ -162,10 +248,7 @@ function DoctorDetails() {
   const { state } = useLocation();
   const [showDetails, setShowDetails] = useState(true);
   const [value, setValue] = React.useState<number | null>(2);
-
-  useEffect(() => {
-    console.log(state.doctor);
-  }, [state]);
+  const navigate = useNavigate();
 
   const handleAboutClick = () => {
     setShowDetails(true);
@@ -175,18 +258,91 @@ function DoctorDetails() {
     setShowDetails(false);
   };
 
+  let timeSoltsArray;
+  if (state.doctor && typeof state.doctor.timeSlot === "string") {
+    try {
+      timeSoltsArray = JSON.parse(state.doctor.timeSlot);
+    } catch (error) {
+      console.error("Error parsing timeSolt", error);
+      timeSoltsArray = [];
+    }
+  } else if (state.doctor && Array.isArray(state.doctor.timeSlot)) {
+    timeSoltsArray = state.doctor.timeSlot;
+  }
+
+  // useEffect(() => {
+  //   console.log(state.doctor);
+  //   console.log(timeSoltsArray);
+  // }, [state, timeSoltsArray]);
+
+  const formatTime12Hour = (time24) => {
+    const [hours, minutes, seconds] = time24.split(":");
+    const hour = parseInt(hours, 10);
+    const ampm = hour >= 12 ? "pm" : "am";
+    let hour12 = hour % 12;
+    if (hour12 === 0) hour12 = 12; // Convert "00" to "12"
+    const minuteFormatted = minutes === "00" ? "" : `:${minutes}`; // Omit minutes if ":00"
+    return `${hour12}${minuteFormatted} ${ampm}`;
+  };
+
   return (
     <MainContainer>
       <Container>
-        <ImgContainer>
-          <Img src={state.doctor.img} />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            margin: "2rem 0",
+          }}
+        >
+          <ImgContainer>
+            <Img src={state.doctor.img} />
 
-          <NameRatingBox>
-            <Specialization>{state.doctor.specialization}</Specialization>
-            <Name>{state.doctor.name}</Name>
-            <ResponsiveRating name="read-only" value={value} readOnly />
-          </NameRatingBox>
-        </ImgContainer>
+            <NameRatingBox>
+              <Specialization>{state.doctor.specialization}</Specialization>
+              <Name>{state.doctor.name}</Name>
+              <ResponsiveRating name="read-only" value={value} readOnly />
+            </NameRatingBox>
+          </ImgContainer>
+
+          <Appointment>
+            <TicketPriceContainer>
+              <Solts>Ticket price: </Solts>
+              <Price>{state.doctor.price}</Price>
+            </TicketPriceContainer>
+
+            <TimeSoltHeading>Available TimeSolts: </TimeSoltHeading>
+
+            <TimeSoltContainer>
+              <Box>
+                {timeSoltsArray &&
+                  timeSoltsArray.map((each) => {
+                    return (
+                      <Solts>
+                        {each.day.charAt(0).toUpperCase() + each.day.slice(1)}:
+                      </Solts>
+                    );
+                  })}
+              </Box>
+              <Box>
+                {timeSoltsArray &&
+                  timeSoltsArray.map((each) => {
+                    return (
+                      <Solts>
+                        {formatTime12Hour(each.startTime)} -{" "}
+                        {formatTime12Hour(each.endTime)}
+                      </Solts>
+                    );
+                  })}
+              </Box>
+            </TimeSoltContainer>
+
+            {/* <Button sx={{ padding: "0", marginTop: "1rem" }}>
+              Book Appointment
+            </Button> */}
+            <TimeSoltHeading>not completed....</TimeSoltHeading>
+          </Appointment>
+        </Box>
 
         <DetailContainer sx={{ gap: 2 }}>
           <StyleText onClick={handleAboutClick} selected={showDetails}>
