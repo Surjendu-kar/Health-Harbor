@@ -92,7 +92,7 @@ function ViewDetails({ fetchedData }) {
       qualificationsArray = JSON.parse(fetchedData.qualifications);
     } catch (error) {
       console.error("Error parsing qualifications", error);
-      qualificationsArray = []; // Default to an empty array in case of error
+      qualificationsArray = []; 
     }
   } else if (fetchedData && Array.isArray(fetchedData.qualifications)) {
     qualificationsArray = fetchedData.qualifications;
@@ -104,7 +104,7 @@ function ViewDetails({ fetchedData }) {
       experiencesArray = JSON.parse(fetchedData.experiences);
     } catch (error) {
       console.error("Error parsing experiences", error);
-      experiencesArray = []; // Default to an empty array in case of error
+      experiencesArray = []; 
     }
   } else if (fetchedData && Array.isArray(fetchedData.experiences)) {
     experiencesArray = fetchedData.experiences;
