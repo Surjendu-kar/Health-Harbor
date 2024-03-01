@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ViewDetails from "../../components/viewDetails/ViewDetails";
 import { Box, Rating, Typography, styled, Button } from "@mui/material";
@@ -10,6 +10,29 @@ const MainContainer = styled(Box)({
 
 const Container = styled(Box)(({ theme }) => ({
   width: "50%",
+
+  [theme.breakpoints.down("md")]: {
+    width: "60%",
+  },
+  [theme.breakpoints.down("sm")]: {
+    width: "80%",
+  },
+}));
+
+const TopContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "space-between",
+  margin: "2rem 0",
+  gap: theme.spacing(1),
+  [theme.breakpoints.down("lg")]: {
+    margin: "1.5rem 0",
+  },
+  [theme.breakpoints.down("md")]: {
+    margin: "1rem 0",
+  },
+  [theme.breakpoints.down("sm")]: {
+    margin: "0.8rem 0",
+  },
 }));
 
 const ImgContainer = styled(Box)(({ theme }) => ({
@@ -70,17 +93,15 @@ const Specialization = styled(Typography)(({ theme }) => ({
   [theme.breakpoints.down("lg")]: {
     fontSize: "0.6rem",
     padding: "0.4rem 0.6rem",
-    maxWidth: "40%",
   },
   [theme.breakpoints.down("md")]: {
     fontSize: "0.5rem",
     padding: "0.3rem 0.5rem",
-    maxWidth: "40%",
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "0.4rem",
     padding: "0rem 0.2rem",
-    maxWidth: "50%",
+    maxWidth: "70%",
     borderRadius: "3px",
   },
 }));
@@ -114,20 +135,24 @@ const ResponsiveRating = styled(Rating)(({ theme }) => ({
 }));
 
 const Appointment = styled(Box)(({ theme }) => ({
+  backgroundColor: "#fff",
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
   padding: "1rem",
-  border: "1px solid black",
   borderRadius: "7px",
+  boxShadow: "1px 5px 8px rgba(0, 0, 0, 0.2)",
+
   [theme.breakpoints.down("lg")]: {
     padding: "0.8rem",
   },
   [theme.breakpoints.down("md")]: {
-    padding: "0.5rem",
+    padding: "0.75rem",
+    borderRadius: "5px",
   },
   [theme.breakpoints.down("sm")]: {
-    padding: "0.25rem",
+    padding: "0.45rem",
+    borderRadius: "3px",
   },
 }));
 
@@ -144,31 +169,16 @@ const TicketPriceContainer = styled(Typography)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: { marginBottom: "0.2rem" },
 }));
 
-const Price = styled(Typography)(({ theme }) => ({
-  fontWeight: "bold",
-  letterSpacing: "1px",
-  fontSize: "0.95rem",
-  [theme.breakpoints.down("lg")]: {
-    fontSize: "0.85rem",
-  },
-  [theme.breakpoints.down("md")]: {
-    fontSize: "0.7rem",
-  },
-  [theme.breakpoints.down("sm")]: {
-    fontSize: "0.4rem",
-  },
-}));
-
 const TimeSoltHeading = styled(Typography)(({ theme }) => ({
   fontSize: "1rem",
   [theme.breakpoints.down("lg")]: {
     fontSize: "0.9rem",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.7rem",
+    fontSize: "0.6rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.4rem",
+    fontSize: "0.32rem",
   },
 }));
 const TimeSoltContainer = styled(Box)(({ theme }) => ({
@@ -188,15 +198,45 @@ const TimeSoltContainer = styled(Box)(({ theme }) => ({
 }));
 
 const Solts = styled(Typography)(({ theme }) => ({
-  fontSize: "0.9rem",
+  fontSize: "0.87rem",
+  padding: "0.2rem 0 0 0",
   [theme.breakpoints.down("lg")]: {
     fontSize: "0.8rem",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.65rem",
+    fontSize: "0.55rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.35rem",
+    fontSize: "0.28rem",
+  },
+}));
+
+const BookAppointmentBtn = styled(Button)(({ theme }) => ({
+  marginTop: "2rem",
+  fontSize: "0.8rem",
+  color: "#fff",
+  backgroundColor: "#1976d2",
+  padding: "0.5rem 0",
+
+  "&:hover": {
+    color: "#1976d2",
+    backgroundColor: "#fff",
+  },
+
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "0.7rem",
+    marginTop: "1.5rem",
+    padding: "0.4rem 0",
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.4rem",
+    marginTop: "1rem",
+    padding: "0.2rem 0",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.2rem",
+    marginTop: "0.5rem",
+    padding: "0.1rem 0",
   },
 }));
 
@@ -270,13 +310,8 @@ function DoctorDetails() {
     timeSoltsArray = state.doctor.timeSlot;
   }
 
-  // useEffect(() => {
-  //   console.log(state.doctor);
-  //   console.log(timeSoltsArray);
-  // }, [state, timeSoltsArray]);
-
   const formatTime12Hour = (time24) => {
-    const [hours, minutes, seconds] = time24.split(":");
+    const [hours, minutes] = time24.split(":");
     const hour = parseInt(hours, 10);
     const ampm = hour >= 12 ? "pm" : "am";
     let hour12 = hour % 12;
@@ -288,13 +323,7 @@ function DoctorDetails() {
   return (
     <MainContainer>
       <Container>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            margin: "2rem 0",
-          }}
-        >
+        <TopContainer>
           <ImgContainer>
             <Img src={state.doctor.img} />
 
@@ -307,8 +336,16 @@ function DoctorDetails() {
 
           <Appointment>
             <TicketPriceContainer>
-              <Solts>Ticket price: </Solts>
-              <Price>{state.doctor.price}</Price>
+              <Solts sx={{ padding: "0" }}>Ticket price: </Solts>
+              <Solts
+                sx={{
+                  padding: "0",
+                  fontWeight: "bold",
+                  letterSpacing: "0.3px",
+                }}
+              >
+                {state.doctor.price}
+              </Solts>
             </TicketPriceContainer>
 
             <TimeSoltHeading>Available TimeSolts: </TimeSoltHeading>
@@ -337,12 +374,11 @@ function DoctorDetails() {
               </Box>
             </TimeSoltContainer>
 
-            {/* <Button sx={{ padding: "0", marginTop: "1rem" }}>
+            <BookAppointmentBtn variant="outlined">
               Book Appointment
-            </Button> */}
-            <TimeSoltHeading>not completed....</TimeSoltHeading>
+            </BookAppointmentBtn>
           </Appointment>
-        </Box>
+        </TopContainer>
 
         <DetailContainer sx={{ gap: 2 }}>
           <StyleText onClick={handleAboutClick} selected={showDetails}>
