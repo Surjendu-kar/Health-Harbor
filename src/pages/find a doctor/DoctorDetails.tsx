@@ -10,12 +10,14 @@ const MainContainer = styled(Box)({
 
 const Container = styled(Box)(({ theme }) => ({
   width: "50%",
-
+  [theme.breakpoints.down("lg")]: {
+    width: "60%",
+  },
   [theme.breakpoints.down("md")]: {
     width: "60%",
   },
   [theme.breakpoints.down("sm")]: {
-    width: "80%",
+    width: "70%",
   },
 }));
 
@@ -51,21 +53,21 @@ const ImgContainer = styled(Box)(({ theme }) => ({
 }));
 
 const Img = styled("img")(({ theme }) => ({
-  height: "160px",
-  width: "160px",
+  height: "200px",
+  width: "200px",
   borderRadius: "10px",
 
   [theme.breakpoints.down("lg")]: {
+    height: "180px",
+    width: "180px",
+  },
+  [theme.breakpoints.down("md")]: {
     height: "120px",
     width: "120px",
   },
-  [theme.breakpoints.down("md")]: {
-    height: "100px",
-    width: "100px",
-  },
   [theme.breakpoints.down("sm")]: {
-    height: "40px",
-    width: "40px",
+    height: "70px",
+    width: "70px",
   },
 }));
 
@@ -138,7 +140,6 @@ const Appointment = styled(Box)(({ theme }) => ({
   backgroundColor: "#fff",
   display: "flex",
   flexDirection: "column",
-  justifyContent: "center",
   padding: "1rem",
   borderRadius: "7px",
   boxShadow: "1px 5px 8px rgba(0, 0, 0, 0.2)",
@@ -333,51 +334,53 @@ function DoctorDetails() {
               <ResponsiveRating name="read-only" value={value} readOnly />
             </NameRatingBox>
           </ImgContainer>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Appointment>
+              <TicketPriceContainer>
+                <Solts sx={{ padding: "0" }}>Ticket price: </Solts>
+                <Solts
+                  sx={{
+                    padding: "0",
+                    fontWeight: "bold",
+                    letterSpacing: "0.3px",
+                  }}
+                >
+                  {state.doctor.price}
+                </Solts>
+              </TicketPriceContainer>
 
-          <Appointment>
-            <TicketPriceContainer>
-              <Solts sx={{ padding: "0" }}>Ticket price: </Solts>
-              <Solts
-                sx={{
-                  padding: "0",
-                  fontWeight: "bold",
-                  letterSpacing: "0.3px",
-                }}
-              >
-                {state.doctor.price}
-              </Solts>
-            </TicketPriceContainer>
+              <TimeSoltHeading>Available TimeSolts: </TimeSoltHeading>
 
-            <TimeSoltHeading>Available TimeSolts: </TimeSoltHeading>
+              <TimeSoltContainer>
+                <Box>
+                  {timeSoltsArray &&
+                    timeSoltsArray.map((each) => {
+                      return (
+                        <Solts>
+                          {each.day.charAt(0).toUpperCase() + each.day.slice(1)}
+                          :
+                        </Solts>
+                      );
+                    })}
+                </Box>
+                <Box>
+                  {timeSoltsArray &&
+                    timeSoltsArray.map((each) => {
+                      return (
+                        <Solts>
+                          {formatTime12Hour(each.startTime)} -{" "}
+                          {formatTime12Hour(each.endTime)}
+                        </Solts>
+                      );
+                    })}
+                </Box>
+              </TimeSoltContainer>
 
-            <TimeSoltContainer>
-              <Box>
-                {timeSoltsArray &&
-                  timeSoltsArray.map((each) => {
-                    return (
-                      <Solts>
-                        {each.day.charAt(0).toUpperCase() + each.day.slice(1)}:
-                      </Solts>
-                    );
-                  })}
-              </Box>
-              <Box>
-                {timeSoltsArray &&
-                  timeSoltsArray.map((each) => {
-                    return (
-                      <Solts>
-                        {formatTime12Hour(each.startTime)} -{" "}
-                        {formatTime12Hour(each.endTime)}
-                      </Solts>
-                    );
-                  })}
-              </Box>
-            </TimeSoltContainer>
-
-            <BookAppointmentBtn variant="outlined">
-              Book Appointment
-            </BookAppointmentBtn>
-          </Appointment>
+              <BookAppointmentBtn variant="outlined">
+                Book Appointment
+              </BookAppointmentBtn>
+            </Appointment>
+          </Box>
         </TopContainer>
 
         <DetailContainer sx={{ gap: 2 }}>
