@@ -5,15 +5,6 @@ import { User } from "@supabase/gotrue-js";
 import { supabase } from "../../supabase/config";
 import FetchAllDoctor from "./FetchAllDoctor";
 import DoctorCard from "../../components/doctorCard/DoctorCard";
-import SpecializationDesign from "../../components/specializationDesign/SpecializationDesign";
-import heart from "../../assets/specializationImgs/heart.gif";
-import bone from "../../assets/specializationImgs/bone.gif";
-import brain from "../../assets/specializationImgs/brain.gif";
-import lungs from "../../assets/specializationImgs/lungs.gif";
-import medicine from "../../assets/specializationImgs/medicine.gif";
-import specialized from "../../assets/specializationImgs/specialized.gif";
-import stomach from "../../assets/specializationImgs/stomach.gif";
-import teeth from "../../assets/specializationImgs/teeth.gif";
 
 type DoctorInfo = {
   id: number;
@@ -107,18 +98,6 @@ const SearchBox = styled(Box)(({ theme }) => ({
       },
     },
   },
-}));
-
-const SpecializationBox = styled(Box)(({ theme }) => ({
-  display: "flex",
-  flexWrap: "wrap",
-  justifyContent: "center",
-  padding: "1rem",
-  gap: theme.spacing(3),
-
-  [theme.breakpoints.down("lg")]: { gap: theme.spacing(3) },
-  [theme.breakpoints.down("md")]: { gap: theme.spacing(2) },
-  [theme.breakpoints.down("sm")]: { gap: theme.spacing(1) },
 }));
 
 function FindDoctor() {
@@ -255,17 +234,6 @@ function FindDoctor() {
               ))
             : null}
         </Box>
-
-        <SpecializationBox>
-          <SpecializationDesign img={heart} title={"Cardiology"} />
-          <SpecializationDesign img={teeth} title={"Dentist"} />
-          <SpecializationDesign img={specialized} title={"Specialized"} />
-          <SpecializationDesign img={lungs} title={"Urology"} />
-          <SpecializationDesign img={brain} title={"Neurology"} />
-          <SpecializationDesign img={bone} title={"Orthopedic"} />
-          <SpecializationDesign img={stomach} title={"Stomach"} />
-          <SpecializationDesign img={medicine} title={"Medicine"} />
-        </SpecializationBox>
       </Container>
     </MainContainer>
   );

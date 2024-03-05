@@ -145,7 +145,6 @@ const Navbar = () => {
         <LogoLink to="/">HealthHarbor</LogoLink>
       </Box>
       <Box sx={{ display: "flex" }}>
-        <StyledLink to="/">Home</StyledLink>
         <StyledLink to="/find-a-doctor">Find a Doctor</StyledLink>
         <StyledLink to="/service">Services</StyledLink>
         <StyledLink to="/about-us">About us</StyledLink>
