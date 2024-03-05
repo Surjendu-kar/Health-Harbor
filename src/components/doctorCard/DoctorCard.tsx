@@ -1,7 +1,85 @@
 // DoctorCard.js
 import React from "react";
-import { Card, CardMedia, CardContent, Typography } from "@mui/material";
+import {
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  styled,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
+
+const StyleCard = styled(Card)(({ theme }) => ({
+  maxWidth: 200,
+  margin: 10,
+  borderRadius: "5px",
+  [theme.breakpoints.down("lg")]: {
+    maxWidth: 190,
+  },
+  [theme.breakpoints.down("md")]: {
+    maxWidth: 100,
+    margin: 7,
+  },
+  [theme.breakpoints.down("sm")]: {
+    maxWidth: 90,
+    margin: 5,
+  },
+}));
+
+const CardMediaStyle = styled(CardMedia)(({ theme }) => ({
+  height: 190,
+  [theme.breakpoints.down("lg")]: {
+    height: 180,
+  },
+  [theme.breakpoints.down("md")]: {
+    height: 100,
+  },
+  [theme.breakpoints.down("sm")]: {
+    height: 70,
+  },
+}));
+
+const Heading = styled(Typography)(({ theme }) => ({
+  fontSize: "1.05rem",
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "0.9rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.7rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.5rem",
+  },
+}));
+
+const Title = styled(Typography)(({ theme }) => ({
+  fontSize: "0.8rem",
+
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "0.7rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.55rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.4rem",
+  },
+}));
+
+const CardContentStyle = styled(CardContent)(({ theme }) => ({
+  "&:last-child": {
+    paddingBottom: "5px",
+  },
+  [theme.breakpoints.down("lg")]: {
+    padding: "1rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    padding: "0.3rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    padding: "0.25rem",
+  },
+}));
 
 const DoctorCard = ({ doctor }) => {
   const qualificationsArray = JSON.parse(doctor.qualifications);
@@ -10,40 +88,24 @@ const DoctorCard = ({ doctor }) => {
   const navigate = useNavigate();
 
   const universityComponents = qualificationsArray.map((q, index) => (
-    <Typography key={index} variant="body2" color="text.secondary">
+    <Title key={index} variant="body2" color="text.secondary">
       {q.university}
-    </Typography>
+    </Title>
   ));
 
   return (
-    <Card
-      sx={{ maxWidth: 345, m: 2, borderRadius: "5px" }}
+    <StyleCard
       onClick={() => navigate("/doctor-details", { state: { doctor } })}
     >
-      <CardMedia
-        component="img"
-        height="200"
-        image={doctor.img}
-        alt={doctor.name}
-      />
-      <CardContent>
-        <Typography
-          gutterBottom
-          variant="h6"
-          component="div"
-          sx={{ marginBottom: "0" }}
-        >
-          {doctor.name}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {doctor.specialization}({degrees})
-        </Typography>
-        {/* <Typography variant="body2" color="text.secondary">
-          {universities}
-        </Typography> */}
+      <CardMediaStyle component="img" image={doctor.img} alt={doctor.name} />
+      <CardContentStyle>
+        <Heading>{doctor.name}</Heading>
+        <Title variant="body2" color="text.secondary">
+          {doctor.specialization} ({degrees})
+        </Title>
         {universityComponents}
-      </CardContent>
-    </Card>
+      </CardContentStyle>
+    </StyleCard>
   );
 };
 

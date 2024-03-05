@@ -5,6 +5,15 @@ import { User } from "@supabase/gotrue-js";
 import { supabase } from "../../supabase/config";
 import FetchAllDoctor from "./FetchAllDoctor";
 import DoctorCard from "../../components/doctorCard/DoctorCard";
+import SpecializationDesign from "../../components/specializationDesign/SpecializationDesign";
+import heart from "../../assets/specializationImgs/heart.gif";
+import bone from "../../assets/specializationImgs/bone.gif";
+import brain from "../../assets/specializationImgs/brain.gif";
+import lungs from "../../assets/specializationImgs/lungs.gif";
+import medicine from "../../assets/specializationImgs/medicine.gif";
+import specialized from "../../assets/specializationImgs/specialized.gif";
+import stomach from "../../assets/specializationImgs/stomach.gif";
+import teeth from "../../assets/specializationImgs/teeth.gif";
 
 type DoctorInfo = {
   id: number;
@@ -24,12 +33,92 @@ type DoctorInfo = {
   img: string;
 };
 
-const MainContainer = styled(Box)(() => ({}));
-const SearchBox = styled(Box)(() => ({
+const MainContainer = styled(Box)({
+  display: "flex",
+  justifyContent: "center",
+});
+
+const Container = styled(Box)(({ theme }) => ({
+  width: "80%",
+}));
+
+const SearchBox = styled(Box)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  margin: "1rem",
+  margin: "2rem 0",
+  flexWrap: "wrap",
+
+  [theme.breakpoints.down("lg")]: { margin: "1.5rem 0" },
+  [theme.breakpoints.down("md")]: { margin: "1.25rem 0" },
+  [theme.breakpoints.down("sm")]: { margin: "1rem 0" },
+
+  "& > div": {
+    display: "flex",
+    alignItems: "center",
+    border: "1px solid black",
+    borderRadius: "20px",
+    backgroundColor: "#fff",
+
+    [theme.breakpoints.down("lg")]: {},
+    [theme.breakpoints.down("md")]: {
+      padding: "0.01rem 0.1rem",
+    },
+    [theme.breakpoints.down("sm")]: { padding: "0" },
+  },
+
+  "& .MuiInput-root, & .MuiSelect-root": {
+    [theme.breakpoints.down("lg")]: { fontSize: "0.875rem" },
+    [theme.breakpoints.down("md")]: {
+      fontSize: "0.7rem",
+    },
+    [theme.breakpoints.down("sm")]: { fontSize: "0.5rem" },
+  },
+
+  "& .MuiButton-root": {
+    [theme.breakpoints.down("lg")]: {
+      fontSize: "0.7rem",
+    },
+    [theme.breakpoints.down("md")]: {
+      padding: theme.spacing(0.7),
+      fontSize: "0.5rem",
+    },
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.3rem",
+      padding: "0.25rem 0.4rem",
+      minWidth: "auto",
+    },
+  },
+
+  "& .MuiButton-startIcon": {
+    [theme.breakpoints.down("lg")]: {
+      "& .MuiSvgIcon-root": {
+        fontSize: "1.2rem",
+      },
+    },
+    [theme.breakpoints.down("md")]: {
+      "& .MuiSvgIcon-root": {
+        fontSize: "0.8rem",
+      },
+    },
+    [theme.breakpoints.down("sm")]: {
+      "& .MuiSvgIcon-root": {
+        fontSize: "0.5rem",
+      },
+    },
+  },
+}));
+
+const SpecializationBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexWrap: "wrap",
+  justifyContent: "center",
+  padding: "1rem",
+  gap: theme.spacing(3),
+
+  [theme.breakpoints.down("lg")]: { gap: theme.spacing(3) },
+  [theme.breakpoints.down("md")]: { gap: theme.spacing(2) },
+  [theme.breakpoints.down("sm")]: { gap: theme.spacing(1) },
 }));
 
 function FindDoctor() {
@@ -41,7 +130,6 @@ function FindDoctor() {
   const [searchData, setSearchData] = useState<DoctorInfo[]>([]);
 
   useEffect(() => {
-    // fetch user login info
     const getUser = async () => {
       const {
         data: { user },
@@ -59,6 +147,7 @@ function FindDoctor() {
         setIsLoading(false);
         if (!error) {
           setFetchedData(data);
+          setSearchData(data);
         }
       };
 
@@ -67,7 +156,7 @@ function FindDoctor() {
   }, [user?.email, fetchedData]);
 
   useEffect(() => {
-    console.log(fetchedData);
+    console.log("fetchedData", fetchedData);
   }, [fetchedData]);
 
   // Handle city input change
@@ -82,82 +171,102 @@ function FindDoctor() {
     setSpecialization(event.target.value as string);
   };
 
-  const handleSubmit = () => {
-    console.log(city, specialization);
-    const filteredData = fetchedData?.filter(
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const filteredData = fetchedData.filter(
       (each) =>
-        (city == "" || each.city.toLowerCase() == city.toLowerCase()) &&
-        (specialization == "" ||
-          each.specialization.toLowerCase() == specialization.toLowerCase())
+        (city === "" || each.city.toLowerCase().includes(city.toLowerCase())) &&
+        (specialization === "" ||
+          each.specialization.toLowerCase() === specialization.toLowerCase())
     );
 
-    console.log(filteredData);
-    setSearchData(filteredData || []);
+    setSearchData(filteredData);
   };
 
   return (
     <MainContainer>
-      <SearchBox>
-        <Box
-          sx={{
-            padding: "3px",
-            border: "1px solid black",
-            borderRadius: "20px",
-            backgroundColor: "#fff",
-          }}
-        >
-          <Input
-            value={city}
-            onChange={handleCityChange}
-            placeholder="Search city"
-            disableUnderline
-            sx={{ padding: "3px" }}
-          />
-          <span>| </span>
-          <Select
-            value={specialization}
-            onChange={handleSpecializationChange}
-            displayEmpty
-            input={<Input disableUnderline />}
-            renderValue={(selected) => {
-              if (selected.length === 0) {
-                return <span>Select an option</span>;
-              }
-              return selected;
-            }}
-          >
-            <MenuItem value="">
-              <em>Select an option</em>
-            </MenuItem>
-            <MenuItem value="cardiology">Cardiology</MenuItem>
-            <MenuItem value="dentist">Dentist</MenuItem>
-            <MenuItem value="specialized">Specialized</MenuItem>
-            <MenuItem value="urology">Urology</MenuItem>
-            <MenuItem value="neurology">Neurology</MenuItem>
-            <MenuItem value="orthopedic">Orthopedic</MenuItem>
-            <MenuItem value="stomach">Stomach</MenuItem>
-          </Select>
+      <Container>
+        <form onSubmit={handleSubmit}>
+          <SearchBox>
+            <Box
+              sx={{
+                padding: "3px",
+                border: "1px solid black",
+                borderRadius: "20px",
+                backgroundColor: "#fff",
+              }}
+            >
+              <Input
+                value={city}
+                onChange={handleCityChange}
+                placeholder="Search city"
+                disableUnderline
+                // sx={{ padding: "3px" }}
+              />
+              <span>| </span>
+              <Select
+                value={specialization}
+                onChange={handleSpecializationChange}
+                displayEmpty
+                input={<Input disableUnderline />}
+                renderValue={(selected) => {
+                  if (selected.length === 0) {
+                    return <span>Select an option</span>;
+                  }
+                  return selected;
+                }}
+              >
+                <MenuItem value="">
+                  <em>Select an option</em>
+                </MenuItem>
+                <MenuItem value="cardiology">Cardiology</MenuItem>
+                <MenuItem value="dentist">Dentist</MenuItem>
+                <MenuItem value="specialized">Specialized</MenuItem>
+                <MenuItem value="urology">Urology</MenuItem>
+                <MenuItem value="neurology">Neurology</MenuItem>
+                <MenuItem value="orthopedic">Orthopedic</MenuItem>
+                <MenuItem value="stomach">Stomach</MenuItem>
+              </Select>
 
-          <Button
-            variant="contained"
-            startIcon={<SearchIcon />}
-            onClick={handleSubmit}
-            sx={{
-              backgroundColor: "#1D2B53",
-              "&:hover": { backgroundColor: "#16324C" },
-              borderRadius: "20px",
-            }}
-          >
-            Search
-          </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                startIcon={<SearchIcon />}
+                sx={{
+                  backgroundColor: "#1D2B53",
+                  "&:hover": { backgroundColor: "#16324C" },
+                  borderRadius: "20px",
+                }}
+              >
+                Search
+              </Button>
+            </Box>
+          </SearchBox>
+        </form>
+
+        <Box sx={{ display: "flex" }}>
+          {searchData.length > 0
+            ? searchData.map((doctor) => (
+                <DoctorCard key={doctor.id} doctor={doctor} />
+              ))
+            : fetchedData
+            ? fetchedData.map((doctor) => (
+                <DoctorCard key={doctor.id} doctor={doctor} />
+              ))
+            : null}
         </Box>
-      </SearchBox>
 
-      <Box sx={{ display: "flex" }}>
-        {searchData?.map((doctor) => (
-          <DoctorCard key={doctor.id} doctor={doctor} />
-        ))}
-      </Box>
+        <SpecializationBox>
+          <SpecializationDesign img={heart} title={"Cardiology"} />
+          <SpecializationDesign img={teeth} title={"Dentist"} />
+          <SpecializationDesign img={specialized} title={"Specialized"} />
+          <SpecializationDesign img={lungs} title={"Urology"} />
+          <SpecializationDesign img={brain} title={"Neurology"} />
+          <SpecializationDesign img={bone} title={"Orthopedic"} />
+          <SpecializationDesign img={stomach} title={"Stomach"} />
+          <SpecializationDesign img={medicine} title={"Medicine"} />
+        </SpecializationBox>
+      </Container>
     </MainContainer>
   );
 }
