@@ -40,7 +40,7 @@ const SpecializationBox = styled(Box)(({ theme }) => ({
   },
   [theme.breakpoints.down("sm")]: {
     margin: "3.5rem auto",
-    width: "90%",
+    width: "100%",
   },
 }));
 
