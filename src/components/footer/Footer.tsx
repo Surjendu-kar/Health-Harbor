@@ -103,7 +103,7 @@ const Title = styled(Typography)(({ theme }) => ({
     letterSpacing: "0.25px",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.4rem",
+    fontSize: "0.36rem",
     letterSpacing: "0.15px",
   },
 }));
@@ -130,7 +130,7 @@ const MailLink = styled("a")(({ theme }) => ({
     letterSpacing: "0.5px",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.42rem",
+    fontSize: "0.39rem",
     letterSpacing: "0.5px",
   },
 }));
