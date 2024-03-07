@@ -9,7 +9,6 @@ import OverView from "./overview/OverView";
 import Appointments from "./appointments/Appointments";
 import LoadingAnimation from "../../components/lottieAnimation/LoadingAnimation";
 import FetchSpecificDoctor from "../../supabase/FetchSpecificDoctor";
-import { useNavigate } from "react-router-dom";
 
 const MainContainer = styled(Box)(({ theme }) => ({
   width: "100%",
@@ -32,7 +31,6 @@ type DoctorInfo = {
   name: string;
   email: string;
   phoneno: string;
-  bio: string;
   gender: string;
   specialization: string;
   price: number;

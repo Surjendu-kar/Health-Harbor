@@ -36,6 +36,7 @@ const TextContainer = styled(Box)(({ theme }) => ({
 }));
 
 const Text = styled(Typography)(({ theme }) => ({
+  color: theme.palette.mode === "dark" ? "grey" : "grey.600",
   fontSize: "0.9rem",
   [theme.breakpoints.down("lg")]: {
     fontSize: "0.8rem",
@@ -73,6 +74,7 @@ function TimeSlot({
   slot,
   onTimeSlotChange,
   fetchedData,
+  isEditMode,
 }: {
   fetchedData: DoctorInfo | null;
 }) {
@@ -108,13 +110,13 @@ function TimeSlot({
   useEffect(() => {
     onTimeSlotChange(timeSlot);
   }, [timeSlot, onTimeSlotChange]);
-  
+
   return (
     <Box>
       <TextContainer>
-        <Text>Day</Text>
-        <Text>Starting Time</Text>
-        <Text>Ending Time</Text>
+        <Text color={isEditMode ? "inherit" : "grey.600"}>Day</Text>
+        <Text color={isEditMode ? "inherit" : "grey.600"}>Starting Time</Text>
+        <Text color={isEditMode ? "inherit" : "grey.600"}>Ending Time</Text>
       </TextContainer>
 
       <Box
@@ -138,7 +140,7 @@ function TimeSlot({
             }
             onChange={handleDayChange}
             sx={{ backgroundColor: "#fff", width: "100%" }}
-            // disabled={timeSlot}
+            disabled={!isEditMode}
           >
             <MenuItem value="sunday">Sunday</MenuItem>
             <MenuItem value="monday">Monday</MenuItem>
@@ -174,7 +176,7 @@ function TimeSlot({
               renderInput={(props) => (
                 <TextField {...props} placeholder="Select time" />
               )}
-              // disabled={timeSlot}
+              disabled={!isEditMode}
               sx={{ backgroundColor: "#fff", width: "100%" }}
             />
           </LocalizationProvider>
@@ -204,7 +206,7 @@ function TimeSlot({
               renderInput={(props) => (
                 <TextField {...props} placeholder="Select time" />
               )}
-              // disabled={timeSlot}
+              disabled={!isEditMode}
               sx={{ backgroundColor: "#fff", width: "100%" }}
             />
           </LocalizationProvider>

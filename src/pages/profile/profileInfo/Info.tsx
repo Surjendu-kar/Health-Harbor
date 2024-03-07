@@ -210,7 +210,6 @@ type DoctorInfo = {
   name: string;
   email: string;
   phoneno: string;
-  bio: string;
   gender: string;
   specialization: string;
   price: number;
@@ -232,7 +231,6 @@ function Info({
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [phoneError, setPhoneError] = useState("");
-  const [bio, setBio] = useState("");
   const [price, setPrice] = useState("");
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
@@ -244,7 +242,6 @@ function Info({
   const [about, setAbout] = useState("");
   const [isFormValid, setIsFormValid] = useState(false);
   const [isEditMode, setIsEditMode] = useState(!fetchedData);
-  const [changes, setChanges] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -265,6 +262,8 @@ function Info({
       qualifications.length > 0 &&
       experiences.length > 0 &&
       timeSlots !== null;
+    // console.log(isValid);
+
     setIsFormValid(isValid);
   };
 
@@ -273,7 +272,6 @@ function Info({
       name: name,
       email: user?.email,
       phoneno: phone,
-      bio: bio,
       gender: gender,
       specialization: specialization,
       price: parseInt(price, 10),
@@ -290,8 +288,21 @@ function Info({
   };
 
   const updateData = async () => {
-    await UpdateData(user?.email, changes);
-    setChanges({});
+    const newDoctor = {
+      name: name,
+      email: user?.email,
+      phoneno: phone,
+      gender: gender,
+      specialization: specialization,
+      price: parseInt(price, 10),
+      address: address,
+      city: city,
+      qualifications: JSON.stringify(qualifications),
+      experiences: JSON.stringify(experiences),
+      timeSlot: JSON.stringify(timeSlots),
+      about: about,
+    };
+    await UpdateData(user?.email, newDoctor);
     setIsLoading(false);
   };
 
@@ -299,11 +310,13 @@ function Info({
     event.preventDefault();
     if (!isFormValid) return;
 
-    setIsLoading(true);
+    if (fetchedData && !isEditMode) {
+      setIsLoading(true);
 
-    if (isEditMode) {
       await updateData();
-    } else {
+    } else if (!isEditMode || !fetchedData) {
+      setIsLoading(true);
+
       await insertData();
     }
     setIsEditMode(false);
@@ -368,7 +381,6 @@ function Info({
     if (fetchedData) {
       setName(fetchedData.name);
       setPhone(fetchedData.phoneno);
-      setBio(fetchedData.bio);
       setPrice(fetchedData.price);
       setAddress(fetchedData.address);
       setCity(fetchedData.city);
@@ -383,10 +395,6 @@ function Info({
 
   const toggleEditMode = () => {
     setIsEditMode(!isEditMode);
-    // if (isEditMode) {
-    //   // Here, you can implement the logic to handle the submission of edited details
-    //   // For example, you could call an update function to save the edited details to the database
-    // }
   };
 
   return (
@@ -438,16 +446,6 @@ function Info({
             {phoneError}
           </Typography>
         )}
-        <TitleTextField
-          required
-          value={bio}
-          id="bio"
-          label="Bio"
-          onChange={(e) => setBio(e.target.value)}
-          fullWidth
-          // disabled={!!fetchedData}
-          disabled={!isEditMode}
-        />
 
         <SelectOption>
           <FormControl
@@ -521,7 +519,11 @@ function Info({
 
         {/* Qualification Section */}
         <Box>
-          <ColorButton onClick={handleAddQualification} variant="contained">
+          <ColorButton
+            onClick={handleAddQualification}
+            variant="contained"
+            disabled={!isEditMode && qualifications.length > 0}
+          >
             Add Qualification
           </ColorButton>
           {qualifications.map((qualification, index) => (
@@ -532,13 +534,18 @@ function Info({
                 handleQualificationChange(index, qualificationData)
               }
               fetchedData={fetchedData}
+              isEditMode={isEditMode}
             />
           ))}
         </Box>
 
         {/* Experience Section */}
         <Box>
-          <ColorButton onClick={handleAddExperience} variant="contained">
+          <ColorButton
+            onClick={handleAddExperience}
+            variant="contained"
+            disabled={!isEditMode && experiences.length > 0}
+          >
             Add Experience
           </ColorButton>
           {experiences.map((experience, index) => (
@@ -548,14 +555,19 @@ function Info({
               onExperienceChange={(updatedExperience) =>
                 handleExperienceChange(index, updatedExperience)
               }
-              fetchedData={fetchedData} // Explicitly passing null if no fetchedData
+              fetchedData={fetchedData}
+              isEditMode={isEditMode}
             />
           ))}
         </Box>
 
         {/* TimeSlot Section */}
         <Box>
-          <ColorButton onClick={handleAddTimeSlot} variant="contained">
+          <ColorButton
+            onClick={handleAddTimeSlot}
+            variant="contained"
+            disabled={!isEditMode && timeSlots.length > 0}
+          >
             Add TimeSlot
           </ColorButton>
           {timeSlots.map((slot, index) => (
@@ -565,31 +577,41 @@ function Info({
               onTimeSlotChange={(updatedSlot) =>
                 handleTimeSlotChange(index, updatedSlot)
               }
+              isEditMode={isEditMode}
             />
           ))}
         </Box>
 
-        <Typography sx={{ fontSize: "1rem", marginTop: "1.5rem" }}>
-          About
-        </Typography>
-        <PriceTextField
-          fullWidth
-          onChange={(e) => setAbout(e.target.value)}
-          sx={{ backgroundColor: "#fff" }}
-          value={about}
-          // disabled={!!fetchedData}
-          disabled={!isEditMode}
-        ></PriceTextField>
+        <Box>
+          <ColorButton
+            variant="contained"
+            disabled={!isEditMode}
+            sx={{ margin: "1.5rem 0 0.5rem 0.1rem" }}
+          >
+            About Section
+          </ColorButton>
+          <PriceTextField
+            fullWidth
+            onChange={(e) => setAbout(e.target.value)}
+            sx={{ backgroundColor: "#fff" }}
+            value={about}
+            // disabled={!!fetchedData}
+            disabled={!isEditMode}
+          ></PriceTextField>
 
-        <ColorButton
-          type="submit"
-          variant="contained"
-          color="primary"
-          // disabled={isEditMode || !isFormValid || isLoading}
-          // disabled={!isEditMode || !isFormValid}
-        >
-          Submit
-        </ColorButton>
+          <Box sx={{ textAlign: "right" }}>
+            <ColorButton
+              type="submit"
+              variant="contained"
+              color="primary"
+              // disabled={isEditMode || !isFormValid || isLoading}
+              // disabled={!isEditMode || !isFormValid}
+              disabled={fetchedData && isEditMode}
+            >
+              Submit
+            </ColorButton>
+          </Box>
+        </Box>
         {isLoading && <CircularProgress />}
       </form>
     </MainContainer>

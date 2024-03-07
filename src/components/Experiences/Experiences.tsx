@@ -29,8 +29,10 @@ const TextContainer = styled(Box)(({ theme }) => ({
     margin: "0.6rem 0 0.1rem 0",
   },
 }));
+
 const Text = styled(Typography)(({ theme }) => ({
   fontSize: "0.9rem",
+  color: theme.palette.mode === "dark" ? "grey" : "grey.600",
   [theme.breakpoints.down("lg")]: {
     fontSize: "0.8rem",
   },
@@ -52,6 +54,7 @@ interface IExperienceProps {
   experience: IExperience;
   onExperienceChange: (experience: IExperience) => void;
   fetchedData: DoctorInfo | null;
+  isEditMode: boolean;
 }
 type DoctorInfo = {
   id: number;
@@ -72,6 +75,7 @@ function Experiences({
   experience,
   onExperienceChange,
   fetchedData,
+  isEditMode,
 }: IExperienceProps) {
   const handleFieldChange = (field: keyof IExperience, value: string) => {
     onExperienceChange({ ...experience, [field]: value });
@@ -84,10 +88,10 @@ function Experiences({
   return (
     <Box>
       <TextContainer>
-        <Text>Starting Date</Text>
-        <Text>Ending Date</Text>
-        <Text>Position</Text>
-        <Text>Hospital</Text>
+        <Text color={isEditMode ? "inherit" : "grey.600"}>Ending Date</Text>
+        <Text color={isEditMode ? "inherit" : "grey.600"}>Starting Date</Text>
+        <Text color={isEditMode ? "inherit" : "grey.600"}>Position</Text>
+        <Text color={isEditMode ? "inherit" : "grey.600"}>Hospital</Text>
       </TextContainer>
 
       <Box
@@ -102,13 +106,17 @@ function Experiences({
             <DatePicker
               value={
                 fetchedData && fetchedData.experiences
-                  ? dayjs(JSON.parse(fetchedData.experiences)[0].startDate)
+                  ? dayjs(
+                      JSON.parse(fetchedData.experiences).find(
+                        (q) => q.startDate === experience.startDate
+                      )?.startDate || ""
+                    )
                   : experience.startDate
               }
               onChange={(newDate) => handleDateChange("startDate", newDate)}
               renderInput={(params) => <TitleTextField {...params} />}
               sx={{ backgroundColor: "#fff" }}
-              disabled={!!fetchedData}
+              disabled={!isEditMode}
             />
           </LocalizationProvider>
         </Box>
@@ -117,13 +125,17 @@ function Experiences({
             <DatePicker
               value={
                 fetchedData && fetchedData.experiences
-                  ? dayjs(JSON.parse(fetchedData.experiences)[0].endDate)
+                  ? dayjs(
+                      JSON.parse(fetchedData.experiences).find(
+                        (q) => q.endDate === experience.endDate
+                      )?.endDate || ""
+                    )
                   : experience.endDate
               }
               onChange={(newDate) => handleDateChange("endDate", newDate)}
               renderInput={(params) => <TitleTextField {...params} />}
               sx={{ backgroundColor: "#fff" }}
-              disabled={!!fetchedData}
+              disabled={!isEditMode}
             />
           </LocalizationProvider>
         </Box>
@@ -132,14 +144,16 @@ function Experiences({
             required
             value={
               fetchedData && fetchedData.experiences
-                ? JSON.parse(fetchedData.experiences)[0].position
+                ? JSON.parse(fetchedData.experiences).find(
+                    (q) => q.position === experience.position
+                  )?.position || ""
                 : experience.position
             }
             id="position"
             // label="required"
             fullWidth
             onChange={(e) => handleFieldChange("position", e.target.value)}
-            disabled={!!fetchedData}
+            disabled={!isEditMode}
           />
         </Box>
         <Box>
@@ -147,14 +161,16 @@ function Experiences({
             required
             value={
               fetchedData && fetchedData.experiences
-                ? JSON.parse(fetchedData.experiences)[0].hospital
+                ? JSON.parse(fetchedData.experiences).find(
+                    (q) => q.hospital === experience.hospital
+                  )?.hospital || ""
                 : experience.hospital
             }
             id="hospital"
             // label="required"
             fullWidth
             onChange={(e) => handleFieldChange("hospital", e.target.value)}
-            disabled={!!fetchedData}
+            disabled={!isEditMode}
           />
         </Box>
       </Box>

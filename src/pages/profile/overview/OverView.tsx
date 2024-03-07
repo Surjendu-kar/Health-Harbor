@@ -129,7 +129,6 @@ type DoctorInfo = {
   name: string;
   email: string;
   phoneno: string;
-  bio: string;
   gender: string;
   specialization: string;
   price: number;
@@ -223,7 +222,10 @@ function OverView({
         {user && fetchedData && (
           <NameRatingBox>
             {/* Name */}
-            <Name>{user?.user_metadata?.full_name}</Name>
+            <Name>
+              {fetchedData ? fetchedData.name : user?.user_metadata?.full_name}
+            </Name>
+
             {/* Rating */}
             <ResponsiveRating name="read-only" value={value} readOnly />
           </NameRatingBox>
