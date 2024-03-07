@@ -16,17 +16,17 @@ import teeth from "../../assets/specializationImgs/teeth.gif";
 import { styled } from "@mui/system";
 
 const HeroBox = styled(Box)(({ theme }) => ({
-  margin: "6rem auto",
-  width: "80%",
+  margin: "5rem auto",
+  width: "90%",
 
   [theme.breakpoints.down("lg")]: {
     margin: "4rem auto",
   },
   [theme.breakpoints.down("md")]: {
-    margin: "2.5rem auto",
+    margin: "3rem auto",
   },
   [theme.breakpoints.down("sm")]: {
-    margin: "1rem auto",
+    margin: "2.5rem auto",
   },
 }));
 
@@ -34,14 +34,13 @@ const SpecializationBox = styled(Box)(({ theme }) => ({
   margin: "5rem auto",
   width: "80%",
 
-  [theme.breakpoints.down("lg")]: {
-    margin: "4rem auto",
-  },
   [theme.breakpoints.down("md")]: {
-    margin: "2.5rem auto",
+    margin: "4rem auto",
+    width: "90%",
   },
   [theme.breakpoints.down("sm")]: {
-    margin: "2rem auto",
+    margin: "3.5rem auto",
+    width: "90%",
   },
 }));
 
@@ -55,7 +54,7 @@ const Specialization = styled(Box)(({ theme }) => ({
     gap: theme.spacing(3),
   },
   [theme.breakpoints.down("md")]: {
-    gap: theme.spacing(2),
+    gap: theme.spacing(1),
   },
   [theme.breakpoints.down("sm")]: {
     gap: theme.spacing(1),
@@ -70,11 +69,11 @@ const Heading = styled(Typography)(({ theme }) => ({
     fontSize: "2rem",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "1.5rem",
+    fontSize: "1.75rem",
     margin: "0.8rem 0",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.7rem",
+    fontSize: "1.15rem",
     margin: "0.5rem 0",
   },
 }));

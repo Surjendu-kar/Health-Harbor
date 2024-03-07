@@ -32,21 +32,27 @@ const SecondMainContainer = styled(Box)(({ theme }) => ({
 
 const HealthContainer = styled(Box)(({ theme }) => ({
   width: "20%",
-
+  [theme.breakpoints.down("md")]: {
+    width: "25%",
+  },
   [theme.breakpoints.down("sm")]: {
     width: "25%",
   },
 }));
 const MenuContainer = styled(Box)(({ theme }) => ({
   width: "10%",
-
+  [theme.breakpoints.down("md")]: {
+    width: "10%",
+  },
   [theme.breakpoints.down("sm")]: {
     width: "10%",
   },
 }));
 const SupportContainer = styled(Box)(({ theme }) => ({
   width: "10%",
-
+  [theme.breakpoints.down("md")]: {
+    width: "10%",
+  },
   [theme.breakpoints.down("sm")]: {
     width: "10%",
   },
@@ -54,7 +60,9 @@ const SupportContainer = styled(Box)(({ theme }) => ({
 const ContactContainer = styled(Box)(({ theme }) => ({
   width: "10%",
   gap: theme.spacing(8),
-
+  [theme.breakpoints.down("md")]: {
+    width: "20%",
+  },
   [theme.breakpoints.down("sm")]: {
     width: "20%",
   },

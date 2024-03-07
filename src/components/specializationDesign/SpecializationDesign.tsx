@@ -2,8 +2,8 @@ import { Box, Typography, styled } from "@mui/material";
 
 const MainContainer = styled(Box)(({ theme }) => ({
   textAlign: "center",
-  borderRadius: "10px",
-  padding: "2.5rem 3.5rem",
+  borderRadius: "15px",
+  padding: "3.5rem 4rem",
   backgroundColor: "#fff",
   minWidth: "6rem",
   margin: "1rem",
@@ -15,20 +15,21 @@ const MainContainer = styled(Box)(({ theme }) => ({
     margin: "0.8rem",
   },
   [theme.breakpoints.down("md")]: {
-    padding: "1rem 2rem",
+    padding: "2rem 2.5rem",
     minWidth: "4rem",
     margin: "0.5rem",
   },
   [theme.breakpoints.down("sm")]: {
-    padding: "0.5rem 1.5rem",
-    minWidth: "2.5rem",
+    padding: "1.5rem 2rem",
+    minWidth: "3.5rem",
     margin: "0rem",
+    borderRadius: "10px",
   },
 }));
 
 const Img = styled("img")(({ theme }) => ({
-  height: "70px",
-  width: "70px",
+  height: "80px",
+  width: "80px",
   borderRadius: "50px",
   backgroundColor: "#f3f8ffb1",
   [theme.breakpoints.down("lg")]: {
@@ -36,12 +37,12 @@ const Img = styled("img")(({ theme }) => ({
     width: "60px",
   },
   [theme.breakpoints.down("md")]: {
-    height: "40px",
-    width: "40px",
+    height: "50px",
+    width: "50px",
   },
   [theme.breakpoints.down("sm")]: {
-    height: "25px",
-    width: "25px",
+    height: "40px",
+    width: "40px",
   },
 }));
 
@@ -49,13 +50,13 @@ const Title = styled(Typography)(({ theme }) => ({
   fontSize: "1rem",
 
   [theme.breakpoints.down("lg")]: {
-    fontSize: "0.8rem",
+    fontSize: "0.9rem",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.6rem",
+    fontSize: "0.8rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.5rem",
+    fontSize: "0.7rem",
   },
 }));
 
