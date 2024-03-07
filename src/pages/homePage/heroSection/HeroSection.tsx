@@ -21,7 +21,7 @@ function HeroSection() {
       fontSize: "2rem",
     },
     [theme.breakpoints.down("sm")]: {
-      fontSize: "1.5rem",
+      fontSize: "1.25rem",
     },
   }));
   const Title = styled(Typography)(({ theme }) => ({
@@ -33,7 +33,7 @@ function HeroSection() {
       fontSize: "0.8rem",
     },
     [theme.breakpoints.down("sm")]: {
-      fontSize: "0.75rem",
+      fontSize: "0.6rem",
     },
   }));
 
@@ -56,7 +56,7 @@ function HeroSection() {
       borderRadius: "5px",
     },
     [theme.breakpoints.down("sm")]: {
-      fontSize: "0.7rem",
+      fontSize: "0.55rem",
       padding: "0.4rem",
       borderRadius: "3px",
     },
