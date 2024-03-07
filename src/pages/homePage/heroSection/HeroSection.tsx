@@ -13,36 +13,36 @@ function HeroSection() {
   }));
 
   const Heading = styled(Typography)(({ theme }) => ({
-    fontSize: "3rem",
+    fontSize: "3.25rem",
     [theme.breakpoints.down("lg")]: {
       fontSize: "2.5rem",
     },
     [theme.breakpoints.down("md")]: {
-      fontSize: "1.5rem",
+      fontSize: "2rem",
     },
     [theme.breakpoints.down("sm")]: {
-      fontSize: "0.8rem",
+      fontSize: "1.5rem",
     },
   }));
   const Title = styled(Typography)(({ theme }) => ({
-    fontSize: "1rem",
+    fontSize: "1.25rem",
     [theme.breakpoints.down("lg")]: {
       fontSize: "0.9rem",
     },
     [theme.breakpoints.down("md")]: {
-      fontSize: "0.7rem",
+      fontSize: "0.8rem",
     },
     [theme.breakpoints.down("sm")]: {
-      fontSize: "0.4rem",
+      fontSize: "0.75rem",
     },
   }));
 
   const FindADoctor = styled(Typography)(({ theme }) => ({
     display: "inline",
-    fontSize: "1.15rem",
+    fontSize: "1.25rem",
     backgroundColor: "#deeaff8f",
-    padding: "0.9rem",
-    borderRadius: "10px",
+    padding: "0.8rem",
+    borderRadius: "7px",
     lineHeight: 2.5,
     cursor: "pointer",
 
@@ -51,19 +51,20 @@ function HeroSection() {
       padding: "0.7rem",
     },
     [theme.breakpoints.down("md")]: {
-      fontSize: "0.65rem",
-      padding: "0.45rem",
-      borderRadius: "7px",
+      fontSize: "0.8rem",
+      padding: "0.4rem",
+      borderRadius: "5px",
     },
     [theme.breakpoints.down("sm")]: {
-      fontSize: "0.35rem",
-      padding: "0.3rem",
+      fontSize: "0.7rem",
+      padding: "0.4rem",
+      borderRadius: "3px",
     },
   }));
 
   const Img = styled("img")(({ theme }) => ({
-    height: "400px",
-    width: "600px",
+    height: "450px",
+    width: "700px",
     borderRadius: "30px",
     boxShadow: "1px 10px 8px rgba(0, 0, 0, 0.3)",
 
@@ -77,8 +78,8 @@ function HeroSection() {
       borderRadius: "20px",
     },
     [theme.breakpoints.down("sm")]: {
-      height: "100px",
-      width: "150px",
+      height: "150px",
+      width: "200px",
       borderRadius: "10px",
     },
   }));
