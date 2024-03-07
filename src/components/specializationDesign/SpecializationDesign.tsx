@@ -20,7 +20,7 @@ const MainContainer = styled(Box)(({ theme }) => ({
     margin: "0.5rem",
   },
   [theme.breakpoints.down("sm")]: {
-    padding: "1.5rem 2rem",
+    padding: "1.5rem 1.8rem",
     minWidth: "3.5rem",
     margin: "0rem",
     borderRadius: "10px",
