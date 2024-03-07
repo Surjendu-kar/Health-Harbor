@@ -16,21 +16,22 @@ const NavContainer = styled(Box)(() => ({
 }));
 
 const StyledLink = styled(Link)(({ theme }) => ({
+  fontFamily: "sans-serif",
   margin: theme.spacing(0, 2),
   textDecoration: "none",
   color: "#fff",
-  fontSize: "1.02rem",
+  fontSize: "0.9rem",
   letterSpacing: "1.5px",
 
   transition: "color 0.3s ease-in-out, font-size 0.3s ease-in-out",
   "&:hover": {
-    fontSize: "1.25rem",
+    fontSize: "1.05rem",
   },
 
   [theme.breakpoints.down("lg")]: {
-    fontSize: "1rem",
+    fontSize: "0.85rem",
     "&:hover": {
-      fontSize: "1.05rem",
+      fontSize: "1rem",
     },
   },
   [theme.breakpoints.down("md")]: {
