@@ -1,4 +1,4 @@
-import { Box, styled } from "@mui/material";
+import { Box, Typography, styled } from "@mui/material";
 import LogoAnimation from "../lottieAnimation/LogoAnimation";
 
 const MainContainer = styled(Box)(({ theme }) => ({
@@ -50,9 +50,9 @@ const MedicineStyle = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: { width: "13px", height: "13px" },
 }));
 
-const Heading = styled("p")(({ theme }) => ({
-  fontSize: "1.25rem",
-  fontWeight: "bold",
+const Heading = styled(Typography)(({ theme }) => ({
+  fontSize: "1.2rem",
+  // fontWeight: "bold",
   color: "#0A1D56",
   letterSpacing: "1.5px",
 
@@ -69,8 +69,8 @@ const Heading = styled("p")(({ theme }) => ({
     letterSpacing: "1px",
   },
 }));
-const Title = styled("p")(({ theme }) => ({
-  fontSize: "1rem",
+const Title = styled(Typography)(({ theme }) => ({
+  fontSize: "0.9rem",
   color: "#57535c",
   letterSpacing: "0.35px",
 

@@ -7,6 +7,8 @@ const MainContainer = styled(Box)(({ theme }) => ({
   backgroundColor: "#fff",
   minWidth: "6rem",
   margin: "1rem",
+  boxShadow: "1px 5px 8px rgba(0, 0, 0, 0.2)",
+
   [theme.breakpoints.down("lg")]: {
     padding: "2rem 3rem",
     minWidth: "5rem",

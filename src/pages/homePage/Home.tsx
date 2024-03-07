@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../supabase/config";
 import { useNavigate } from "react-router-dom";
 import { User } from "@supabase/supabase-js";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import HeroSection from "./heroSection/HeroSection";
 import SpecializationDesign from "../../components/specializationDesign/SpecializationDesign";
 import heart from "../../assets/specializationImgs/heart.gif";
@@ -15,9 +15,37 @@ import stomach from "../../assets/specializationImgs/stomach.gif";
 import teeth from "../../assets/specializationImgs/teeth.gif";
 import { styled } from "@mui/system";
 
+const HeroBox = styled(Box)(({ theme }) => ({
+  margin: "6rem auto",
+  width: "80%",
+
+  [theme.breakpoints.down("lg")]: {
+    margin: "4rem auto",
+  },
+  [theme.breakpoints.down("md")]: {
+    margin: "2.5rem auto",
+  },
+  [theme.breakpoints.down("sm")]: {
+    margin: "1rem auto",
+  },
+}));
+
 const SpecializationBox = styled(Box)(({ theme }) => ({
   margin: "5rem auto",
   width: "80%",
+
+  [theme.breakpoints.down("lg")]: {
+    margin: "4rem auto",
+  },
+  [theme.breakpoints.down("md")]: {
+    margin: "2.5rem auto",
+  },
+  [theme.breakpoints.down("sm")]: {
+    margin: "2rem auto",
+  },
+}));
+
+const Specialization = styled(Box)(({ theme }) => ({
   display: "flex",
   flexWrap: "wrap",
   justifyContent: "center",
@@ -25,15 +53,29 @@ const SpecializationBox = styled(Box)(({ theme }) => ({
 
   [theme.breakpoints.down("lg")]: {
     gap: theme.spacing(3),
-    margin: "4rem auto",
   },
   [theme.breakpoints.down("md")]: {
     gap: theme.spacing(2),
-    margin: "2.5rem auto",
   },
   [theme.breakpoints.down("sm")]: {
     gap: theme.spacing(1),
-    margin: "1rem auto",
+  },
+}));
+
+const Heading = styled(Typography)(({ theme }) => ({
+  color: "#333333",
+  margin: "10rem 0 2rem 0",
+  fontSize: "2.5rem",
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "2rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "1.5rem",
+    margin: "0.8rem 0",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.7rem",
+    margin: "0.5rem 0",
   },
 }));
 
@@ -62,21 +104,24 @@ function Home() {
   // console.log(user);
 
   return (
+    // backgroundColor: "#C7C8CC",
     <Box>
       {user && <Box></Box>}
-      <Box>
+      <HeroBox>
         <HeroSection />
-      </Box>
-
+      </HeroBox>
       <SpecializationBox>
-        <SpecializationDesign img={heart} title={"Cardiology"} />
-        <SpecializationDesign img={teeth} title={"Dentist"} />
-        <SpecializationDesign img={specialized} title={"Specialized"} />
-        <SpecializationDesign img={lungs} title={"Urology"} />
-        <SpecializationDesign img={brain} title={"Neurology"} />
-        <SpecializationDesign img={bone} title={"Orthopedic"} />
-        <SpecializationDesign img={stomach} title={"Stomach"} />
-        <SpecializationDesign img={medicine} title={"Medicine"} />
+        <Heading textAlign={"center"}>Categories</Heading>
+        <Specialization>
+          <SpecializationDesign img={heart} title={"Cardiology"} />
+          <SpecializationDesign img={teeth} title={"Dentist"} />
+          <SpecializationDesign img={specialized} title={"Specialized"} />
+          <SpecializationDesign img={lungs} title={"Urology"} />
+          <SpecializationDesign img={brain} title={"Neurology"} />
+          <SpecializationDesign img={bone} title={"Orthopedic"} />
+          <SpecializationDesign img={stomach} title={"Stomach"} />
+          <SpecializationDesign img={medicine} title={"Medicine"} />
+        </Specialization>
       </SpecializationBox>
     </Box>
   );
