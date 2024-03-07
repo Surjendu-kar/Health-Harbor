@@ -26,28 +26,48 @@ const SecondMainContainer = styled(Box)(({ theme }) => ({
     padding: "2rem 2rem 1rem 2rem",
   },
   [theme.breakpoints.down("sm")]: {
-    padding: "0.5rem",
+    padding: "1.5rem 1rem 0.5rem 1rem",
   },
 }));
 
-const Container = styled(Box)(() => ({
+const HealthContainer = styled(Box)(({ theme }) => ({
+  width: "20%",
+
+  [theme.breakpoints.down("sm")]: {
+    width: "25%",
+  },
+}));
+const MenuContainer = styled(Box)(({ theme }) => ({
   width: "10%",
+
+  [theme.breakpoints.down("sm")]: {
+    width: "10%",
+  },
+}));
+const SupportContainer = styled(Box)(({ theme }) => ({
+  width: "10%",
+
+  [theme.breakpoints.down("sm")]: {
+    width: "10%",
+  },
+}));
+const ContactContainer = styled(Box)(({ theme }) => ({
+  width: "10%",
+  gap: theme.spacing(8),
+
+  [theme.breakpoints.down("sm")]: {
+    width: "20%",
+  },
 }));
 
-const MedicineStyle = styled(Box)(({ theme }) => ({
+const ContactBox = styled(Box)(({ theme }) => ({
   display: "flex",
-  alignItems: "center",
-  width: "50px",
-  height: "55px",
-  [theme.breakpoints.down("lg")]: {
-    width: "35px",
-    height: "35px",
+  flexDirection: "column",
+  gap: theme.spacing(1),
+
+  [theme.breakpoints.down("sm")]: {
+    gap: theme.spacing(0.35),
   },
-  [theme.breakpoints.down("md")]: {
-    width: "30px",
-    height: "30px",
-  },
-  [theme.breakpoints.down("sm")]: { width: "13px", height: "13px" },
 }));
 
 const Heading = styled(Typography)(({ theme }) => ({
@@ -65,7 +85,7 @@ const Heading = styled(Typography)(({ theme }) => ({
     letterSpacing: "1.05px",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.35rem",
+    fontSize: "0.5rem",
     letterSpacing: "1px",
   },
 }));
@@ -83,8 +103,8 @@ const Title = styled(Typography)(({ theme }) => ({
     letterSpacing: "0.25px",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.23rem",
-    letterSpacing: "0.25px",
+    fontSize: "0.4rem",
+    letterSpacing: "0.15px",
   },
 }));
 
@@ -110,8 +130,8 @@ const MailLink = styled("a")(({ theme }) => ({
     letterSpacing: "0.5px",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.23rem",
-    letterSpacing: "0.25px",
+    fontSize: "0.42rem",
+    letterSpacing: "0.5px",
   },
 }));
 
@@ -143,7 +163,7 @@ const ReserveTitle = styled("p")(({ theme }) => ({
     letterSpacing: "1px",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.2rem",
+    fontSize: "0.42rem",
     letterSpacing: "0.5px",
   },
 }));
@@ -152,22 +172,18 @@ function Footer() {
   return (
     <MainContainer>
       <SecondMainContainer>
-        <Container sx={{ width: "20%" }}>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <MedicineStyle>
-              <LogoAnimation />
-            </MedicineStyle>
-            <Heading>HealthHarbor</Heading>
-          </Box>
+        <HealthContainer>
+          <Heading>HealthHarbor</Heading>
+
           <Title>
             The primary objective of a consultant is to use expert knowledge and
             skill to diagnose and treat patients while retaining ultimate
             clinical responsibility for their care. We are 'All in One
             Healthcare' here for help you.
           </Title>
-        </Container>
+        </HealthContainer>
 
-        <Container>
+        <MenuContainer>
           <Heading>Menu</Heading>
           <Box>
             <Title>Home</Title>
@@ -175,9 +191,9 @@ function Footer() {
             <Title>Find a Doctor</Title>
             <Title>Contact</Title>
           </Box>
-        </Container>
+        </MenuContainer>
 
-        <Container>
+        <SupportContainer>
           <Heading>Support</Heading>
           <Box>
             <Title>Terms & Conditions</Title>
@@ -186,25 +202,28 @@ function Footer() {
             <Title>FAQ/Help</Title>
             <Title>Resources</Title>
           </Box>
-        </Container>
+        </SupportContainer>
 
-        <Container>
+        <ContactContainer>
           <Heading>Contact us</Heading>
-          <Box>
-            <MailLink href="mailto:rahulkar9988@gmail.com">
-              rahulkar9988@gmail.com
-            </MailLink>
-            <MailLink
-              href="mailto:britisundar789j@gmail.com"
-              sx={{ padding: "0.5rem 0" }}
-            >
-              britisundar789j@gmail.com
-            </MailLink>
-            <MailLink href="mailto:hitenagar@gmail.com">
-              hitenagar@gmail.com
-            </MailLink>
-          </Box>
-        </Container>
+          <ContactBox>
+            <Box>
+              <MailLink href="mailto:rahulkar9988@gmail.com">
+                rahulkar9988@gmail.com
+              </MailLink>
+            </Box>
+            <Box>
+              <MailLink href="mailto:britisundar789j@gmail.com">
+                britisundar789j@gmail.com
+              </MailLink>
+            </Box>
+            <Box>
+              <MailLink href="mailto:hitenagar@gmail.com">
+                hitenagar@gmail.com
+              </MailLink>
+            </Box>
+          </ContactBox>
+        </ContactContainer>
       </SecondMainContainer>
 
       <ReserveSection>
