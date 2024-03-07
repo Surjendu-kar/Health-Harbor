@@ -29,8 +29,10 @@ const TextContainer = styled(Box)(({ theme }) => ({
     margin: "0.6rem 0 0.1rem 0",
   },
 }));
+
 const Text = styled(Typography)(({ theme }) => ({
   fontSize: "0.9rem",
+  color: theme.palette.mode === "dark" ? "grey" : "grey.600",
   [theme.breakpoints.down("lg")]: {
     fontSize: "0.8rem",
   },
@@ -52,6 +54,7 @@ interface IQualificationProps {
   qualification: IQualification;
   onQualificationChange: (qualification: IQualification) => void;
   fetchedData: DoctorInfo | null;
+  isEditMode: boolean;
 }
 
 type DoctorInfo = {
@@ -73,6 +76,7 @@ function Qualification({
   qualification,
   onQualificationChange,
   fetchedData,
+  isEditMode,
 }: IQualificationProps) {
   const handleFieldChange = (field, value) => {
     onQualificationChange({ ...qualification, [field]: value });
@@ -85,10 +89,10 @@ function Qualification({
   return (
     <Box>
       <TextContainer>
-        <Text>Starting Date</Text>
-        <Text>Ending Date</Text>
-        <Text>Degree</Text>
-        <Text>University</Text>
+        <Text color={isEditMode ? "inherit" : "grey.600"}>Starting Date</Text>
+        <Text color={isEditMode ? "inherit" : "grey.600"}>Ending Date</Text>
+        <Text color={isEditMode ? "inherit" : "grey.600"}>Degree</Text>
+        <Text color={isEditMode ? "inherit" : "grey.600"}>University</Text>
       </TextContainer>
 
       <Box
@@ -103,13 +107,17 @@ function Qualification({
             <DatePicker
               value={
                 fetchedData && fetchedData.qualifications
-                  ? dayjs(JSON.parse(fetchedData.qualifications)[0].startDate)
+                  ? dayjs(
+                      JSON.parse(fetchedData.qualifications).find(
+                        (q) => q.startDate === qualification.startDate
+                      )?.startDate || ""
+                    )
                   : qualification.startDate
               }
               sx={{ backgroundColor: "#fff" }}
               onChange={(newDate) => handleDateChange("startDate", newDate)}
               renderInput={(params) => <TitleTextField {...params} />}
-              disabled={!!fetchedData}
+              disabled={!isEditMode}
             />
           </LocalizationProvider>
         </Box>
@@ -118,13 +126,17 @@ function Qualification({
             <DatePicker
               value={
                 fetchedData && fetchedData.qualifications
-                  ? dayjs(JSON.parse(fetchedData.qualifications)[0].endDate)
+                  ? dayjs(
+                      JSON.parse(fetchedData.qualifications).find(
+                        (q) => q.endDate === qualification.endDate
+                      )?.endDate || ""
+                    )
                   : qualification.endDate
               }
               sx={{ backgroundColor: "#fff" }}
               onChange={(newDate) => handleDateChange("endDate", newDate)}
               renderInput={(params) => <TitleTextField {...params} />}
-              disabled={!!fetchedData}
+              disabled={!isEditMode}
             />
           </LocalizationProvider>
         </Box>
@@ -135,11 +147,13 @@ function Qualification({
             fullWidth
             value={
               fetchedData && fetchedData.qualifications
-                ? JSON.parse(fetchedData.qualifications)[0].degree
+                ? JSON.parse(fetchedData.qualifications).find(
+                    (q) => q.degree === qualification.degree
+                  )?.degree || ""
                 : qualification.degree
             }
             onChange={(e) => handleFieldChange("degree", e.target.value)}
-            disabled={!!fetchedData}
+            disabled={!isEditMode}
             sx={{ marginBottom: "1rem" }}
           />
         </Box>
@@ -150,11 +164,13 @@ function Qualification({
             required
             value={
               fetchedData && fetchedData.qualifications
-                ? JSON.parse(fetchedData.qualifications)[0].university
+                ? JSON.parse(fetchedData.qualifications).find(
+                    (q) => q.university === qualification.university
+                  )?.university || ""
                 : qualification.university
             }
             onChange={(e) => handleFieldChange("university", e.target.value)}
-            disabled={!!fetchedData}
+            disabled={!isEditMode}
           />
         </Box>
       </Box>

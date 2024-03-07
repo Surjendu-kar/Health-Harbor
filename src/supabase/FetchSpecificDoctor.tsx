@@ -5,7 +5,6 @@ type DoctorInfo = {
   name: string;
   email: string;
   phoneno: string;
-  bio: string;
   gender: string;
   specialization: string;
   price: number;

@@ -6,7 +6,7 @@ async function UpdateData(userEmail, updates) {
       .from("doctorInfo")
       .update(updates)
       .eq("email", userEmail);
-      
+
     console.log(data);
 
     if (error) throw error;

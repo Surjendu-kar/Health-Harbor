@@ -8,7 +8,6 @@ async function InsertData(doctorData) {
         name: doctorData.name,
         email: doctorData.email,
         phoneno: doctorData.phoneno,
-        bio: doctorData.bio,
         gender: doctorData.gender,
         specialization: doctorData.specialization,
         price: doctorData.price,
