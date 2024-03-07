@@ -43,11 +43,11 @@ const StyledLink = styled(Link)(({ theme }) => ({
     margin: theme.spacing(0, 1),
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.35rem",
-    letterSpacing: "1px",
+    fontSize: "0.53rem",
+    letterSpacing: "0.65px",
     margin: theme.spacing(0, 0.5),
     "&:hover": {
-      fontSize: "0.45rem",
+      fontSize: "0.65rem",
     },
   },
 }));
@@ -65,7 +65,7 @@ const MedicineStyle = styled(Box)(({ theme }) => ({
     width: "30px",
     height: "30px",
   },
-  [theme.breakpoints.down("sm")]: { width: "15px", height: "15px" },
+  [theme.breakpoints.down("sm")]: { width: "27px", height: "27px" },
 }));
 
 const LogoLink = styled(StyledLink)(({ theme }) => ({
@@ -77,11 +77,12 @@ const LogoLink = styled(StyledLink)(({ theme }) => ({
     position: "absolute",
     left: 0,
     bottom: 0,
-    height: "3px",
+    height: "1px",
     width: "0%",
     backgroundColor: "#fff",
     transition: "all ease 1s",
   },
+
   "&:hover::after": {
     width: "100%",
   },
@@ -93,8 +94,9 @@ const LogoLink = styled(StyledLink)(({ theme }) => ({
     letterSpacing: "1.2px",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.4rem",
+    fontSize: "0.7rem",
     letterSpacing: "1px",
+    margin: theme.spacing(0),
   },
 }));
 
@@ -117,8 +119,8 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
     height: "22px",
   },
   [theme.breakpoints.down("sm")]: {
-    width: "18px",
-    height: "18px",
+    width: "20px",
+    height: "20px",
     border: "1px solid white",
   },
 }));
@@ -139,7 +141,13 @@ const Navbar = () => {
 
   return (
     <NavContainer>
-      <Box sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          cursor: "pointer",
+        }}
+      >
         <MedicineStyle>
           <LogoAnimation />
         </MedicineStyle>
