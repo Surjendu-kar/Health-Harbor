@@ -18,11 +18,11 @@ const MainContainer = styled(Box)(({ theme }) => ({
   },
   [theme.breakpoints.down("md")]: {
     margin: "0rem 2.5rem",
-    padding: "1.75rem",
+    padding: "1.5rem",
   },
   [theme.breakpoints.down("sm")]: {
     margin: "0rem 1rem",
-    padding: "1.25rem",
+    padding: "0.75rem",
   },
 }));
 const FirstContainer = styled(Box)(() => ({
@@ -64,7 +64,7 @@ const TextStyle = styled(Typography)(({ theme }) => ({
     fontSize: "0.75rem",
   },
   [theme.breakpoints.down("sm")]: {
-    padding: "0.3rem 0.8rem",
+    padding: "0.3rem 1.05rem",
     fontSize: "0.5rem",
   },
 }));
