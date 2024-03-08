@@ -15,15 +15,14 @@ const MainContainer = styled(Box)(({ theme }) => ({
 
   [theme.breakpoints.down("lg")]: {
     margin: "0rem 3rem",
-    padding: "1.5rem",
   },
   [theme.breakpoints.down("md")]: {
     margin: "0rem 2.5rem",
-    padding: "1rem",
+    padding: "1.75rem",
   },
   [theme.breakpoints.down("sm")]: {
     margin: "0rem 1rem",
-    padding: "0.5rem",
+    padding: "1.25rem",
   },
 }));
 const FirstContainer = styled(Box)(() => ({
@@ -58,15 +57,15 @@ const TextStyle = styled(Typography)(({ theme }) => ({
 
   [theme.breakpoints.down("lg")]: {
     padding: "0.8rem 3rem",
-    fontSize: "0.8rem",
+    fontSize: "0.9rem",
   },
   [theme.breakpoints.down("md")]: {
     padding: "0.6rem 2rem",
-    fontSize: "0.6rem",
+    fontSize: "0.75rem",
   },
   [theme.breakpoints.down("sm")]: {
     padding: "0.3rem 0.8rem",
-    fontSize: "0.4rem",
+    fontSize: "0.5rem",
   },
 }));
 const LogOut = styled(TextStyle)(() => ({
