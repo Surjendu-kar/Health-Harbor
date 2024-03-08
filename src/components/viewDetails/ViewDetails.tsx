@@ -9,24 +9,25 @@ const Heading = styled(Typography)(({ theme }) => ({
   fontSize: "1.05rem",
   marginBottom: "0.5rem",
   [theme.breakpoints.down("lg")]: {
-    fontSize: "0.95rem",
+    fontSize: "0.1rem",
     marginBottom: "0.3rem",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.85rem",
+    fontSize: "0.9rem",
     marginBottom: "0.2rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.55rem",
+    fontSize: "0.8rem",
     marginBottom: "0.1rem",
   },
 }));
 
 const Title = styled(Typography)(({ theme }) => ({
   fontSize: "0.85rem",
-  [theme.breakpoints.down("lg")]: { fontSize: "0.7rem" },
-  [theme.breakpoints.down("md")]: { fontSize: "0.6rem" },
-  [theme.breakpoints.down("sm")]: { fontSize: "0.35rem" },
+  color: "#626262",
+  [theme.breakpoints.down("lg")]: { fontSize: "0.8rem" },
+  [theme.breakpoints.down("md")]: { fontSize: "0.7rem" },
+  [theme.breakpoints.down("sm")]: { fontSize: "0.6rem" },
 }));
 
 const EducationBox = styled(Box)(({ theme }) => ({
@@ -47,7 +48,7 @@ const EducationBox = styled(Box)(({ theme }) => ({
     borderRadius: "5px",
   },
   [theme.breakpoints.down("sm")]: {
-    padding: "0.3rem 1rem 0.3rem 1rem",
+    padding: "0.5rem 1rem 0.5rem 1rem",
     marginTop: "0.3rem",
   },
 }));
@@ -65,7 +66,7 @@ const ExperienceBox = styled(Box)(({ theme }) => ({
     borderRadius: "5px",
   },
   [theme.breakpoints.down("sm")]: {
-    padding: "0.3rem 1rem 0.3rem 1rem",
+    padding: "0.5rem 1rem 0.5rem 1rem",
     flexDirection: "column",
     alignItems: "start",
     marginBottom: "0rem",
@@ -80,9 +81,9 @@ const ExperienceBox = styled(Box)(({ theme }) => ({
 const DateText = styled(Typography)(({ theme }) => ({
   fontSize: "0.9rem",
   fontWeight: "bold",
-  [theme.breakpoints.down("lg")]: { fontSize: "0.8rem" },
-  [theme.breakpoints.down("md")]: { fontSize: "0.7rem" },
-  [theme.breakpoints.down("sm")]: { fontSize: "0.45rem" },
+  [theme.breakpoints.down("lg")]: { fontSize: "0.85rem" },
+  [theme.breakpoints.down("md")]: { fontSize: "0.75rem" },
+  [theme.breakpoints.down("sm")]: { fontSize: "0.6rem" },
 }));
 
 function ViewDetails({ fetchedData }) {
@@ -92,7 +93,7 @@ function ViewDetails({ fetchedData }) {
       qualificationsArray = JSON.parse(fetchedData.qualifications);
     } catch (error) {
       console.error("Error parsing qualifications", error);
-      qualificationsArray = []; 
+      qualificationsArray = [];
     }
   } else if (fetchedData && Array.isArray(fetchedData.qualifications)) {
     qualificationsArray = fetchedData.qualifications;
@@ -104,7 +105,7 @@ function ViewDetails({ fetchedData }) {
       experiencesArray = JSON.parse(fetchedData.experiences);
     } catch (error) {
       console.error("Error parsing experiences", error);
-      experiencesArray = []; 
+      experiencesArray = [];
     }
   } else if (fetchedData && Array.isArray(fetchedData.experiences)) {
     experiencesArray = fetchedData.experiences;
@@ -138,7 +139,7 @@ function ViewDetails({ fetchedData }) {
                       )
                     : "Present"}
                 </DateText>
-                <Title>
+                <Title sx={{ color: "#000" }}>
                   {qualification.degree}, {qualification.university}
                 </Title>
               </EducationBox>
@@ -173,8 +174,8 @@ function ViewDetails({ fetchedData }) {
                       })
                     : "Present"}
                 </DateText>
-                <Title>{experience.position}</Title>
-                <Title>{experience.hospital}</Title>
+                <Title sx={{ color: "#000" }}>{experience.position}</Title>
+                <Title sx={{ color: "#000" }}>{experience.hospital}</Title>
               </ExperienceBox>
             ))}
         </Box>

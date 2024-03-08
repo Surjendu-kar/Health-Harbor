@@ -42,8 +42,8 @@ const Img = styled("img")(({ theme }) => ({
     width: "90px",
   },
   [theme.breakpoints.down("sm")]: {
-    height: "50px",
-    width: "50px",
+    height: "75px",
+    width: "75px",
   },
 }));
 
@@ -107,7 +107,7 @@ const Name = styled(Typography)(({ theme }) => ({
     fontSize: "0.7rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.5rem",
+    fontSize: "0.65rem",
   },
 }));
 
@@ -120,7 +120,7 @@ const ResponsiveRating = styled(Rating)(({ theme }) => ({
     fontSize: "0.6rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.4rem",
+    fontSize: "0.5rem",
   },
 }));
 
