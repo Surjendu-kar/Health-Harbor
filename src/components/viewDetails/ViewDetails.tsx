@@ -13,7 +13,7 @@ const Heading = styled(Typography)(({ theme }) => ({
     marginBottom: "0.3rem",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.9rem",
+    fontSize: "0.95rem",
     marginBottom: "0.2rem",
   },
   [theme.breakpoints.down("sm")]: {
@@ -26,7 +26,7 @@ const Title = styled(Typography)(({ theme }) => ({
   fontSize: "0.85rem",
   color: "#626262",
   [theme.breakpoints.down("lg")]: { fontSize: "0.8rem" },
-  [theme.breakpoints.down("md")]: { fontSize: "0.7rem" },
+  [theme.breakpoints.down("md")]: { fontSize: "0.76rem" },
   [theme.breakpoints.down("sm")]: { fontSize: "0.6rem" },
 }));
 

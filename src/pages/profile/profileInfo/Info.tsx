@@ -76,7 +76,7 @@ const ProfileTitle = styled("h1")(({ theme }) => ({
   fontSize: "1.5rem",
   [theme.breakpoints.down("lg")]: { fontSize: "1.15rem" },
   [theme.breakpoints.down("md")]: { fontSize: "0.9rem" },
-  [theme.breakpoints.down("sm")]: { fontSize: "0.7rem" },
+  [theme.breakpoints.down("sm")]: { fontSize: "0.85rem" },
 }));
 
 const TitleTextField = styled(TextField)(({ theme }) => ({
@@ -100,10 +100,10 @@ const TitleTextField = styled(TextField)(({ theme }) => ({
       padding: "0px",
     },
     [theme.breakpoints.down("md")]: {
-      fontSize: "0.85rem",
+      fontSize: "0.75rem",
     },
     [theme.breakpoints.down("sm")]: {
-      fontSize: "0.6rem",
+      fontSize: "0.65rem",
     },
   },
   "& .MuiOutlinedInput-input": {
@@ -114,7 +114,7 @@ const TitleTextField = styled(TextField)(({ theme }) => ({
       height: "10px",
     },
     [theme.breakpoints.down("sm")]: {
-      height: "0px",
+      height: "5px",
       padding: "15px",
     },
   },
@@ -140,12 +140,13 @@ const ResponsiveSelect = styled(Select)(({ theme }) => ({
       padding: "15px",
     },
     [theme.breakpoints.down("md")]: {
-      fontSize: "0.85rem",
+      fontSize: "0.75rem",
       padding: "10px",
     },
     [theme.breakpoints.down("sm")]: {
-      fontSize: "0.6rem",
-      padding: "3px",
+      fontSize: "0.65rem",
+      padding: "5px",
+      paddingLeft: "1rem",
     },
   },
 }));
@@ -162,6 +163,7 @@ const SelectOption = styled(Box)(({ theme }) => ({
   },
   [theme.breakpoints.down("sm")]: {
     marginTop: "0.7rem",
+    flexWrap: "wrap",
   },
 }));
 
@@ -509,6 +511,7 @@ function Info({
           />
         </SelectOption>
 
+        {/* Address */}
         <LocationFields
           isEditMode={isEditMode}
           setAddress={setAddress}

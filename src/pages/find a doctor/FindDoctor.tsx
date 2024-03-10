@@ -5,6 +5,7 @@ import { User } from "@supabase/gotrue-js";
 import { supabase } from "../../supabase/config";
 import FetchAllDoctor from "./FetchAllDoctor";
 import DoctorCard from "../../components/doctorCard/DoctorCard";
+import LoadingAnimation from "../../components/lottieAnimation/LoadingAnimation";
 
 type DoctorInfo = {
   id: number;
@@ -161,6 +162,20 @@ function FindDoctor() {
 
     setSearchData(filteredData);
   };
+
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <LoadingAnimation />
+      </Box>
+    );
+  }
 
   return (
     <MainContainer>

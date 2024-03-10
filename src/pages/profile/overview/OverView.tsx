@@ -34,12 +34,12 @@ const Img = styled("img")(({ theme }) => ({
   filter: "blur(0px)",
 
   [theme.breakpoints.down("lg")]: {
-    height: "110px",
-    width: "110px",
+    height: "130px",
+    width: "130px",
   },
   [theme.breakpoints.down("md")]: {
-    height: "90px",
-    width: "90px",
+    height: "115px",
+    width: "115px",
   },
   [theme.breakpoints.down("sm")]: {
     height: "75px",
@@ -101,10 +101,10 @@ const NameRatingBox = styled(Box)(({ theme }) => ({
 const Name = styled(Typography)(({ theme }) => ({
   fontSize: "1rem",
   [theme.breakpoints.down("lg")]: {
-    fontSize: "0.8rem",
+    fontSize: "0.95rem",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.7rem",
+    fontSize: "0.85rem",
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "0.65rem",
