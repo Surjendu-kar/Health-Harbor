@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Box, Input, Select, MenuItem, Button, styled } from "@mui/material";
+import {
+  Box,
+  Input,
+  Select,
+  MenuItem,
+  Button,
+  styled,
+  Skeleton,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { User } from "@supabase/gotrue-js";
 import { supabase } from "../../supabase/config";
 import FetchAllDoctor from "./FetchAllDoctor";
 import DoctorCard from "../../components/doctorCard/DoctorCard";
-import LoadingAnimation from "../../components/lottieAnimation/LoadingAnimation";
+import "../../App.css";
 
 type DoctorInfo = {
   id: number;
@@ -163,20 +171,6 @@ function FindDoctor() {
     setSearchData(filteredData);
   };
 
-  if (isLoading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <LoadingAnimation />
-      </Box>
-    );
-  }
-
   return (
     <MainContainer>
       <Container>
@@ -238,17 +232,57 @@ function FindDoctor() {
           </SearchBox>
         </form>
 
-        <Box sx={{ display: "flex" }}>
-          {searchData.length > 0
-            ? searchData.map((doctor) => (
-                <DoctorCard key={doctor.id} doctor={doctor} />
-              ))
-            : fetchedData
-            ? fetchedData.map((doctor) => (
-                <DoctorCard key={doctor.id} doctor={doctor} />
-              ))
-            : null}
-        </Box>
+        {!isLoading ? (
+          <Box
+            sx={{ display: "flex" }}
+            className={!isLoading ? "fadeInAnimation" : ""}
+          >
+            {searchData.length > 0
+              ? searchData.map((doctor) => (
+                  <DoctorCard key={doctor.id} doctor={doctor} />
+                ))
+              : null}
+          </Box>
+        ) : (
+          <Box display={"flex"} gap={2}>
+            <Skeleton
+              variant="rectangular"
+              width={200}
+              height={250}
+              sx={{ borderRadius: "10px" }}
+            />
+            <Skeleton
+              variant="rectangular"
+              width={200}
+              height={250}
+              sx={{ borderRadius: "10px" }}
+            />
+            <Skeleton
+              variant="rectangular"
+              width={200}
+              height={250}
+              sx={{ borderRadius: "10px" }}
+            />
+            <Skeleton
+              variant="rectangular"
+              width={200}
+              height={250}
+              sx={{ borderRadius: "10px" }}
+            />
+            <Skeleton
+              variant="rectangular"
+              width={200}
+              height={250}
+              sx={{ borderRadius: "10px" }}
+            />
+            <Skeleton
+              variant="rectangular"
+              width={200}
+              height={250}
+              sx={{ borderRadius: "10px" }}
+            />
+          </Box>
+        )}
       </Container>
     </MainContainer>
   );

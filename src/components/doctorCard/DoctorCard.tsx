@@ -17,7 +17,7 @@ const StyleCard = styled(Card)(({ theme }) => ({
     maxWidth: 190,
   },
   [theme.breakpoints.down("md")]: {
-    maxWidth: 100,
+    maxWidth: 120,
     margin: 7,
   },
   [theme.breakpoints.down("sm")]: {
@@ -32,10 +32,10 @@ const CardMediaStyle = styled(CardMedia)(({ theme }) => ({
     height: 180,
   },
   [theme.breakpoints.down("md")]: {
-    height: 100,
+    height: 140,
   },
   [theme.breakpoints.down("sm")]: {
-    height: 70,
+    height: 100,
   },
 }));
 
@@ -48,7 +48,7 @@ const Heading = styled(Typography)(({ theme }) => ({
     fontSize: "0.7rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.5rem",
+    fontSize: "0.6rem",
   },
 }));
 
@@ -59,10 +59,10 @@ const Title = styled(Typography)(({ theme }) => ({
     fontSize: "0.7rem",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.55rem",
+    fontSize: "0.6rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.4rem",
+    fontSize: "0.5rem",
   },
 }));
 
@@ -77,7 +77,7 @@ const CardContentStyle = styled(CardContent)(({ theme }) => ({
     padding: "0.3rem",
   },
   [theme.breakpoints.down("sm")]: {
-    padding: "0.25rem",
+    padding: "0.5rem",
   },
 }));
 
