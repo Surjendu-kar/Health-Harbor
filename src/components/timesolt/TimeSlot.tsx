@@ -17,35 +17,88 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 
-const TextContainer = styled(Box)(({ theme }) => ({
+const MainContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "space-around",
-  alignItems: "center",
-  gap: "1rem",
-  margin: "1.5rem 0 0.5rem 0",
-
-  [theme.breakpoints.down("lg")]: {
-    margin: "1rem 0 0.3rem 0",
-  },
-  [theme.breakpoints.down("md")]: {
-    margin: "0.8rem 0 0.2rem 0",
-  },
+  gap: theme.spacing(1),
+  [theme.breakpoints.down("lg")]: {},
+  [theme.breakpoints.down("md")]: {},
   [theme.breakpoints.down("sm")]: {
-    margin: "0.6rem 0 0.1rem 0",
+    flexDirection: "column",
   },
 }));
 
 const Text = styled(Typography)(({ theme }) => ({
-  color: theme.palette.mode === "dark" ? "grey" : "grey.600",
+  textAlign: "right",
   fontSize: "0.9rem",
+  margin: "1.5rem 0 0.5rem 0",
+  color: theme.palette.mode === "dark" ? "grey" : "grey.600",
+
   [theme.breakpoints.down("lg")]: {
     fontSize: "0.8rem",
+    margin: "1rem 0 0.3rem 0",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.7rem",
+    fontSize: "0.65rem",
+    margin: "0.8rem 0 0.2rem 0",
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "0.55rem",
+    margin: "0",
+  },
+}));
+
+const FormControlStyle = styled(FormControl)(({ theme }) => ({
+  flex: 1,
+  width: "100%",
+  [theme.breakpoints.down("lg")]: {},
+  [theme.breakpoints.down("md")]: {},
+  [theme.breakpoints.down("sm")]: {},
+
+  "& .MuiSelect-select": {
+    [theme.breakpoints.down("lg")]: {
+      fontSize: "0.95rem",
+      padding: "15px",
+    },
+    [theme.breakpoints.down("md")]: {
+      fontSize: "0.75rem",
+      padding: "10px",
+    },
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.65rem",
+      padding: "5px",
+      paddingLeft: "1rem",
+    },
+  },
+}));
+
+const ResponsiveDatePicker = styled(TimePicker)(({ theme }) => ({
+  [theme.breakpoints.down("sm")]: {
+    width: "100%",
+  },
+  "& .MuiInputBase-root": {
+    [theme.breakpoints.down("lg")]: {
+      fontSize: "0.95rem",
+      padding: "0px",
+    },
+    [theme.breakpoints.down("md")]: {
+      fontSize: "0.75rem",
+    },
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.65rem",
+    },
+  },
+  "& .MuiOutlinedInput-input": {
+    [theme.breakpoints.down("lg")]: {
+      height: "20px",
+    },
+    [theme.breakpoints.down("md")]: {
+      height: "10px",
+    },
+    [theme.breakpoints.down("sm")]: {
+      height: "5px",
+      padding: "15px",
+    },
   },
 }));
 
@@ -112,22 +165,11 @@ function TimeSlot({
   }, [timeSlot, onTimeSlotChange]);
 
   return (
-    <Box>
-      <TextContainer>
+    <MainContainer>
+      <Box>
         <Text color={isEditMode ? "inherit" : "grey.600"}>Day</Text>
-        <Text color={isEditMode ? "inherit" : "grey.600"}>Starting Time</Text>
-        <Text color={isEditMode ? "inherit" : "grey.600"}>Ending Time</Text>
-      </TextContainer>
 
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-around",
-          gap: "1rem",
-          width: "100%",
-        }}
-      >
-        <FormControl sx={{ flex: 1, minWidth: 120 }}>
+        <FormControlStyle>
           <InputLabel>Select</InputLabel>
           <Select
             labelId="demo-simple-select-label"
@@ -150,69 +192,73 @@ function TimeSlot({
             <MenuItem value="friday">Friday</MenuItem>
             <MenuItem value="saturday">Saturday</MenuItem>
           </Select>
-        </FormControl>
+        </FormControlStyle>
+      </Box>
 
-        {/* Starting Time Picker */}
-        <Box sx={{ flex: 1 }}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <TimePicker
-              value={
-                fetchedData && fetchedData.timeSlot
+      {/* Starting Time Picker */}
+      <Box>
+        <Text color={isEditMode ? "inherit" : "grey.600"}>Starting Time</Text>
+
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ResponsiveDatePicker
+            value={
+              fetchedData && fetchedData.timeSlot
+                ? dayjs(
+                    JSON.parse(fetchedData.timeSlot)[0].startTime,
+                    "HH:mm:ss"
+                  ).isValid()
                   ? dayjs(
                       JSON.parse(fetchedData.timeSlot)[0].startTime,
                       "HH:mm:ss"
-                    ).isValid()
-                    ? dayjs(
-                        JSON.parse(fetchedData.timeSlot)[0].startTime,
-                        "HH:mm:ss"
-                      )
-                    : null
-                  : timeSlot.startTime &&
-                    dayjs(timeSlot.startTime, "HH:mm:ss").isValid()
-                  ? dayjs(timeSlot.startTime, "HH:mm:ss")
+                    )
                   : null
-              }
-              onChange={handleStartTimeChange}
-              renderInput={(props) => (
-                <TextField {...props} placeholder="Select time" />
-              )}
-              disabled={!isEditMode}
-              sx={{ backgroundColor: "#fff", width: "100%" }}
-            />
-          </LocalizationProvider>
-        </Box>
+                : timeSlot.startTime &&
+                  dayjs(timeSlot.startTime, "HH:mm:ss").isValid()
+                ? dayjs(timeSlot.startTime, "HH:mm:ss")
+                : null
+            }
+            onChange={handleStartTimeChange}
+            renderInput={(props) => (
+              <TextField {...props} placeholder="Select time" />
+            )}
+            disabled={!isEditMode}
+            sx={{ backgroundColor: "#fff", width: "100%" }}
+          />
+        </LocalizationProvider>
+      </Box>
 
-        {/* Ending Time Picker */}
-        <Box sx={{ flex: 1 }}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <TimePicker
-              value={
-                fetchedData && fetchedData.timeSlot
+      {/* Ending Time Picker */}
+      <Box>
+        <Text color={isEditMode ? "inherit" : "grey.600"}>Ending Time</Text>
+
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ResponsiveDatePicker
+            value={
+              fetchedData && fetchedData.timeSlot
+                ? dayjs(
+                    JSON.parse(fetchedData.timeSlot)[0].endTime,
+                    "HH:mm:ss"
+                  ).isValid()
                   ? dayjs(
                       JSON.parse(fetchedData.timeSlot)[0].endTime,
                       "HH:mm:ss"
-                    ).isValid()
-                    ? dayjs(
-                        JSON.parse(fetchedData.timeSlot)[0].endTime,
-                        "HH:mm:ss"
-                      )
-                    : null
-                  : timeSlot.endTime &&
-                    dayjs(timeSlot.endTime, "HH:mm:ss").isValid()
-                  ? dayjs(timeSlot.endTime, "HH:mm:ss")
+                    )
                   : null
-              }
-              onChange={handleEndTimeChange}
-              renderInput={(props) => (
-                <TextField {...props} placeholder="Select time" />
-              )}
-              disabled={!isEditMode}
-              sx={{ backgroundColor: "#fff", width: "100%" }}
-            />
-          </LocalizationProvider>
-        </Box>
+                : timeSlot.endTime &&
+                  dayjs(timeSlot.endTime, "HH:mm:ss").isValid()
+                ? dayjs(timeSlot.endTime, "HH:mm:ss")
+                : null
+            }
+            onChange={handleEndTimeChange}
+            renderInput={(props) => (
+              <TextField {...props} placeholder="Select time" />
+            )}
+            disabled={!isEditMode}
+            sx={{ backgroundColor: "#fff", width: "100%" }}
+          />
+        </LocalizationProvider>
       </Box>
-    </Box>
+    </MainContainer>
   );
 }
 

@@ -22,7 +22,7 @@ const MainContainer = styled(Box)(({ theme }) => ({
     marginTop: "1rem",
   },
   [theme.breakpoints.down("sm")]: {
-    marginTop: "0.5rem",
+    marginTop: "0.75rem",
   },
 }));
 
@@ -97,7 +97,6 @@ function ProfileDetails() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          marginTop: "10rem",
         }}
       >
         <LoadingAnimation />
