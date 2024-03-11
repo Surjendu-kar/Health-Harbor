@@ -36,6 +36,7 @@ type DoctorInfo = {
 const MainContainer = styled(Box)({
   display: "flex",
   justifyContent: "center",
+  width: "100%",
 });
 
 const Container = styled(Box)(({ theme }) => ({
@@ -107,6 +108,26 @@ const SearchBox = styled(Box)(({ theme }) => ({
       },
     },
   },
+}));
+
+const CardContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexWrap: "nowrap",
+  width: "90vw",
+  maxWidth: "100%",
+  overflowX: "auto",
+  "& > *": {
+    flex: "0 0 auto",
+  },
+}));
+
+const SkeletonStyle = styled(Skeleton)(({ theme }) => ({
+  width: "200px",
+  height: "250px",
+  borderRadius: "10px",
+  [theme.breakpoints.down("lg")]: { width: "200px", height: "250px" },
+  [theme.breakpoints.down("md")]: { width: "150px", height: "200px" },
+  [theme.breakpoints.down("sm")]: { width: "100px", height: "150px" },
 }));
 
 function FindDoctor() {
@@ -233,55 +254,22 @@ function FindDoctor() {
         </form>
 
         {!isLoading ? (
-          <Box
-            sx={{ display: "flex" }}
-            className={!isLoading ? "fadeInAnimation" : ""}
-          >
+          <CardContainer className={!isLoading ? "fadeInAnimation" : ""}>
             {searchData.length > 0
               ? searchData.map((doctor) => (
                   <DoctorCard key={doctor.id} doctor={doctor} />
                 ))
               : null}
-          </Box>
+          </CardContainer>
         ) : (
-          <Box display={"flex"} gap={2}>
-            <Skeleton
-              variant="rectangular"
-              width={200}
-              height={250}
-              sx={{ borderRadius: "10px" }}
-            />
-            <Skeleton
-              variant="rectangular"
-              width={200}
-              height={250}
-              sx={{ borderRadius: "10px" }}
-            />
-            <Skeleton
-              variant="rectangular"
-              width={200}
-              height={250}
-              sx={{ borderRadius: "10px" }}
-            />
-            <Skeleton
-              variant="rectangular"
-              width={200}
-              height={250}
-              sx={{ borderRadius: "10px" }}
-            />
-            <Skeleton
-              variant="rectangular"
-              width={200}
-              height={250}
-              sx={{ borderRadius: "10px" }}
-            />
-            <Skeleton
-              variant="rectangular"
-              width={200}
-              height={250}
-              sx={{ borderRadius: "10px" }}
-            />
-          </Box>
+          <CardContainer gap={2}>
+            <SkeletonStyle variant="rectangular" />
+            <SkeletonStyle variant="rectangular" />
+            <SkeletonStyle variant="rectangular" />
+            <SkeletonStyle variant="rectangular" />
+            <SkeletonStyle variant="rectangular" />
+            <SkeletonStyle variant="rectangular" />
+          </CardContainer>
         )}
       </Container>
     </MainContainer>
