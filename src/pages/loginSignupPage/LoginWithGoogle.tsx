@@ -45,7 +45,7 @@ const GoggleImg = styled("img")(() => ({
 }));
 
 const Heading = styled(Typography)(() => ({
-  fontSize: "2.5rem",
+  fontSize: "2.25rem",
 }));
 const Title = styled(Typography)(() => ({
   fontSize: "1rem",
