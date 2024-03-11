@@ -125,7 +125,7 @@ const SkeletonStyle = styled(Skeleton)(({ theme }) => ({
   width: "200px",
   height: "250px",
   borderRadius: "10px",
-  [theme.breakpoints.down("lg")]: { width: "300px", height: "200px" },
+  [theme.breakpoints.down("lg")]: { width: "200px", height: "250px" },
   [theme.breakpoints.down("md")]: { width: "150px", height: "200px" },
   [theme.breakpoints.down("sm")]: { width: "100px", height: "150px" },
 }));
