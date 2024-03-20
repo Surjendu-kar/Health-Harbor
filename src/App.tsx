@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import ProfileDetails from "./pages/profile/ProfileDetails";
 import Home from "./pages/homePage/Home";
-import { LoginWithGoogle } from "./pages/loginSignupPage/LoginWithGoogle";
+import { LoginPage } from "./pages/loginSignupPage/LoginPage";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { supabase } from "./supabase/config";
 import FindDoctor from "./pages/find a doctor/FindDoctor";
@@ -10,8 +10,8 @@ import AboutUs from "./pages/aboutUsPage/AboutUs";
 import Contact from "./pages/contactPage/Contact";
 import Navbar from "./components/header/Navbar";
 import Footer from "./components/footer/Footer";
-import Signup from "./pages/loginSignupPage/Signup";
 import DoctorDetails from "./pages/find a doctor/DoctorDetails";
+import { SignupPage } from "./pages/loginSignupPage/SignupPage";
 
 const App = () => {
   const navigate = useNavigate();
@@ -47,8 +47,8 @@ const App = () => {
       <Navbar />
       <Routes>
         <Route element={<Home />} path="/" />
-        <Route element={<LoginWithGoogle />} path="/login" />
-        <Route element={<Signup />} path="/signup" />
+        <Route element={<LoginPage />} path="/login" />
+        <Route element={<SignupPage />} path="/signup" />
         <Route element={<FindDoctor />} path="/find-a-doctor" />
         <Route element={<DoctorDetails />} path="/doctor-details" />
         <Route element={<Service />} path="/service" />
