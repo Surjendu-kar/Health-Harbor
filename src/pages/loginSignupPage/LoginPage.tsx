@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../supabase/config";
 import { User } from "@supabase/supabase-js";
 import { useNavigate } from "react-router-dom";
-import { Box, TextField, Typography } from "@mui/material";
-import styled from "styled-components";
+import { Box, TextField, Typography, styled } from "@mui/material";
 import loginImg from "../../assets/loginImg/portrait-doctor.jpg";
 import GoogleLogo from "../../assets/google svg/googleLogo.svg";
 import { ToastContainer, toast } from "react-toastify";
@@ -13,7 +12,7 @@ const MainContainer = styled(Box)(() => ({
   justifyContent: "center",
 }));
 
-const Container = styled(Box)(() => ({
+const Container = styled(Box)(({ theme }) => ({
   display: "flex",
   boxShadow: "0 5px 5px rgba(0,0,0,.5)",
   marginTop: "3rem",
@@ -21,11 +20,21 @@ const Container = styled(Box)(() => ({
   borderTopRightRadius: "20%",
   borderBottomLeftRadius: "20%",
   overflow: "hidden",
+
+  [theme.breakpoints.down("lg")]: {
+    marginTop: "2.8rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    marginTop: "2rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    margin: "1rem 0.5rem",
+  },
 }));
 
 const ImgContainer = styled(Box)(() => ({}));
 
-const LoginContainer = styled(Box)(() => ({
+const LoginContainer = styled(Box)(({ theme }) => ({
   padding: "1rem",
   display: "flex",
   flexDirection: "column",
@@ -33,60 +42,102 @@ const LoginContainer = styled(Box)(() => ({
   justifyContent: "center",
   backgroundColor: "#d3d3d378",
   color: "#000",
+
+  [theme.breakpoints.down("md")]: { padding: "0.8rem" },
+  [theme.breakpoints.down("sm")]: { padding: "0rem" },
 }));
 
-const DoctorImg = styled("img")(() => ({
+const DoctorImg = styled("img")(({ theme }) => ({
   width: "350px",
   height: "500px",
-}));
-const GoggleImg = styled("img")(() => ({
-  width: "20px",
-  height: "20px",
+  [theme.breakpoints.down("md")]: { width: "250px", height: "400px" },
+  [theme.breakpoints.down("sm")]: { width: "150px", height: "230px" },
 }));
 
-const Heading = styled(Typography)(() => ({
+const Heading = styled(Typography)(({ theme }) => ({
   fontSize: "2.25rem",
+
+  [theme.breakpoints.down("lg")]: { fontSize: "2.15rem" },
+  [theme.breakpoints.down("md")]: { fontSize: "1.8rem" },
+  [theme.breakpoints.down("sm")]: { fontSize: "1.2rem" },
 }));
-const Title = styled(Typography)(() => ({
+
+const Title = styled(Typography)(({ theme }) => ({
   fontSize: "1rem",
+  [theme.breakpoints.down("lg")]: { fontSize: "1rem" },
+  [theme.breakpoints.down("md")]: { fontSize: "0.8rem" },
+  [theme.breakpoints.down("sm")]: { fontSize: "0.6rem" },
 }));
-const TextTitle = styled(Typography)(() => ({
+
+const TextTitle = styled(Typography)(({ theme }) => ({
   fontSize: "0.75rem",
+  [theme.breakpoints.down("lg")]: { fontSize: "0.75rem" },
+  [theme.breakpoints.down("md")]: { fontSize: "0.6rem" },
+  [theme.breakpoints.down("sm")]: { fontSize: "0.45rem" },
+}));
+const TextFieldBox = styled(Box)(({ theme }) => ({
+  margin: "2rem 0 0",
+  width: "90%",
+  [theme.breakpoints.down("md")]: { margin: "1.5rem 0 0" },
+  [theme.breakpoints.down("sm")]: { margin: "0.5rem 0 0" },
 }));
 
 const UserTextField = styled(TextField)(({ theme }) => ({
   backgroundColor: "#fff",
   borderRadius: "30px",
   boxShadow: "0 5px 5px rgba(0,0,0,0.1)",
-
   "&:hover .MuiInputLabel-root": {
-    color: "#000", // Change label color to black on hover
+    color: "#000",
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      border: "none", // Remove the border
+      border: "none",
     },
     "&:hover fieldset": {
-      border: "none", // Remove the border on hover
+      border: "none",
     },
     "&.Mui-focused fieldset": {
-      border: "none", // Remove the border when the input is focused
+      border: "none",
     },
     "& input": {
-      padding: "0.85rem", // Remove padding from the input
+      padding: "0.85rem",
+
+      [theme.breakpoints.down("md")]: {
+        padding: "0.65rem 0",
+        fontSize: "0.75rem",
+      },
+      [theme.breakpoints.down("sm")]: {
+        padding: "0.4rem 0",
+        fontSize: "0.6rem",
+      },
     },
   },
   "& .MuiInputLabel-root": {
-    // Target the label
     fontSize: "0.8rem",
+    width: "100%",
+
+    [theme.breakpoints.down("md")]: { fontSize: "0.65rem" },
+    [theme.breakpoints.down("sm")]: { fontSize: "0.5rem" },
   },
 }));
 
 const PasswordTextField = styled(UserTextField)(({ theme }) => ({
   marginTop: "0.8rem",
+  [theme.breakpoints.down("md")]: { marginTop: "0.5rem" },
+  [theme.breakpoints.down("sm")]: { marginTop: "0.3rem" },
 }));
 
-const CustomBtn = styled("button")(() => ({
+const ButtonBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  width: "100%",
+  margin: "2rem 0",
+  [theme.breakpoints.down("md")]: { margin: "1.5rem 0" },
+  [theme.breakpoints.down("sm")]: { margin: "0.8rem 0" },
+}));
+
+const CustomBtn = styled("button")(({ theme }) => ({
   width: "70%",
   border: "none",
   padding: "0.65rem 0",
@@ -94,9 +145,13 @@ const CustomBtn = styled("button")(() => ({
   color: "#fff",
   backgroundColor: "#FDA403",
   cursor: "pointer",
-  fontSize: "1em",
+  fontSize: "1rem",
   boxShadow: "0 5px 5px rgba(0,0,0,0.2)",
   transition: "background-color 0.5s ease, color 0.5s ease",
+
+  [theme.breakpoints.down("lg")]: { padding: "0.65rem 0", fontSize: "0.9rem" },
+  [theme.breakpoints.down("md")]: { padding: "0.5rem 0", fontSize: "0.8rem" },
+  [theme.breakpoints.down("sm")]: { padding: "0.4rem 0", fontSize: "0.6rem" },
 
   "&:hover": {
     color: "#FDA403",
@@ -104,7 +159,23 @@ const CustomBtn = styled("button")(() => ({
     transition: "background-color 0.5s ease, color 0.5s ease",
   },
 }));
-export function LoginWithGoogle() {
+
+const SignWithGG = styled(Typography)(({ theme }) => ({
+  fontSize: "1rem",
+
+  [theme.breakpoints.down("lg")]: { fontSize: "0.9rem" },
+  [theme.breakpoints.down("md")]: { fontSize: "0.8rem" },
+  [theme.breakpoints.down("sm")]: { fontSize: "0.6rem" },
+}));
+
+const GoggleImg = styled("img")(({ theme }) => ({
+  width: "20px",
+  height: "20px",
+  [theme.breakpoints.down("md")]: { width: "15px" },
+  [theme.breakpoints.down("sm")]: { height: "10px" },
+}));
+
+export function LoginPage() {
   const [user, setUser] = useState<User | null>(null);
   const [selectedRole, setSelectedRole] = useState<string>("");
   const [username, setUsername] = useState("");
@@ -178,7 +249,8 @@ export function LoginWithGoogle() {
               <Heading>Hey Welcome !</Heading>
               <Title>Login Your Account</Title>
             </Box>
-            <Box sx={{ margin: "2rem 0 0", width: "90%" }}>
+
+            <TextFieldBox>
               <UserTextField
                 required
                 fullWidth
@@ -200,7 +272,7 @@ export function LoginWithGoogle() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-            </Box>
+            </TextFieldBox>
 
             <Box
               sx={{
@@ -217,15 +289,7 @@ export function LoginWithGoogle() {
               <TextTitle>Forgot password?</TextTitle>
             </Box>
 
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                width: "100%",
-                margin: "2rem 0",
-              }}
-            >
+            <ButtonBox>
               <CustomBtn
                 type="submit"
                 onClick={() => {
@@ -247,10 +311,10 @@ export function LoginWithGoogle() {
                   gap={1}
                 >
                   <GoggleImg src={GoogleLogo} alt="Sign in with Google" />
-                  <Typography>Sign in with Google</Typography>
+                  <SignWithGG>Sign in with Google</SignWithGG>
                 </Box>
               </CustomBtn>
-            </Box>
+            </ButtonBox>
           </LoginContainer>
         </Container>
       </MainContainer>
