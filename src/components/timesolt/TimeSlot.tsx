@@ -151,7 +151,7 @@ function TimeSlot({
   useEffect(() => {
     const complete = timeSlot.day && timeSlot.startTime && timeSlot.endTime;
     if (complete && !isComplete) {
-      console.log(timeSlot);
+      // console.log(timeSlot);
       setIsComplete(true);
     }
     if (!complete) {

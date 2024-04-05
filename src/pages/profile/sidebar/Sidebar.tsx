@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../../supabase/config";
 import { User } from "@supabase/supabase-js";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 const MainContainer = styled(Box)(({ theme }) => ({
   margin: "2rem 5rem",
@@ -111,6 +112,7 @@ function Sidebar({ onMenuSelect }) {
       } = await supabase.auth.getUser();
       setUser(user);
     };
+    // console.log(user);
 
     getUser();
   }, []);
@@ -120,23 +122,44 @@ function Sidebar({ onMenuSelect }) {
     setUser(null);
     navigate("/");
   };
+  const handleDeleteAc = async () => {
+    try {
+      const { error } = await supabase
+        .from("doctorInfo")
+        .delete()
+        .eq("email", user?.email);
+
+      if (error) {
+        console.error("Error deleting account:", error.message);
+      } else {
+        toast.success("Account deleted successfully");
+      }
+    } catch (error) {
+      console.error("Error deleting account:", error);
+    }
+  };
 
   return (
-    <MainContainer>
-      <FirstContainer>
-        <TextStyle onClick={() => onMenuSelect("overview")}>Overview</TextStyle>
-        <TextStyle onClick={() => onMenuSelect("appointments")}>
-          Appointments
-        </TextStyle>
-        <TextStyle onClick={() => onMenuSelect("profile")}>Profile</TextStyle>
-      </FirstContainer>
-      {user && (
-        <SecondContainer>
-          <LogOut onClick={handleLogout}>Logout</LogOut>
-          <DeleteAc>Delete Account</DeleteAc>
-        </SecondContainer>
-      )}
-    </MainContainer>
+    <>
+      <ToastContainer />
+      <MainContainer>
+        <FirstContainer>
+          <TextStyle onClick={() => onMenuSelect("overview")}>
+            Overview
+          </TextStyle>
+          <TextStyle onClick={() => onMenuSelect("appointments")}>
+            Appointments
+          </TextStyle>
+          <TextStyle onClick={() => onMenuSelect("profile")}>Profile</TextStyle>
+        </FirstContainer>
+        {user && (
+          <SecondContainer>
+            <LogOut onClick={handleLogout}>Logout</LogOut>
+            <DeleteAc onClick={handleDeleteAc}>Delete Account</DeleteAc>
+          </SecondContainer>
+        )}
+      </MainContainer>
+    </>
   );
 }
 

@@ -15,7 +15,6 @@ import { ButtonProps } from "@mui/material/Button";
 import Qualification from "../../../components/qualification/Qualification";
 import Experiences from "../../../components/Experiences/Experiences";
 import TimeSlot from "../../../components/timesolt/TimeSlot";
-import InsertData from "../../../supabase/InsertData";
 import { User } from "@supabase/supabase-js";
 import { Edit, Check } from "@mui/icons-material";
 import UpdateData from "../../../supabase/UpdateData";
@@ -243,12 +242,12 @@ function Info({
   const [timeSlots, setTimeSlots] = useState([]);
   const [about, setAbout] = useState("");
   const [isFormValid, setIsFormValid] = useState(false);
-  const [isEditMode, setIsEditMode] = useState(!fetchedData);
+  const [isEditMode, setIsEditMode] = useState(!fetchedData?.name);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    checkFormValidity();
-  }, [phone, qualifications, experiences, timeSlots]);
+  // useEffect(() => {
+    // checkFormValidity();
+  // }, [phone, qualifications, experiences, timeSlots]);
 
   const handlePhoneChange = (e) => {
     const value = e.target.value;
@@ -267,26 +266,6 @@ function Info({
     // console.log(isValid);
 
     setIsFormValid(isValid);
-  };
-
-  const insertData = async () => {
-    const newDoctor = {
-      name: name,
-      email: user?.email,
-      phoneno: phone,
-      gender: gender,
-      specialization: specialization,
-      price: parseInt(price, 10),
-      address: address,
-      city: city,
-      qualifications: JSON.stringify(qualifications),
-      experiences: JSON.stringify(experiences),
-      timeSlot: JSON.stringify(timeSlots),
-      about: about,
-    };
-    console.log(newDoctor);
-    await InsertData(newDoctor);
-    setIsLoading(false);
   };
 
   const updateData = async () => {
@@ -310,17 +289,17 @@ function Info({
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!isFormValid) return;
+    // if (!isFormValid) return;
 
-    if (fetchedData && !isEditMode) {
-      setIsLoading(true);
+    // if (fetchedData && !isEditMode) {
+    //   setIsLoading(true);
 
       await updateData();
-    } else if (!isEditMode || !fetchedData) {
-      setIsLoading(true);
+    // } else if (!isEditMode || !fetchedData) {
+    //   setIsLoading(true);
 
-      await insertData();
-    }
+      // await insertData();
+    // }
     setIsEditMode(false);
   };
 
@@ -609,7 +588,7 @@ function Info({
               color="primary"
               // disabled={isEditMode || !isFormValid || isLoading}
               // disabled={!isEditMode || !isFormValid}
-              disabled={fetchedData && isEditMode}
+              // disabled={fetchedData && isEditMode}
             >
               Submit
             </ColorButton>

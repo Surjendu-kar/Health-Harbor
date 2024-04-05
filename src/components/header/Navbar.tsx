@@ -153,6 +153,7 @@ const Navbar = () => {
         </MedicineStyle>
         <LogoLink to="/">HealthHarbor</LogoLink>
       </Box>
+
       <Box sx={{ display: "flex" }}>
         <StyledLink to="/find-a-doctor">Find a Doctor</StyledLink>
         <StyledLink to="/service">Services</StyledLink>
@@ -160,7 +161,7 @@ const Navbar = () => {
         <StyledLink to="/contact">Contact</StyledLink>
       </Box>
 
-      {user && (
+      {user ? (
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <StyledAvatar
             component={Link}
@@ -168,6 +169,8 @@ const Navbar = () => {
             src={user ? user?.user_metadata?.avatar_url : ""}
           />
         </Box>
+      ) : (
+        <StyledLink to="/login">Signin</StyledLink>
       )}
     </NavContainer>
   );
