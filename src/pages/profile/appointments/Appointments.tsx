@@ -16,13 +16,13 @@ const TextStyle = styled("p")(() => ({
 function Appointments({ user }) {
   return (
     <MainContainer>
-      {/* <Heading>
+      <Heading>
         <TextStyle>NAME</TextStyle>
         <TextStyle>GENDER</TextStyle>
         <TextStyle>PAYMENT</TextStyle>
         <TextStyle>PRICE</TextStyle>
         <TextStyle>BOOKED ON</TextStyle>
-      </Heading> */}
+      </Heading>
     </MainContainer>
   );
 }

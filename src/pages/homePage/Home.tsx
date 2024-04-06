@@ -1,7 +1,3 @@
-import { useEffect, useState } from "react";
-import { supabase } from "../../supabase/config";
-import { useNavigate } from "react-router-dom";
-import { User } from "@supabase/supabase-js";
 import { Box, Typography } from "@mui/material";
 import HeroSection from "./heroSection/HeroSection";
 import SpecializationDesign from "../../components/specializationDesign/SpecializationDesign";
@@ -79,33 +75,8 @@ const Heading = styled(Typography)(({ theme }) => ({
 }));
 
 function Home() {
-  const [user, setUser] = useState<User | null>(null);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setUser(user);
-
-      // Navigate to login if there is no user
-      if (!user) {
-        setTimeout(() => {
-          navigate("/login");
-        }, 1000);
-      }
-    };
-
-    getUser();
-  }, [navigate]);
-
-  // console.log(user);
-
   return (
-    // backgroundColor: "#C7C8CC",
     <Box>
-      {user && <Box></Box>}
       <HeroBox>
         <HeroSection />
       </HeroBox>

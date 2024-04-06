@@ -111,13 +111,33 @@ function ProfileDetails() {
       }}
     >
       <Sidebar onMenuSelect={handleMenuSelect} />
-      {activeComponent === "overview" && (
+      {activeComponent === "overview" && fetchedData?.role === "doctor" && (
         <OverView user={user} fetchedData={fetchedData} />
       )}
-      {activeComponent === "profile" && (
+      {activeComponent === "overview" && fetchedData?.role === "patient" && (
+        <>
+          patient overview -- <b>currently in development phase.</b>
+        </>
+      )}
+
+      {activeComponent === "profile" && fetchedData?.role === "doctor" && (
         <Info user={user} fetchedData={fetchedData} />
       )}
-      {activeComponent === "appointments" && <Appointments user={user} />}
+      {activeComponent === "profile" && fetchedData?.role === "patient" && (
+        <>
+          patient profile -- <b>currently in development phase.</b>
+        </>
+      )}
+
+      {activeComponent === "appointments" && fetchedData?.role === "doctor" && (
+        <Appointments user={user} />
+      )}
+      {activeComponent === "appointments" &&
+        fetchedData?.role === "patient" && (
+          <>
+            patient appointments -- <b>currently in development phase.</b>
+          </>
+        )}
     </MainContainer>
   );
 }

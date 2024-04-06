@@ -115,7 +115,7 @@ const UserTextField = styled(TextField)(({ theme }) => ({
   "& .MuiInputLabel-root": {
     fontSize: "0.8rem",
     width: "100%",
-
+    color: "rgba(0, 0, 0, 0.4)",
     [theme.breakpoints.down("md")]: { fontSize: "0.65rem" },
     [theme.breakpoints.down("sm")]: { fontSize: "0.5rem" },
   },
@@ -177,9 +177,9 @@ const GoggleImg = styled("img")(({ theme }) => ({
 
 export function LoginPage() {
   const [user, setUser] = useState<User | null>(null);
-  const [selectedRole, setSelectedRole] = useState<string>("");
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -203,9 +203,45 @@ export function LoginPage() {
     }
   };
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
+  const handleLogin = async () => {
+    try {
+      setIsLoading(true);
+
+      if (!email || !password) {
+        toast.error("Please fill in all required fields");
+        setIsLoading(false);
+        return;
+      }
+
+      // const { data, error } = await supabase
+      //   .from("authentication")
+      //   .select("*")
+      //   .eq("email", email)
+      //   .eq("password", password);
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+      });
+
+      if (error) {
+        toast.error(error.message);
+      } else if (data.length === 0) {
+        toast.error("Invalid email or password");
+      } else {
+        toast.success("Login successful.");
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+        setEmail("");
+        setPassword("");
+      }
+    } catch (error) {
+      toast.error("An unexpected error occurred.");
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -219,20 +255,15 @@ export function LoginPage() {
     getUser();
   }, []);
 
-  useEffect(() => {
-    if (user && selectedRole) {
-      if (selectedRole === "User") {
-        navigate("/");
-      } else if (selectedRole === "Doctor") {
-        navigate("/profile");
-      }
-    }
-  }, [user, selectedRole, navigate]);
-
-  const handleRoleSelection = (role: string) => {
-    console.log(`User selected role: ${role}`);
-    setSelectedRole(role);
-  };
+  // useEffect(() => {
+  //   if (user && selectedRole) {
+  //     if (selectedRole === "User") {
+  //       navigate("/");
+  //     } else if (selectedRole === "Doctor") {
+  //       navigate("/profile");
+  //     }
+  //   }
+  // }, [user, selectedRole, navigate]);
 
   return (
     <>
@@ -254,12 +285,12 @@ export function LoginPage() {
               <UserTextField
                 required
                 fullWidth
-                id="username"
-                label="Username"
-                name="username"
-                autoComplete="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                id="email"
+                label="you@example.com"
+                name="email"
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <PasswordTextField
                 required
@@ -286,21 +317,26 @@ export function LoginPage() {
               <TextTitle onClick={() => navigate("/signup")}>
                 Don't have an account? Sign up
               </TextTitle>
-              <TextTitle>Forgot password?</TextTitle>
+              <TextTitle
+                onClick={() =>
+                  toast.warning(" currently in development phase.")
+                }
+              >
+                Forgot password?
+              </TextTitle>
             </Box>
 
             <ButtonBox>
               <CustomBtn
                 type="submit"
                 onClick={() => {
-                  toast.warning(" currently in development phase.");
-                  toast.warning(" you can login with google.");
+                  handleLogin();
                 }}
               >
-                Login
+                {isLoading ? "Loading..." : "Login"}
               </CustomBtn>
 
-              <TextTitle margin={"0.15rem 0"}>or</TextTitle>
+              {/* <TextTitle margin={"0.15rem 0"}>or</TextTitle>
               <CustomBtn onClick={handleLoginWithGoogle}>
                 <Box
                   sx={{
@@ -313,7 +349,7 @@ export function LoginPage() {
                   <GoggleImg src={GoogleLogo} alt="Sign in with Google" />
                   <SignWithGG>Sign in with Google</SignWithGG>
                 </Box>
-              </CustomBtn>
+              </CustomBtn> */}
             </ButtonBox>
           </LoginContainer>
         </Container>

@@ -9,8 +9,6 @@ import {
   Skeleton,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { User } from "@supabase/gotrue-js";
-import { supabase } from "../../supabase/config";
 import FetchAllDoctor from "./FetchAllDoctor";
 import DoctorCard from "../../components/doctorCard/DoctorCard";
 import "../../App.css";
@@ -131,7 +129,6 @@ const SkeletonStyle = styled(Skeleton)(({ theme }) => ({
 }));
 
 function FindDoctor() {
-  const [user, setUser] = useState<User | null>(null);
   const [fetchedData, setFetchedData] = useState<DoctorInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [city, setCity] = useState("");
@@ -139,18 +136,7 @@ function FindDoctor() {
   const [searchData, setSearchData] = useState<DoctorInfo[]>([]);
 
   useEffect(() => {
-    const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setUser(user);
-    };
-
-    getUser();
-  }, []);
-
-  useEffect(() => {
-    if (!fetchedData && user?.email) {
+    if (!fetchedData) {
       const fetchData = async () => {
         const { data, error } = await FetchAllDoctor();
         setIsLoading(false);
@@ -162,10 +148,6 @@ function FindDoctor() {
 
       fetchData();
     }
-  }, [user?.email, fetchedData]);
-
-  useEffect(() => {
-    console.log("fetchedData", fetchedData);
   }, [fetchedData]);
 
   // Handle city input change

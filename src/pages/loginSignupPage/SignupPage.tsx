@@ -127,6 +127,7 @@ const UserTextField = styled(TextField)(({ theme }) => ({
   "& .MuiInputLabel-root": {
     fontSize: "0.8rem",
     width: "100%",
+    color: "rgba(0, 0, 0, 0.4)",
 
     [theme.breakpoints.down("md")]: { fontSize: "0.65rem" },
     [theme.breakpoints.down("sm")]: { fontSize: "0.5rem" },
@@ -158,6 +159,7 @@ const FormControlStyle = styled(FormControl)(({ theme }) => ({
 
   "& .MuiInputLabel-root": {
     fontSize: "0.8rem",
+    color: "rgba(0, 0, 0, 0.4)",
     [theme.breakpoints.down("sm")]: { fontSize: "0.5rem" },
   },
   "& .MuiSelect-icon": {
@@ -222,37 +224,61 @@ const CustomBtn = styled("button")(({ theme }) => ({
 export function SignupPage() {
   const [user, setUser] = useState<User | null>(null);
   const [selectedRole, setSelectedRole] = useState<string>("");
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [patientDoctor, SetPatientDoctor] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const theme = useTheme();
   const navigate = useNavigate();
 
-  const handleLoginWithGoogle = async () => {
+  const handleSignup = async () => {
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          queryParams: {
-            access_type: "offline",
-            prompt: "consent",
-          },
-        },
+      setIsLoading(true);
+
+      // Check if all required fields are filled
+      if (!email || !password || !confirmPassword || !selectedRole) {
+        toast.error("Please fill in all required fields");
+        setIsLoading(false);
+        return;
+      }
+
+      // Check if password and confirmPassword are the same
+      if (password !== confirmPassword) {
+        toast.error("Password and Confirm Password do not match");
+        setIsLoading(false);
+        return;
+      }
+
+      const { error: signUpError } = await supabase.auth.signUp({
+        email: email,
+        password: password,
       });
 
-      if (error) {
-        throw new Error(error.message);
+      const { data, error: updateError } = await supabase
+        .from("doctorInfo")
+        .insert({ email: email, role: selectedRole });
+
+      if (signUpError || updateError) {
+        toast.error(signUpError?.message || updateError?.message);
+      } else {
+        toast.success(
+          "Sign up successful! Please check your email for confirmation."
+        );
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
+        setSelectedRole("");
       }
     } catch (error) {
-      alert(error);
+      toast.error("An unexpected error occurred.");
+      console.error(error);
+    } finally {
+      setIsLoading(false);
     }
-  };
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
   };
 
   useEffect(() => {
@@ -274,12 +300,21 @@ export function SignupPage() {
         navigate("/profile");
       }
     }
-  }, [user, selectedRole, navigate]);
+  }, [user, selectedRole, password, email, navigate]);
+  // useEffect(() => {
+  //   const checkUserAndRedirect = async () => {
+  //     const { data } = await supabase.auth.getUser();
+  //     if (data.user && selectedRole) {
+  //       if (selectedRole === "User") {
+  //         navigate("/");
+  //       } else if (selectedRole === "Doctor") {
+  //         navigate("/profile");
+  //       }
+  //     }
+  //   };
 
-  const handleRoleSelection = (role: string) => {
-    console.log(`User selected role: ${role}`);
-    setSelectedRole(role);
-  };
+  //   checkUserAndRedirect();
+  // }, [user, selectedRole, navigate]);
 
   return (
     <>
@@ -300,12 +335,12 @@ export function SignupPage() {
               <UserTextField
                 required
                 fullWidth
-                id="username"
-                label="Username"
-                name="username"
-                autoComplete="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                id="email"
+                label="you@example.com"
+                name="email"
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <PasswordTextField
                 required
@@ -363,8 +398,8 @@ export function SignupPage() {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={patientDoctor}
-                  onChange={(e) => SetPatientDoctor(e.target.value)}
+                  value={selectedRole}
+                  onChange={(e) => setSelectedRole(e.target.value)}
                   renderValue={(selected) => (
                     <Box
                       sx={{
@@ -387,12 +422,10 @@ export function SignupPage() {
             <ButtonBox>
               <CustomBtn
                 type="submit"
-                onClick={() => {
-                  toast.warning(" currently in development phase.");
-                  toast.warning(" you can login with google.");
-                }}
+                onClick={handleSignup}
+                disabled={isLoading}
               >
-                Sign up
+                {isLoading ? "Loading..." : "Sign up"}
               </CustomBtn>
             </ButtonBox>
           </LoginContainer>
