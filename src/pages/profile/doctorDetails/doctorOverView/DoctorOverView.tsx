@@ -1,10 +1,10 @@
 import { Box, Button, Rating, Typography, styled } from "@mui/material";
-import defaultImg from "../../../assets/Default_pfp-removebg-preview.png";
+import defaultImg from "../../../../assets/Default_pfp-removebg-preview.png";
 import { User } from "@supabase/supabase-js";
-import { supabase } from "../../../supabase/config";
+import { supabase } from "../../../../supabase/config";
 import React, { useEffect, useRef, useState } from "react";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import ViewDetails from "../../../components/viewDetails/ViewDetails";
+import ViewDetails from "../../../../components/viewDetails/ViewDetails";
 
 const MainContainer = styled(Box)(({ theme }) => ({
   width: "50%",
@@ -140,7 +140,7 @@ type DoctorInfo = {
   about: string;
 };
 
-function OverView({
+function DoctorOverView({
   user,
   fetchedData,
 }: {
@@ -263,4 +263,4 @@ function OverView({
   );
 }
 
-export default OverView;
+export default DoctorOverView;
