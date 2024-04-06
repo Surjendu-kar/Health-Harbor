@@ -12,14 +12,14 @@ import {
 } from "@mui/material";
 import { purple } from "@mui/material/colors";
 import { ButtonProps } from "@mui/material/Button";
-import Qualification from "../../../components/qualification/Qualification";
-import Experiences from "../../../components/Experiences/Experiences";
-import TimeSlot from "../../../components/timesolt/TimeSlot";
+import Qualification from "../../../../components/qualification/Qualification";
+import Experiences from "../../../../components/Experiences/Experiences";
+import TimeSlot from "../../../../components/timesolt/TimeSlot";
 import { User } from "@supabase/supabase-js";
 import { Edit, Check } from "@mui/icons-material";
-import UpdateData from "../../../supabase/UpdateData";
+import UpdateData from "../../../../supabase/UpdateData";
 import CircularProgress from "@mui/material/CircularProgress";
-import LocationFields from "../../../components/locationFields/LocationFields";
+import LocationFields from "../../../../components/locationFields/LocationFields";
 
 const MainContainer = styled(Box)(({ theme }) => ({
   width: "50%",
@@ -118,6 +118,7 @@ const TitleTextField = styled(TextField)(({ theme }) => ({
     },
   },
 }));
+
 const PriceTextField = styled(TitleTextField)(({ theme }) => ({
   marginTop: "0rem",
 
@@ -246,7 +247,7 @@ function Info({
   const [isLoading, setIsLoading] = useState(false);
 
   // useEffect(() => {
-    // checkFormValidity();
+  // checkFormValidity();
   // }, [phone, qualifications, experiences, timeSlots]);
 
   const handlePhoneChange = (e) => {
@@ -294,11 +295,11 @@ function Info({
     // if (fetchedData && !isEditMode) {
     //   setIsLoading(true);
 
-      await updateData();
+    await updateData();
     // } else if (!isEditMode || !fetchedData) {
     //   setIsLoading(true);
 
-      // await insertData();
+    // await insertData();
     // }
     setIsEditMode(false);
   };

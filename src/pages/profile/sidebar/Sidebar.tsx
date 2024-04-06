@@ -4,6 +4,7 @@ import { supabase } from "../../../supabase/config";
 import { User } from "@supabase/supabase-js";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import FetchSpecificDoctor from "../../../supabase/FetchSpecificDoctor";
 
 const MainContainer = styled(Box)(({ theme }) => ({
   margin: "2rem 5rem",
@@ -102,9 +103,28 @@ const DeleteAc = styled(TextStyle)(({ theme }) => ({
   },
 }));
 
+type DoctorInfo = {
+  id: number;
+  name: string;
+  email: string;
+  phoneno: string;
+  gender: string;
+  specialization: string;
+  price: number;
+  address: string;
+  city: string;
+  qualifications: string[];
+  experiences: string[];
+  timeSlot: string[];
+  about: string;
+};
+
 function Sidebar({ onMenuSelect }) {
   const [user, setUser] = useState<User | null>(null);
+  const [fetchedData, setFetchedData] = useState<DoctorInfo | null>(null);
+
   const navigate = useNavigate();
+
   useEffect(() => {
     const getUser = async () => {
       const {
@@ -116,6 +136,21 @@ function Sidebar({ onMenuSelect }) {
 
     getUser();
   }, []);
+
+  useEffect(() => {
+    if (!fetchedData && user?.email) {
+      const fetchData = async () => {
+        const { data, error } = await FetchSpecificDoctor({
+          userEmail: user.email,
+        });
+        if (!error) {
+          setFetchedData(data[0]);
+        }
+      };
+
+      fetchData();
+    }
+  }, [user?.email, fetchedData]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -143,15 +178,29 @@ function Sidebar({ onMenuSelect }) {
     <>
       <ToastContainer />
       <MainContainer>
-        <FirstContainer>
-          <TextStyle onClick={() => onMenuSelect("overview")}>
-            Overview
-          </TextStyle>
-          <TextStyle onClick={() => onMenuSelect("appointments")}>
-            Appointments
-          </TextStyle>
-          <TextStyle onClick={() => onMenuSelect("profile")}>Profile</TextStyle>
-        </FirstContainer>
+        {fetchedData?.role === "doctor" ? (
+          <FirstContainer>
+            <TextStyle onClick={() => onMenuSelect("overview")}>
+              Overview
+            </TextStyle>
+            <TextStyle onClick={() => onMenuSelect("appointments")}>
+              Appointments
+            </TextStyle>
+            <TextStyle onClick={() => onMenuSelect("profile")}>
+              Profile
+            </TextStyle>
+          </FirstContainer>
+        ) : (
+          <FirstContainer>
+            <TextStyle onClick={() => onMenuSelect("overview")}>
+              Overview
+            </TextStyle>
+            <TextStyle onClick={() => onMenuSelect("profile")}>
+              Patient Details
+            </TextStyle>
+          </FirstContainer>
+        )}
+
         {user && (
           <SecondContainer>
             <LogOut onClick={handleLogout}>Logout</LogOut>

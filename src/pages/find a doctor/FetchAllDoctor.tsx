@@ -24,7 +24,10 @@ async function FetchAllDoctor(): Promise<{
   error: Error | null;
 }> {
   try {
-    const { data, error } = await supabase.from("doctorInfo").select("*");
+    const { data, error } = await supabase
+      .from("doctorInfo")
+      .select("*")
+      .not("role", "eq", "patient");
 
     return { data, error };
   } catch (error) {

@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 
 import { Box, styled, keyframes } from "@mui/material";
 import Sidebar from "./sidebar/Sidebar";
-import Info from "./profileInfo/Info";
+import Info from "./doctorDetails/profileInfo/Info";
 import { User } from "@supabase/supabase-js";
 import { supabase } from "../../supabase/config";
-import OverView from "./overview/OverView";
-import Appointments from "./appointments/Appointments";
+import DoctorOverView from "./doctorDetails/doctorOverView/DoctorOverView";
+import Appointments from "./doctorDetails/appointments/Appointments";
 import LoadingAnimation from "../../components/lottieAnimation/LoadingAnimation";
 import FetchSpecificDoctor from "../../supabase/FetchSpecificDoctor";
+import PatientOverView from "./patientDetails/patientOverView/PatientOverView";
+import PatientInfo from "./patientDetails/patientInfo/PatientInfo";
 
 const MainContainer = styled(Box)(({ theme }) => ({
   width: "100%",
@@ -112,11 +114,11 @@ function ProfileDetails() {
     >
       <Sidebar onMenuSelect={handleMenuSelect} />
       {activeComponent === "overview" && fetchedData?.role === "doctor" && (
-        <OverView user={user} fetchedData={fetchedData} />
+        <DoctorOverView user={user} fetchedData={fetchedData} />
       )}
       {activeComponent === "overview" && fetchedData?.role === "patient" && (
         <>
-          patient overview -- <b>currently in development phase.</b>
+          <PatientOverView user={user} fetchedData={fetchedData} />
         </>
       )}
 
@@ -125,19 +127,13 @@ function ProfileDetails() {
       )}
       {activeComponent === "profile" && fetchedData?.role === "patient" && (
         <>
-          patient profile -- <b>currently in development phase.</b>
+          <PatientInfo user={user} fetchedData={fetchedData} />
         </>
       )}
 
       {activeComponent === "appointments" && fetchedData?.role === "doctor" && (
         <Appointments user={user} />
       )}
-      {activeComponent === "appointments" &&
-        fetchedData?.role === "patient" && (
-          <>
-            patient appointments -- <b>currently in development phase.</b>
-          </>
-        )}
     </MainContainer>
   );
 }
