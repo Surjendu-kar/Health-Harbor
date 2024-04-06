@@ -128,15 +128,29 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
 const Navbar = () => {
   const [user, setUser] = useState<User | null>(null);
 
-  useEffect(() => {
-    const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setUser(user);
-    };
+  // useEffect(() => {
+  //   const getUser = async () => {
+  //     const {
+  //       data: { user },
+  //     } = await supabase.auth.getUser();
+  //     setUser(user);
+  //   };
 
-    getUser();
+  //   getUser();
+  // }, [user]);
+
+  useEffect(() => {
+    const authListener = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN") {
+        setUser(session?.user ?? null);
+      } else if (event === "SIGNED_OUT") {
+        setUser(null);
+      }
+    });
+
+    return () => {
+      // authListener?.unsubscribe();
+    };
   }, []);
 
   return (
