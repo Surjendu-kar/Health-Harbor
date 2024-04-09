@@ -30,7 +30,7 @@ const HeroBox = styled(Box)(({ theme }) => ({
   },
   [theme.breakpoints.down("md")]: {
     margin: "0rem auto",
-    height: "60vh",
+    height: "50vh",
   },
   [theme.breakpoints.down("sm")]: {
     margin: "0rem auto",
@@ -49,7 +49,7 @@ const SpecializationBox = styled(Box)(({ theme }) => ({
     height: "80vh",
   },
   [theme.breakpoints.down("sm")]: {
-    height: "70vh",
+    height: "60vh",
   },
 }));
 
@@ -113,7 +113,7 @@ const DefaultBox = styled(Box)(({ theme }) => ({
   boxShadow: "1px 5px 8px rgba(0, 0, 0, 0.2)",
   margin: "3rem 0",
 
-  [theme.breakpoints.down("md")]: { margin: "2rem 0", height: "60vh" },
+  [theme.breakpoints.down("md")]: { margin: "2rem 0", height: "45vh" },
   [theme.breakpoints.down("sm")]: { margin: "1rem 0", height: "40vh" },
 }));
 
