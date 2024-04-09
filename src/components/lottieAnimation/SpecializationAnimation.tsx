@@ -40,7 +40,7 @@ const SpecializationAnimation = () => {
     <MainContainer
       ref={animBox}
       sx={{
-        width: isSm ? "180px" : isMd ? "260px" : isLg ? "380px" : "500px",
+        width: isSm ? "210px" : isMd ? "260px" : isLg ? "380px" : "500px",
       }}
     />
   );
