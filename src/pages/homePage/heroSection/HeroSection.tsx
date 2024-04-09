@@ -1,6 +1,7 @@
 import { Box, Typography, styled } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import doctorImg from "../../../assets/doctor-img.jpg";
+import HeroAnimation from "../../../components/lottieAnimation/HeroAnimation";
 
 function HeroSection() {
   const navigate = useNavigate();
@@ -14,6 +15,8 @@ function HeroSection() {
 
   const Heading = styled(Typography)(({ theme }) => ({
     fontSize: "3.25rem",
+    fontWeight: "bold",
+    color: "#15285ce8",
     [theme.breakpoints.down("lg")]: {
       fontSize: "2.5rem",
     },
@@ -25,7 +28,12 @@ function HeroSection() {
     },
   }));
   const Title = styled(Typography)(({ theme }) => ({
-    fontSize: "1.25rem",
+    fontSize: "1.35rem",
+    fontWeight: "bold",
+    color: "#030d28ba",
+    paddingLeft: "5px",
+    marginBottom: "1.5rem",
+
     [theme.breakpoints.down("lg")]: {
       fontSize: "0.9rem",
     },
@@ -43,9 +51,16 @@ function HeroSection() {
     backgroundColor: "#deeaff8f",
     padding: "0.8rem",
     borderRadius: "7px",
+    border: "1px solid black",
+    boxShadow: "1px 5px 5px rgba(0, 0, 0, 0.2)",
     lineHeight: 2.5,
     cursor: "pointer",
-
+    transition: "font-size 0.2s ease",
+    
+    "&:hover": {
+      fontSize: "1.3rem",
+      boxShadow: "1px 7px 4px rgba(0, 0, 0, 0.2)",
+    },
     [theme.breakpoints.down("lg")]: {
       fontSize: "1rem",
       padding: "0.7rem",
@@ -116,7 +131,8 @@ function HeroSection() {
           justifyContent: "center",
         }}
       >
-        <Img src={doctorImg}></Img>
+        {/* <Img src={doctorImg}></Img> */}
+        <HeroAnimation />
       </Box>
     </MainContainer>
   );

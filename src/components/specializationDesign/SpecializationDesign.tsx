@@ -1,35 +1,40 @@
 import { Box, Typography, styled } from "@mui/material";
 
 const MainContainer = styled(Box)(({ theme }) => ({
-  textAlign: "center",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
   borderRadius: "15px",
-  padding: "3.5rem 4rem",
+  padding: "0rem 3rem",
+  height: "170px",
   backgroundColor: "#fff",
-  minWidth: "6rem",
   margin: "1rem",
   boxShadow: "1px 5px 8px rgba(0, 0, 0, 0.2)",
 
   [theme.breakpoints.down("lg")]: {
-    padding: "2rem 3rem",
-    minWidth: "5rem",
-    margin: "0.8rem",
+    padding: "0rem 2rem",
+    margin: "0.7rem",
+    height: "130px",
   },
   [theme.breakpoints.down("md")]: {
-    padding: "2rem 2.5rem",
-    minWidth: "4rem",
-    margin: "0.5rem",
+    padding: "0rem 1.5rem",
+    maxWidth: "2.5rem",
+    margin: "0.25rem",
+    height: "90px",
   },
   [theme.breakpoints.down("sm")]: {
-    padding: "1.5rem 1.8rem",
-    minWidth: "3.5rem",
-    margin: "0rem",
+    padding: "0rem 1.2rem",
+    maxWidth: "2rem",
+    margin: "0.2rem",
     borderRadius: "10px",
+    height: "75px",
   },
 }));
 
 const Img = styled("img")(({ theme }) => ({
-  height: "80px",
-  width: "80px",
+  height: "70px",
+  width: "70px",
   borderRadius: "50px",
   backgroundColor: "#f3f8ffb1",
   [theme.breakpoints.down("lg")]: {
@@ -37,12 +42,12 @@ const Img = styled("img")(({ theme }) => ({
     width: "60px",
   },
   [theme.breakpoints.down("md")]: {
-    height: "50px",
-    width: "50px",
-  },
-  [theme.breakpoints.down("sm")]: {
     height: "40px",
     width: "40px",
+  },
+  [theme.breakpoints.down("sm")]: {
+    height: "35px",
+    width: "35px",
   },
 }));
 
@@ -53,10 +58,10 @@ const Title = styled(Typography)(({ theme }) => ({
     fontSize: "0.9rem",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.8rem",
+    fontSize: "0.7rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.7rem",
+    fontSize: "0.6rem",
   },
 }));
 

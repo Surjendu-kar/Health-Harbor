@@ -1,15 +1,16 @@
 import { useRef, useEffect } from "react";
 import Lottie from "lottie-web";
-import animationData from "../../assets/loadingAnimation/Animation - 1707317749384.json";
+import animationData from "../../assets/heroAnimation/Animation - 1712590717069.json";
 import { AnimationItem } from "lottie-web";
 import { Box, useMediaQuery, useTheme } from "@mui/material";
 import styled from "styled-components";
 
 const MainContainer = styled(Box)`
   width: 300px;
+  transition: width 0.3s ease;
 `;
 
-const LogoAnimation = () => {
+const HeroAnimation = () => {
   const animBox = useRef<HTMLDivElement | null>(null);
   const animationInstance = useRef<AnimationItem | null>(null);
   const theme = useTheme();
@@ -37,10 +38,10 @@ const LogoAnimation = () => {
     <MainContainer
       ref={animBox}
       sx={{
-        width: isSm ? "100px" : isMd ? "200px" : isLg ? "280px" : "300px",
+        width: isSm ? "200px" : isMd ? "300px" : isLg ? "550px" : "650px",
       }}
     />
   );
 };
 
-export default LogoAnimation;
+export default HeroAnimation;
