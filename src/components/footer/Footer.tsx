@@ -26,7 +26,7 @@ const SecondMainContainer = styled(Box)(({ theme }) => ({
     padding: "2rem 2rem 1rem 2rem",
   },
   [theme.breakpoints.down("sm")]: {
-    padding: "1.5rem 0.75rem 0.5rem 0.75rem",
+    padding: "1.5rem 0.75rem 0.5rem 0.35rem",
   },
 }));
 
