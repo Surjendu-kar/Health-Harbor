@@ -11,6 +11,21 @@ function HeroSection() {
     justifyContent: "space-between",
     alignItems: "center",
     gap: theme.spacing(1),
+    overflow: "hidden",
+  }));
+  const AnimatedBox = styled(Box)(({ theme }) => ({
+    paddingLeft: "1rem",
+    "@keyframes scrollAnimation": {
+      "0%": {
+        transform: "translateX(-50%)",
+        opacity: 0,
+      },
+      "100%": {
+        transform: "translateX(0)",
+        opacity: 1,
+      },
+    },
+    animation: "scrollAnimation 1s ease-out forwards",
   }));
 
   const Heading = styled(Typography)(({ theme }) => ({
@@ -42,6 +57,7 @@ function HeroSection() {
     },
     [theme.breakpoints.down("sm")]: {
       fontSize: "0.65rem",
+      paddingLeft: "1px",
     },
   }));
 
@@ -77,6 +93,17 @@ function HeroSection() {
     },
   }));
 
+  const ImageContainer = styled(Box)(({ theme }) => ({
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    [theme.breakpoints.down("sm")]: {
+      width: "40%",
+      paddingRight: "1rem",
+    },
+  }));
+
   const Img = styled("img")(({ theme }) => ({
     height: "450px",
     width: "700px",
@@ -101,39 +128,18 @@ function HeroSection() {
 
   return (
     <MainContainer>
-      <Box
-        sx={{
-          "@keyframes scrollAnimation": {
-            "0%": {
-              transform: "translateX(-50%)",
-              opacity: 0,
-            },
-            "100%": {
-              transform: "translateX(0)",
-              opacity: 1,
-            },
-          },
-          animation: "scrollAnimation 1s ease-out forwards",
-        }}
-      >
+      <AnimatedBox>
         <Heading>Welcome to HealthHarbor</Heading>
         <Title>Find and manage your healthcare appointments with ease.</Title>
         <FindADoctor onClick={() => navigate("/find-a-doctor")}>
           Find a Doctor
         </FindADoctor>
-      </Box>
+      </AnimatedBox>
 
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
+      <ImageContainer>
         {/* <Img src={doctorImg}></Img> */}
         <HeroAnimation />
-      </Box>
+      </ImageContainer>
     </MainContainer>
   );
 }
