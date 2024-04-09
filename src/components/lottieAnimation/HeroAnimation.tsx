@@ -38,7 +38,7 @@ const HeroAnimation = () => {
     <MainContainer
       ref={animBox}
       sx={{
-        width: isSm ? "200px" : isMd ? "300px" : isLg ? "550px" : "650px",
+        width: isSm ? "250px" : isMd ? "300px" : isLg ? "550px" : "650px",
       }}
     />
   );

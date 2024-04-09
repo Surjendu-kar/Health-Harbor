@@ -41,7 +41,7 @@ function HeroSection() {
       fontSize: "0.8rem",
     },
     [theme.breakpoints.down("sm")]: {
-      fontSize: "0.6rem",
+      fontSize: "0.65rem",
     },
   }));
 
@@ -56,7 +56,7 @@ function HeroSection() {
     lineHeight: 2.5,
     cursor: "pointer",
     transition: "font-size 0.2s ease",
-    
+
     "&:hover": {
       fontSize: "1.3rem",
       boxShadow: "1px 7px 4px rgba(0, 0, 0, 0.2)",
