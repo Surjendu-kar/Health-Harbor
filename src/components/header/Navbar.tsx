@@ -29,16 +29,16 @@ const StyledLink = styled(Link)(({ theme }) => ({
   },
 
   [theme.breakpoints.down("lg")]: {
-    fontSize: "0.85rem",
+    fontSize: "0.9rem",
     "&:hover": {
       fontSize: "1rem",
     },
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.7rem",
+    fontSize: "0.8rem",
     letterSpacing: "1.2px",
     "&:hover": {
-      fontSize: "0.85rem",
+      fontSize: "0.9rem",
     },
     margin: theme.spacing(0, 1),
   },
@@ -90,7 +90,7 @@ const LogoLink = styled(StyledLink)(({ theme }) => ({
     fontSize: "1.2rem",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.9rem",
+    fontSize: "0.95rem",
     letterSpacing: "1.2px",
   },
   [theme.breakpoints.down("sm")]: {
@@ -115,8 +115,8 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
     height: "33px",
   },
   [theme.breakpoints.down("md")]: {
-    width: "22px",
-    height: "22px",
+    width: "25px",
+    height: "25px",
   },
   [theme.breakpoints.down("sm")]: {
     width: "20px",

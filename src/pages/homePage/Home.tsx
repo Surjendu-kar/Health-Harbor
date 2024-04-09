@@ -29,12 +29,12 @@ const HeroBox = styled(Box)(({ theme }) => ({
     margin: "4rem auto",
   },
   [theme.breakpoints.down("md")]: {
-    margin: "3rem auto",
-    height: "80vh",
+    margin: "0rem auto",
+    height: "60vh",
   },
   [theme.breakpoints.down("sm")]: {
     margin: "0rem auto",
-    height: "55vh",
+    height: "40vh",
     marginBottom: "1rem",
   },
 }));
@@ -49,7 +49,7 @@ const SpecializationBox = styled(Box)(({ theme }) => ({
     height: "80vh",
   },
   [theme.breakpoints.down("sm")]: {
-    height: "90vh",
+    height: "70vh",
   },
 }));
 
@@ -80,6 +80,7 @@ const Heading = styled(Typography)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     fontSize: "0.8rem",
     margin: "0.5rem 0",
+    padding: "1rem",
   },
 }));
 
@@ -96,7 +97,6 @@ const Specialization = styled(Box)(({ theme }) => ({
   },
   [theme.breakpoints.down("md")]: {
     gap: theme.spacing(1),
-    padding: "3rem",
   },
   [theme.breakpoints.down("sm")]: {
     gap: theme.spacing(1),
@@ -106,22 +106,15 @@ const Specialization = styled(Box)(({ theme }) => ({
   },
 }));
 
-const DefaultBox1 = styled(Box)(({ theme }) => ({
+const DefaultBox = styled(Box)(({ theme }) => ({
   height: "70vh",
   backgroundColor: "#f3f8ffb1",
   borderRadius: "30px",
   boxShadow: "1px 5px 8px rgba(0, 0, 0, 0.2)",
-  marginBottom: "3rem",
+  margin: "3rem 0",
 
-  [theme.breakpoints.down("md")]: {marginBottom: "2rem",},
-  [theme.breakpoints.down("sm")]: {marginBottom: "1rem",},
-}));
-const DefaultBox2 = styled(DefaultBox1)(({ theme }) => ({
-  marginBottom: "0",
-  marginTop: "3rem",
-
-  [theme.breakpoints.down("md")]: { marginTop: "2rem" },
-  [theme.breakpoints.down("sm")]: { marginTop: "1rem" },
+  [theme.breakpoints.down("md")]: { margin: "2rem 0", height: "60vh" },
+  [theme.breakpoints.down("sm")]: { margin: "1rem 0", height: "40vh" },
 }));
 
 function Home() {
@@ -130,7 +123,7 @@ function Home() {
       <HeroBox>
         <HeroSection />
       </HeroBox>
-      <DefaultBox1>other details...</DefaultBox1>
+      <DefaultBox>other details...</DefaultBox>
       <SpecializationBox>
         <Specialization>
           <Box
@@ -176,7 +169,7 @@ function Home() {
           </Box>
         </Specialization>
       </SpecializationBox>
-      <DefaultBox2>other details...</DefaultBox2>
+      <DefaultBox>other details...</DefaultBox>
     </Box>
   );
 }

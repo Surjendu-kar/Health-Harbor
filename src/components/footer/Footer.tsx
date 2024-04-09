@@ -26,7 +26,7 @@ const SecondMainContainer = styled(Box)(({ theme }) => ({
     padding: "2rem 2rem 1rem 2rem",
   },
   [theme.breakpoints.down("sm")]: {
-    padding: "1.5rem 1rem 0.5rem 1rem",
+    padding: "1.5rem 0.75rem 0.5rem 0.75rem",
   },
 }));
 
@@ -89,11 +89,11 @@ const Heading = styled(Typography)(({ theme }) => ({
     letterSpacing: "1.25px",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.85rem",
+    fontSize: "0.9rem",
     letterSpacing: "1.05px",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.5rem",
+    fontSize: "0.7rem",
     letterSpacing: "1px",
   },
 }));
@@ -103,15 +103,15 @@ const Title = styled(Typography)(({ theme }) => ({
   letterSpacing: "0.35px",
 
   [theme.breakpoints.down("lg")]: {
-    fontSize: "0.7rem",
+    fontSize: "0.8rem",
     letterSpacing: "0.25px",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.65rem",
+    fontSize: "0.75rem",
     letterSpacing: "0.25px",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.36rem",
+    fontSize: "0.5rem",
     letterSpacing: "0.15px",
   },
 }));
@@ -129,16 +129,16 @@ const MailLink = styled("a")(({ theme }) => ({
     fontSize: "1.1rem",
   },
   [theme.breakpoints.down("lg")]: {
-    fontSize: "0.7rem",
+    fontSize: "0.8rem",
     letterSpacing: "0.9px",
   },
 
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.65rem",
+    fontSize: "0.75rem",
     letterSpacing: "0.5px",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.39rem",
+    fontSize: "0.45rem",
     letterSpacing: "0.5px",
   },
 }));
@@ -163,11 +163,11 @@ const ReserveTitle = styled("p")(({ theme }) => ({
   fontSize: "1rem",
 
   [theme.breakpoints.down("lg")]: {
-    fontSize: "0.7rem",
+    fontSize: "0.9rem",
     letterSpacing: "1.25px",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.65rem",
+    fontSize: "0.75rem",
     letterSpacing: "1px",
   },
   [theme.breakpoints.down("sm")]: {
