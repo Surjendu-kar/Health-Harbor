@@ -1,15 +1,18 @@
 import { useRef, useEffect } from "react";
 import Lottie from "lottie-web";
-import animationData from "../../assets/loadingAnimation/Animation - 1707317749384.json";
+import animationData from "../../assets/heroAnimation/Animation - 1712590927260.json";
 import { AnimationItem } from "lottie-web";
 import { Box, useMediaQuery, useTheme } from "@mui/material";
 import styled from "styled-components";
 
-const MainContainer = styled(Box)`
-  width: 300px;
-`;
+const MainContainer = styled(Box)(({ theme }) => ({
+  width: "300px",
+  display: "flex",
+  justifyContent: "center",
+  // marginTop: "5rem",
+}));
 
-const LogoAnimation = () => {
+const SpecializationAnimation = () => {
   const animBox = useRef<HTMLDivElement | null>(null);
   const animationInstance = useRef<AnimationItem | null>(null);
   const theme = useTheme();
@@ -37,10 +40,10 @@ const LogoAnimation = () => {
     <MainContainer
       ref={animBox}
       sx={{
-        width: isSm ? "100px" : isMd ? "200px" : isLg ? "280px" : "300px",
+        width: isSm ? "180px" : isMd ? "260px" : isLg ? "380px" : "500px",
       }}
     />
   );
 };
 
-export default LogoAnimation;
+export default SpecializationAnimation;
