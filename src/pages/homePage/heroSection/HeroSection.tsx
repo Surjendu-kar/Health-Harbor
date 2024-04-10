@@ -1,6 +1,5 @@
 import { Box, Typography, styled } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import doctorImg from "../../../assets/doctor-img.jpg";
 import HeroAnimation from "../../../components/lottieAnimation/HeroAnimation";
 
 function HeroSection() {
@@ -104,27 +103,6 @@ function HeroSection() {
     },
   }));
 
-  const Img = styled("img")(({ theme }) => ({
-    height: "450px",
-    width: "700px",
-    borderRadius: "30px",
-    boxShadow: "1px 10px 8px rgba(0, 0, 0, 0.3)",
-
-    [theme.breakpoints.down("lg")]: {
-      height: "300px",
-      width: "480px",
-    },
-    [theme.breakpoints.down("md")]: {
-      height: "200px",
-      width: "300px",
-      borderRadius: "20px",
-    },
-    [theme.breakpoints.down("sm")]: {
-      height: "150px",
-      width: "200px",
-      borderRadius: "10px",
-    },
-  }));
 
   return (
     <MainContainer>
@@ -137,7 +115,6 @@ function HeroSection() {
       </AnimatedBox>
 
       <ImageContainer>
-        {/* <Img src={doctorImg}></Img> */}
         <HeroAnimation />
       </ImageContainer>
     </MainContainer>

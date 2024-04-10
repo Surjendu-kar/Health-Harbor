@@ -11,6 +11,9 @@ import stomach from "../../assets/specializationImgs/stomach.gif";
 import teeth from "../../assets/specializationImgs/teeth.gif";
 import { styled } from "@mui/system";
 import SpecializationAnimation from "../../components/lottieAnimation/SpecializationAnimation";
+import doctorImg from "../../assets/doctorImg.png";
+import GetAppointment from "./heroSection/GetAppointment";
+import GetAppointmentAnimation from "../../components/lottieAnimation/GetAppointmentAnimation";
 
 const HeroBox = styled(Box)(({ theme }) => ({
   // margin: "5rem auto",
@@ -44,12 +47,15 @@ const SpecializationBox = styled(Box)(({ theme }) => ({
   backgroundColor: "#f3f8ffb1",
   borderRadius: "30px",
   boxShadow: "1px 5px 8px rgba(0, 0, 0, 0.2)",
+  marginTop: "3rem",
 
   [theme.breakpoints.down("md")]: {
-    height: "80vh",
+    maxheight: "80vh",
+    marginTop: "2rem",
   },
   [theme.breakpoints.down("sm")]: {
     height: "60vh",
+    marginTop: "1rem",
   },
 }));
 
@@ -65,7 +71,7 @@ const fadeInAnimation = keyframes`
 `;
 
 const Heading = styled(Typography)(({ theme }) => ({
-  color: "#333333cc",
+  color: "#15285ce8",
   fontSize: "2rem",
   fontWeight: "bold",
   animation: `${fadeInAnimation} 1s ease-in-out`,
@@ -107,15 +113,47 @@ const Specialization = styled(Box)(({ theme }) => ({
 }));
 
 const DefaultBox = styled(Box)(({ theme }) => ({
-  height: "70vh",
+  height: "80vh",
   backgroundColor: "#f3f8ffb1",
   borderRadius: "30px",
   boxShadow: "1px 5px 8px rgba(0, 0, 0, 0.2)",
-  margin: "3rem 0",
+  margin: "3rem 0 0",
+
+  display: "flex",
+  justifyContent: "space-around",
+  alignItems: "center",
 
   [theme.breakpoints.down("md")]: { margin: "2rem 0", height: "45vh" },
   [theme.breakpoints.down("sm")]: { margin: "1rem 0", height: "40vh" },
 }));
+
+const GetAppointmentBox = styled(DefaultBox)(({ theme }) => ({
+  flexWrap: "wrap",
+
+  [theme.breakpoints.down("md")]: { height: "60vh" },
+  [theme.breakpoints.down("sm")]: { maxheight: "60vh" },
+}));
+
+// const Img = styled("img")(({ theme }) => ({
+//   height: "350px",
+//   width: "350px",
+//   borderRadius: "30px",
+
+//   [theme.breakpoints.down("lg")]: {
+//     height: "300px",
+//     width: "480px",
+//   },
+//   [theme.breakpoints.down("md")]: {
+//     height: "200px",
+//     width: "300px",
+//     borderRadius: "20px",
+//   },
+//   [theme.breakpoints.down("sm")]: {
+//     height: "150px",
+//     width: "200px",
+//     borderRadius: "10px",
+//   },
+// }));
 
 function Home() {
   return (
@@ -123,9 +161,20 @@ function Home() {
       <HeroBox>
         <HeroSection />
       </HeroBox>
-      <DefaultBox>other details...</DefaultBox>
+
       <SpecializationBox>
         <Specialization>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            <SpecializationAnimation />
+          </Box>
+
           <Box
             sx={{
               display: "flex",
@@ -156,19 +205,18 @@ function Home() {
               <SpecializationDesign img={medicine} title={"Medicine"} />
             </Box>
           </Box>
-
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexWrap: "wrap",
-            }}
-          >
-            <SpecializationAnimation />
-          </Box>
         </Specialization>
       </SpecializationBox>
+
+      <GetAppointmentBox>
+        <Box>
+          <GetAppointment />
+        </Box>
+        <Box>
+          <GetAppointmentAnimation />
+        </Box>
+      </GetAppointmentBox>
+
       <DefaultBox>other details...</DefaultBox>
     </Box>
   );

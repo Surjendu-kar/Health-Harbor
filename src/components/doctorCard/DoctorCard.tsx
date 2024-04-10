@@ -13,6 +13,7 @@ const StyleCard = styled(Card)(({ theme }) => ({
   maxWidth: 200,
   margin: 10,
   borderRadius: "5px",
+  cursor: "pointer",
   [theme.breakpoints.down("lg")]: {
     maxWidth: 190,
   },
