@@ -66,7 +66,7 @@ function HeroSection() {
     backgroundColor: "#deeaff8f",
     padding: "0.8rem",
     borderRadius: "7px",
-    border: "1px solid black",
+    // border: "1px solid black",
     boxShadow: "1px 5px 5px rgba(0, 0, 0, 0.2)",
     lineHeight: 2.5,
     cursor: "pointer",
