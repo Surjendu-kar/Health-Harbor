@@ -54,7 +54,7 @@ const SpecializationBox = styled(Box)(({ theme }) => ({
     marginTop: "2rem",
   },
   [theme.breakpoints.down("sm")]: {
-    height: "60vh",
+    height: "50vh",
     marginTop: "1rem",
   },
 }));
@@ -131,7 +131,7 @@ const GetAppointmentBox = styled(DefaultBox)(({ theme }) => ({
   flexWrap: "wrap",
 
   [theme.breakpoints.down("md")]: { height: "60vh" },
-  [theme.breakpoints.down("sm")]: { maxheight: "60vh" },
+  [theme.breakpoints.down("sm")]: { height: "50vh" },
 }));
 
 // const Img = styled("img")(({ theme }) => ({
