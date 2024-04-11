@@ -39,6 +39,8 @@ function HeroSection() {
     },
     [theme.breakpoints.down("sm")]: {
       fontSize: "1.25rem",
+      letterSpacing: "0.7px",
+      marginBottom: "0.25rem",
     },
   }));
   const Title = styled(Typography)(({ theme }) => ({
@@ -57,6 +59,7 @@ function HeroSection() {
     [theme.breakpoints.down("sm")]: {
       fontSize: "0.65rem",
       paddingLeft: "1px",
+      letterSpacing: "0.85px",
     },
   }));
 
@@ -89,6 +92,7 @@ function HeroSection() {
       fontSize: "0.55rem",
       padding: "0.4rem",
       borderRadius: "3px",
+      letterSpacing: "0.7px",
     },
   }));
 
@@ -102,7 +106,6 @@ function HeroSection() {
       paddingRight: "1rem",
     },
   }));
-
 
   return (
     <MainContainer>

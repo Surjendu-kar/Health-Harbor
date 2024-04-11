@@ -11,6 +11,12 @@ const MainContainer = styled(Box)(({ theme }) => ({
   backgroundColor: "#fff",
   margin: "1rem",
   boxShadow: "1px 5px 8px rgba(0, 0, 0, 0.2)",
+  transition: "transform 0.2s ease",
+  cursor: "pointer",
+  "&:hover": {
+    transform: "scale(1.05)",
+    boxShadow: "1px 8px 8px rgba(0, 0, 0, 0.2)",
+  },
 
   [theme.breakpoints.down("lg")]: {
     padding: "0rem 2rem",
@@ -37,6 +43,7 @@ const Img = styled("img")(({ theme }) => ({
   width: "70px",
   borderRadius: "50px",
   backgroundColor: "#f3f8ffb1",
+
   [theme.breakpoints.down("lg")]: {
     height: "60px",
     width: "60px",

@@ -83,6 +83,7 @@ const Heading = styled(Typography)(({ theme }) => ({
   // fontWeight: "bold",
   color: "#0A1D56",
   letterSpacing: "1.5px",
+  marginBottom: "0.25rem",
 
   [theme.breakpoints.down("lg")]: {
     fontSize: "1rem",
@@ -100,19 +101,19 @@ const Heading = styled(Typography)(({ theme }) => ({
 const Title = styled(Typography)(({ theme }) => ({
   fontSize: "0.9rem",
   color: "#57535c",
-  letterSpacing: "0.35px",
+  letterSpacing: "1px",
 
   [theme.breakpoints.down("lg")]: {
     fontSize: "0.8rem",
-    letterSpacing: "0.25px",
+    letterSpacing: "1px",
   },
   [theme.breakpoints.down("md")]: {
     fontSize: "0.75rem",
-    letterSpacing: "0.25px",
+    letterSpacing: "0.5px",
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "0.5rem",
-    letterSpacing: "0.15px",
+    letterSpacing: "0.45px",
   },
 }));
 
@@ -135,11 +136,10 @@ const MailLink = styled("a")(({ theme }) => ({
 
   [theme.breakpoints.down("md")]: {
     fontSize: "0.75rem",
-    letterSpacing: "0.5px",
+    letterSpacing: "0.85px",
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "0.45rem",
-    letterSpacing: "0.5px",
   },
 }));
 
