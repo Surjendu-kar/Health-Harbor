@@ -44,8 +44,9 @@ const StyledLink = styled(Link)(({ theme }) => ({
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "0.53rem",
-    letterSpacing: "0.65px",
+    letterSpacing: "0.7px",
     margin: theme.spacing(0, 0.5),
+    
     "&:hover": {
       fontSize: "0.65rem",
     },

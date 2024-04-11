@@ -13,7 +13,8 @@ const Heading = styled(Typography)(({ theme }) => ({
     fontSize: "1.5rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "1rem",
+    fontSize: "0.8rem",
+    textAlign: "center",
   },
 }));
 
@@ -22,6 +23,7 @@ const Title = styled(Typography)(({ theme }) => ({
   color: "#030d28ba",
   paddingLeft: "5px",
   margin: "1rem 0",
+  letterSpacing: "0.8px",
 
   [theme.breakpoints.down("lg")]: {
     fontSize: "0.9rem",
@@ -35,6 +37,7 @@ const Title = styled(Typography)(({ theme }) => ({
     fontSize: "0.65rem",
     paddingLeft: "1px",
     margin: "0.5rem 0",
+    letterSpacing: "0.5px",
   },
 }));
 
@@ -77,6 +80,7 @@ const GetAppointmentBtn = styled(Typography)(({ theme }) => ({
     fontSize: "0.55rem",
     padding: "0.4rem",
     borderRadius: "3px",
+    letterSpacing: "0.7px",
   },
 }));
 
@@ -88,7 +92,8 @@ function GetAppointment() {
       <Title>
         <UnorderedList>
           <ListItem>
-            Click on the "Find Doctors" or "Get Appointment" button.
+            Click on the <b>"Find Doctors"</b> or <b>"Get Appointment"</b>{" "}
+            button.
           </ListItem>
           <ListItem>
             Search for doctors based on:
