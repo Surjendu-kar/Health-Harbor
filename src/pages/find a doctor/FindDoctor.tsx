@@ -40,6 +40,9 @@ const MainContainer = styled(Box)({
 
 const Container = styled(Box)(({ theme }) => ({
   width: "80%",
+  [theme.breakpoints.down("sm")]: {
+    width: "95%",
+  },
 }));
 
 const TopContainer = styled(Box)(({ theme }) => ({
@@ -55,7 +58,7 @@ const TopContainer = styled(Box)(({ theme }) => ({
   },
   [theme.breakpoints.down("sm")]: {
     margin: "1rem auto 1.5rem auto",
-    width: "70%",
+    width: "90%",
   },
 }));
 
@@ -177,8 +180,8 @@ const Title = styled(Typography)(({ theme }) => ({
     fontSize: "0.86rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.6rem",
-    letterSpacing: "0.75px",
+    fontSize: "0.55rem",
+    letterSpacing: "0.7px",
   },
 }));
 
