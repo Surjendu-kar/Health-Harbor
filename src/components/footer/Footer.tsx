@@ -54,7 +54,7 @@ const SupportContainer = styled(Box)(({ theme }) => ({
     width: "10%",
   },
   [theme.breakpoints.down("sm")]: {
-    width: "20%",
+    width: "10%",
   },
 }));
 const ContactContainer = styled(Box)(({ theme }) => ({
