@@ -20,7 +20,7 @@ const StyledLink = styled(Link)(({ theme }) => ({
   margin: theme.spacing(0, 2),
   textDecoration: "none",
   color: "#fff",
-  fontSize: "0.9rem",
+  fontSize: "0.9  rem",
   letterSpacing: "1.5px",
 
   transition: "color 0.3s ease-in-out, font-size 0.3s ease-in-out",

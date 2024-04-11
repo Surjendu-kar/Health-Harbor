@@ -31,6 +31,8 @@ function HeroSection() {
     fontSize: "3.25rem",
     fontWeight: "bold",
     color: "#15285ce8",
+    letterSpacing: "0.85px",
+
     [theme.breakpoints.down("lg")]: {
       fontSize: "2.5rem",
     },
@@ -49,6 +51,7 @@ function HeroSection() {
     color: "#030d28ba",
     paddingLeft: "5px",
     marginBottom: "1.5rem",
+    letterSpacing: "1px",
 
     [theme.breakpoints.down("lg")]: {
       fontSize: "0.9rem",
@@ -59,7 +62,7 @@ function HeroSection() {
     [theme.breakpoints.down("sm")]: {
       fontSize: "0.65rem",
       paddingLeft: "1px",
-      letterSpacing: "0.85px",
+      letterSpacing: "0.75px",
     },
   }));
 
@@ -74,6 +77,8 @@ function HeroSection() {
     lineHeight: 2.5,
     cursor: "pointer",
     transition: "font-size 0.2s ease",
+    letterSpacing: "0.9px",
+
 
     "&:hover": {
       fontSize: "1.3rem",

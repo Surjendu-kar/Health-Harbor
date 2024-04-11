@@ -6,6 +6,8 @@ const Heading = styled(Typography)(({ theme }) => ({
   fontSize: "2.2rem",
   fontWeight: "bold",
   color: "#15285ce8",
+  letterSpacing: "0.85px",
+
   [theme.breakpoints.down("lg")]: {
     fontSize: "2.5rem",
   },
@@ -16,7 +18,7 @@ const Heading = styled(Typography)(({ theme }) => ({
     fontSize: "1rem",
     textAlign: "center",
     letterSpacing: "0.5px",
-    marginTop: "1rem",
+    margin: "1rem 0",
   },
 }));
 
@@ -25,7 +27,7 @@ const Title = styled(Typography)(({ theme }) => ({
   color: "#030d28ba",
   paddingLeft: "5px",
   margin: "1rem 0",
-  letterSpacing: "0.8px",
+  letterSpacing: "1px",
 
   [theme.breakpoints.down("lg")]: {
     fontSize: "0.9rem",
@@ -64,6 +66,7 @@ const GetAppointmentBtn = styled(Typography)(({ theme }) => ({
   lineHeight: 2.5,
   cursor: "pointer",
   transition: "font-size 0.2s ease",
+  letterSpacing: "0.85px",
 
   "&:hover": {
     fontSize: "1.3rem",
