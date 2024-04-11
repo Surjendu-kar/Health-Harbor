@@ -139,8 +139,8 @@ const MailLink = styled("a")(({ theme }) => ({
     letterSpacing: "0.85px",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.45rem",
-    letterSpacing: "0.6px",
+    fontSize: "0.43rem",
+    letterSpacing: "0.5px",
   },
 }));
 
