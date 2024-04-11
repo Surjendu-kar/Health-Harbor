@@ -13,7 +13,7 @@ const Heading = styled(Typography)(({ theme }) => ({
     fontSize: "1.5rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.8rem",
+    fontSize: "1rem",
     textAlign: "center",
   },
 }));
