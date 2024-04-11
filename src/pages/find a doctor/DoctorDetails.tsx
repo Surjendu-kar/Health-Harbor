@@ -9,15 +9,13 @@ const MainContainer = styled(Box)({
 });
 
 const Container = styled(Box)(({ theme }) => ({
-  width: "50%",
-  [theme.breakpoints.down("lg")]: {
-    width: "60%",
-  },
+  width: "60%",
+
   [theme.breakpoints.down("md")]: {
-    width: "60%",
+    width: "80%",
   },
   [theme.breakpoints.down("sm")]: {
-    width: "70%",
+    width: "90%",
   },
 }));
 
@@ -62,12 +60,13 @@ const Img = styled("img")(({ theme }) => ({
     width: "180px",
   },
   [theme.breakpoints.down("md")]: {
-    height: "120px",
-    width: "120px",
+    height: "130px",
+    width: "130px",
   },
   [theme.breakpoints.down("sm")]: {
-    height: "70px",
-    width: "70px",
+    height: "90px",
+    width: "90px",
+    borderRadius: "7px",
   },
 }));
 
@@ -77,7 +76,7 @@ const NameRatingBox = styled(Box)(({ theme }) => ({
     marginLeft: "0.8rem",
   },
   [theme.breakpoints.down("md")]: {
-    marginLeft: "0.5rem",
+    marginLeft: "0.6rem",
   },
   [theme.breakpoints.down("sm")]: {
     marginLeft: "0.3rem",
@@ -93,16 +92,16 @@ const Specialization = styled(Typography)(({ theme }) => ({
   textAlign: "center",
 
   [theme.breakpoints.down("lg")]: {
-    fontSize: "0.6rem",
+    fontSize: "0.8rem",
     padding: "0.4rem 0.6rem",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.5rem",
+    fontSize: "0.65rem",
     padding: "0.3rem 0.5rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.4rem",
-    padding: "0rem 0.2rem",
+    fontSize: "0.55rem",
+    padding: "0rem 0.3rem",
     maxWidth: "70%",
     borderRadius: "3px",
   },
@@ -113,26 +112,26 @@ const Name = styled(Typography)(({ theme }) => ({
   fontWeight: "bold",
 
   [theme.breakpoints.down("lg")]: {
-    fontSize: "0.8rem",
+    fontSize: "1rem",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.7rem",
+    fontSize: "0.8rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.5rem",
+    fontSize: "0.6rem",
   },
 }));
 
 const ResponsiveRating = styled(Rating)(({ theme }) => ({
   fontSize: "0.9rem",
   [theme.breakpoints.down("lg")]: {
-    fontSize: "0.8rem",
+    fontSize: "0.85rem",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.6rem",
+    fontSize: "0.7rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.4rem",
+    fontSize: "0.5rem",
   },
 }));
 
@@ -172,14 +171,15 @@ const TicketPriceContainer = styled(Typography)(({ theme }) => ({
 
 const TimeSoltHeading = styled(Typography)(({ theme }) => ({
   fontSize: "1rem",
+  fontWeight: "bold",
   [theme.breakpoints.down("lg")]: {
     fontSize: "0.9rem",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.6rem",
+    fontSize: "0.7rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.32rem",
+    fontSize: "0.58rem",
   },
 }));
 const TimeSoltContainer = styled(Box)(({ theme }) => ({
@@ -191,24 +191,24 @@ const TimeSoltContainer = styled(Box)(({ theme }) => ({
     gap: theme.spacing(6),
   },
   [theme.breakpoints.down("md")]: {
-    gap: theme.spacing(3),
+    gap: theme.spacing(5),
   },
   [theme.breakpoints.down("sm")]: {
-    gap: theme.spacing(1),
+    gap: theme.spacing(3),
   },
 }));
 
 const Solts = styled(Typography)(({ theme }) => ({
-  fontSize: "0.87rem",
+  fontSize: "0.9rem",
   padding: "0.2rem 0 0 0",
   [theme.breakpoints.down("lg")]: {
     fontSize: "0.8rem",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.55rem",
+    fontSize: "0.7rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.28rem",
+    fontSize: "0.57rem",
   },
 }));
 
@@ -218,7 +218,6 @@ const BookAppointmentBtn = styled(Button)(({ theme }) => ({
   color: "#fff",
   backgroundColor: "#1976d2",
   padding: "0.5rem 0",
-
   "&:hover": {
     color: "#1976d2",
     backgroundColor: "#fff",
@@ -230,14 +229,15 @@ const BookAppointmentBtn = styled(Button)(({ theme }) => ({
     padding: "0.4rem 0",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.4rem",
+    fontSize: "0.55rem",
     marginTop: "1rem",
     padding: "0.2rem 0",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.2rem",
+    fontSize: "0.42rem",
     marginTop: "0.5rem",
     padding: "0.1rem 0",
+    borderRadius: "2px",
   },
 }));
 
@@ -257,9 +257,10 @@ const DetailContainer = styled(Box)(({ theme }) => ({
 }));
 
 const StyleText = styled(Typography)(({ theme, selected }) => ({
-  fontSize: "14px",
+  fontSize: "17px",
   position: "relative",
   fontWeight: "bold",
+  cursor: "pointer",
   "&::after": {
     content: '""',
     position: "absolute",
@@ -275,13 +276,13 @@ const StyleText = styled(Typography)(({ theme, selected }) => ({
     backgroundColor: "#000",
   },
   [theme.breakpoints.down("lg")]: {
-    fontSize: "12px",
+    fontSize: "17px",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "10px",
+    fontSize: "14px",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "7px",
+    fontSize: "10px",
   },
 }));
 
@@ -327,13 +328,13 @@ function DoctorDetails() {
         <TopContainer>
           <ImgContainer>
             <Img src={state.doctor.img} />
-
             <NameRatingBox>
               <Specialization>{state.doctor.specialization}</Specialization>
               <Name>{state.doctor.name}</Name>
               <ResponsiveRating name="read-only" value={value} readOnly />
             </NameRatingBox>
           </ImgContainer>
+
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Appointment>
               <TicketPriceContainer>
