@@ -7,6 +7,7 @@ import {
   Button,
   styled,
   Skeleton,
+  Typography,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import FetchAllDoctor from "./FetchAllDoctor";
@@ -41,11 +42,28 @@ const Container = styled(Box)(({ theme }) => ({
   width: "80%",
 }));
 
+const TopContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  margin: "2rem auto 3rem auto",
+  width: "50%",
+  textAlign: "center",
+
+  [theme.breakpoints.down("md")]: {
+    margin: "1.5rem auto 2rem auto",
+    width: "80%",
+  },
+  [theme.breakpoints.down("sm")]: {
+    margin: "1rem auto 1.5rem auto",
+    width: "70%",
+  },
+}));
+
 const SearchBox = styled(Box)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  margin: "2rem 0",
+  margin: "1rem 0 2rem 0",
   flexWrap: "wrap",
 
   [theme.breakpoints.down("lg")]: { margin: "1.5rem 0" },
@@ -112,6 +130,7 @@ const CardContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   flexWrap: "nowrap",
   width: "90vw",
+  paddingBottom: "1rem",
   maxWidth: "100%",
   overflowX: "auto",
   "& > *": {
@@ -126,6 +145,41 @@ const SkeletonStyle = styled(Skeleton)(({ theme }) => ({
   [theme.breakpoints.down("lg")]: { width: "200px", height: "250px" },
   [theme.breakpoints.down("md")]: { width: "150px", height: "200px" },
   [theme.breakpoints.down("sm")]: { width: "100px", height: "150px" },
+}));
+
+const Heading = styled(Typography)(({ theme }) => ({
+  fontSize: "3rem",
+  fontWeight: "bold",
+  color: "#15285ce8",
+  letterSpacing: "0.85px",
+
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "2.5rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "1.8rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "1.1rem",
+    letterSpacing: "0.7px",
+  },
+}));
+const Title = styled(Typography)(({ theme }) => ({
+  fontSize: "1.1rem",
+  fontWeight: "bold",
+  color: "#030d28ba",
+  letterSpacing: "1px",
+
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "0.9rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.86rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.6rem",
+    letterSpacing: "0.75px",
+  },
 }));
 
 function FindDoctor() {
@@ -177,6 +231,14 @@ function FindDoctor() {
   return (
     <MainContainer>
       <Container>
+        <TopContainer>
+          <Heading>Our Specialist</Heading>
+          <Title>
+            HealthHarbor always help to provide proper treatment for all of get
+            proper cure and healty life which is the most focus thing.
+          </Title>
+        </TopContainer>
+
         <form onSubmit={handleSubmit}>
           <SearchBox>
             <Box

@@ -13,7 +13,13 @@ const StyleCard = styled(Card)(({ theme }) => ({
   maxWidth: 200,
   margin: 10,
   borderRadius: "5px",
+  boxShadow: "1px 5px 8px rgba(0, 0, 0, 0.2)",
+  transition: "transform 0.2s ease",
   cursor: "pointer",
+  "&:hover": {
+    transform: "scale(1.05)",
+    boxShadow: "1px 8px 8px rgba(0, 0, 0, 0.2)",
+  },
   [theme.breakpoints.down("lg")]: {
     maxWidth: 190,
   },
