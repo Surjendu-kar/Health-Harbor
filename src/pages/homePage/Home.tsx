@@ -75,6 +75,7 @@ const Heading = styled(Typography)(({ theme }) => ({
   fontSize: "2rem",
   fontWeight: "bold",
   animation: `${fadeInAnimation} 1s ease-in-out`,
+  letterSpacing: "0.85px",
 
   [theme.breakpoints.down("lg")]: {
     fontSize: "1.8rem",
