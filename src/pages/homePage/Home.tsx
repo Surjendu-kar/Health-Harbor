@@ -87,6 +87,7 @@ const Heading = styled(Typography)(({ theme }) => ({
     fontSize: "1rem",
     margin: "0.5rem 0",
     padding: "1rem",
+    letterSpacing:'0.5px',
   },
 }));
 
