@@ -49,12 +49,12 @@ const MenuContainer = styled(Box)(({ theme }) => ({
   },
 }));
 const SupportContainer = styled(Box)(({ theme }) => ({
-  width: "10%",
+  width: "20%",
   [theme.breakpoints.down("md")]: {
     width: "10%",
   },
   [theme.breakpoints.down("sm")]: {
-    width: "10%",
+    width: "20%",
   },
 }));
 const ContactContainer = styled(Box)(({ theme }) => ({
