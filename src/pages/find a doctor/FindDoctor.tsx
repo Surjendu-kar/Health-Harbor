@@ -198,8 +198,11 @@ function FindDoctor() {
         const { data, error } = await FetchAllDoctor();
         setIsLoading(false);
         if (!error) {
-          setFetchedData(data);
-          setSearchData(data);
+          const approvedDoctors = data.filter(
+            (doctor) => doctor.approved === "YES"
+          );
+          setFetchedData(approvedDoctors);
+          setSearchData(approvedDoctors);
         }
       };
 
