@@ -49,7 +49,7 @@ const TopContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   margin: "2rem auto 3rem auto",
-  width: "50%",
+  width: "60%",
   textAlign: "center",
 
   [theme.breakpoints.down("md")]: {

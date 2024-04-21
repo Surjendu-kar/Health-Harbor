@@ -53,6 +53,7 @@ const UnorderedList = styled("ul")(({ theme }) => ({
 const ListItem = styled("li")(({ theme }) => ({
   margin: 0,
   color: "#000",
+  fontSize: "1.1rem",
 }));
 
 const GetAppointmentBtn = styled(Typography)(({ theme }) => ({
