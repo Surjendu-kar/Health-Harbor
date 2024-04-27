@@ -154,7 +154,7 @@ const ReserveSection = styled(Box)(({ theme }) => ({
     paddingBottom: "0.45rem",
   },
   [theme.breakpoints.down("sm")]: {
-    paddingBottom: "0.2rem",
+    paddingBottom: "0.25rem",
   },
 }));
 
@@ -175,6 +175,7 @@ const ReserveTitle = styled("p")(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     fontSize: "0.42rem",
     letterSpacing: "0.5px",
+    paddingBottom: "0.15rem",
   },
 }));
 

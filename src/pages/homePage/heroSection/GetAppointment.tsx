@@ -13,6 +13,8 @@ const Heading = styled(Typography)(({ theme }) => ({
   },
   [theme.breakpoints.down("md")]: {
     fontSize: "1.1rem",
+    textAlign: "center",
+
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "1rem",
@@ -34,7 +36,7 @@ const Title = styled(Typography)(({ theme }) => ({
     margin: "1rem 0",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.8rem",
+    fontSize: "0.7rem",
     margin: "0.75rem 0",
   },
   [theme.breakpoints.down("sm")]: {
@@ -58,7 +60,7 @@ const ListItem = styled("li")(({ theme }) => ({
     fontSize: "2.5rem",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.8rem",
+    fontSize: "0.75rem",
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "0.75rem",
@@ -87,13 +89,16 @@ const GetAppointmentBtn = styled(Typography)(({ theme }) => ({
     padding: "0.7rem",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.8rem",
-    padding: "0.4rem",
+    fontSize: "0.85rem",
+    padding: "0.55rem",
     borderRadius: "5px",
+    marginLeft: "0.75rem",
+
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "0.55rem",
     padding: "0.4rem",
+    marginLeft: "0.5rem",
     borderRadius: "3px",
     letterSpacing: "0.7px",
   },

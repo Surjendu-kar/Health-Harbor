@@ -33,7 +33,8 @@ const HeroBox = styled(Box)(({ theme }) => ({
   },
   [theme.breakpoints.down("md")]: {
     margin: "0rem auto",
-    height: "40vh",
+    height: "35vh",
+    maxheight: "45vh",
   },
   [theme.breakpoints.down("sm")]: {
     margin: "0rem auto",
@@ -46,7 +47,7 @@ const SpecializationBox = styled(Box)(({ theme }) => ({
   margin: "0rem auto",
   backgroundColor: "#f3f8ffb1",
   borderRadius: "30px",
-  boxShadow: "1px 5px 8px rgba(0, 0, 0, 0.2)",
+  boxShadow: "0px 4px 14px rgba(0, 0, 0, 0.28)",
   marginTop: "3rem",
 
   [theme.breakpoints.down("md")]: {
@@ -56,6 +57,7 @@ const SpecializationBox = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     height: "55vh",
     marginTop: "1rem",
+    borderRadius: "15px",
   },
 }));
 
@@ -118,7 +120,7 @@ const DefaultBox = styled(Box)(({ theme }) => ({
   height: "80vh",
   backgroundColor: "#f3f8ffb1",
   borderRadius: "30px",
-  boxShadow: "1px 5px 8px rgba(0, 0, 0, 0.2)",
+  boxShadow: "0px 4px 14px rgba(0, 0, 0, 0.28)",
   margin: "3rem 0 0",
 
   display: "flex",
@@ -126,7 +128,11 @@ const DefaultBox = styled(Box)(({ theme }) => ({
   alignItems: "center",
 
   [theme.breakpoints.down("md")]: { margin: "1.5rem 0", height: "40vh" },
-  [theme.breakpoints.down("sm")]: { margin: "1rem 0", height: "40vh" },
+  [theme.breakpoints.down("sm")]: {
+    margin: "1rem 0",
+    height: "40vh",
+    borderRadius: "15px",
+  },
 }));
 
 const GetAppointmentBox = styled(DefaultBox)(({ theme }) => ({
@@ -134,7 +140,7 @@ const GetAppointmentBox = styled(DefaultBox)(({ theme }) => ({
   flexWrap: "wrap",
   padding: "0 2rem",
   [theme.breakpoints.down("md")]: { maxheight: "60vh", padding: "1rem 0.8rem" },
-  [theme.breakpoints.down("sm")]: { height: "65vh", padding: "0.5rem" },
+  [theme.breakpoints.down("sm")]: { height: "65vh", padding: "1rem" },
 }));
 
 // const Img = styled("img")(({ theme }) => ({
