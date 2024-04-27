@@ -12,7 +12,7 @@ const Heading = styled(Typography)(({ theme }) => ({
     fontSize: "2.5rem",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "1.5rem",
+    fontSize: "1.1rem",
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "1rem",
@@ -54,6 +54,15 @@ const ListItem = styled("li")(({ theme }) => ({
   margin: 0,
   color: "#000",
   fontSize: "1.1rem",
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "2.5rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.8rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.75rem",
+  },
 }));
 
 const GetAppointmentBtn = styled(Typography)(({ theme }) => ({
