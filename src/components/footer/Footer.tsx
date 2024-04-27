@@ -12,7 +12,7 @@ const MainContainer = styled(Box)(({ theme }) => ({
     marginTop: "3rem",
   },
   [theme.breakpoints.down("sm")]: {
-    marginTop: "1rem",
+    // marginTop: "2rem",
   },
 }));
 const SecondMainContainer = styled(Box)(({ theme }) => ({
