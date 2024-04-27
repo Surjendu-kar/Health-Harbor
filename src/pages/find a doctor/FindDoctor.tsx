@@ -38,7 +38,7 @@ const MainContainer = styled(Box)(({ theme }) => ({
   width: "100%",
   height: "100vh",
   [theme.breakpoints.down("md")]: {
-    height: "80vh",
+    height: "60vh",
   },
   [theme.breakpoints.down("sm")]: {
     height: "60vh",
