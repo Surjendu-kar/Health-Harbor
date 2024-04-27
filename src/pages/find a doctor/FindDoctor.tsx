@@ -41,7 +41,7 @@ const MainContainer = styled(Box)(({ theme }) => ({
     height: "60vh",
   },
   [theme.breakpoints.down("sm")]: {
-    height: "60vh",
+    height: "65vh",
   },
 }));
 
