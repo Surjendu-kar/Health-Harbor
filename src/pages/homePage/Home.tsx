@@ -33,7 +33,7 @@ const HeroBox = styled(Box)(({ theme }) => ({
   },
   [theme.breakpoints.down("md")]: {
     margin: "0rem auto",
-    height: "50vh",
+    height: "40vh",
   },
   [theme.breakpoints.down("sm")]: {
     margin: "0rem auto",
@@ -88,7 +88,7 @@ const Heading = styled(Typography)(({ theme }) => ({
     fontSize: "1rem",
     margin: "0.5rem 0",
     padding: "1rem",
-    letterSpacing:'0.5px',
+    letterSpacing: "0.5px",
   },
 }));
 
@@ -125,15 +125,16 @@ const DefaultBox = styled(Box)(({ theme }) => ({
   justifyContent: "space-around",
   alignItems: "center",
 
-  [theme.breakpoints.down("md")]: { margin: "2rem 0", height: "45vh" },
+  [theme.breakpoints.down("md")]: { margin: "1.5rem 0", height: "40vh" },
   [theme.breakpoints.down("sm")]: { margin: "1rem 0", height: "40vh" },
 }));
 
 const GetAppointmentBox = styled(DefaultBox)(({ theme }) => ({
+  display: "flex",
   flexWrap: "wrap",
-
-  [theme.breakpoints.down("md")]: { height: "60vh" },
-  [theme.breakpoints.down("sm")]: { height: "55vh", padding: "0.5rem" },
+  padding: "0 2rem",
+  [theme.breakpoints.down("md")]: { maxheight: "60vh", padding: "1rem 0.8rem" },
+  [theme.breakpoints.down("sm")]: { height: "65vh", padding: "0.5rem" },
 }));
 
 // const Img = styled("img")(({ theme }) => ({

@@ -32,11 +32,18 @@ type DoctorInfo = {
   img: string;
 };
 
-const MainContainer = styled(Box)({
+const MainContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
   width: "100%",
-});
+  height: "100vh",
+  [theme.breakpoints.down("md")]: {
+    height: "80vh",
+  },
+  [theme.breakpoints.down("sm")]: {
+    height: "60vh",
+  },
+}));
 
 const Container = styled(Box)(({ theme }) => ({
   width: "80%",
@@ -139,6 +146,22 @@ const CardContainer = styled(Box)(({ theme }) => ({
   "& > *": {
     flex: "0 0 auto",
   },
+}));
+
+const NoDataFoundBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "30vh",
+  width: "100%",
+  [theme.breakpoints.down("md")]: { height: "20vh" },
+  [theme.breakpoints.down("sm")]: { height: "10vh" },
+}));
+const NoDataFoundText = styled(Typography)(({ theme }) => ({
+  color: "red",
+  fontSize: "1rem",
+  [theme.breakpoints.down("md")]: { fontSize: "0.75rem" },
+  [theme.breakpoints.down("sm")]: { fontSize: "0.5rem" },
 }));
 
 const SkeletonStyle = styled(Skeleton)(({ theme }) => ({
@@ -305,11 +328,15 @@ function FindDoctor() {
 
         {!isLoading ? (
           <CardContainer className={!isLoading ? "fadeInAnimation" : ""}>
-            {searchData.length > 0
-              ? searchData.map((doctor) => (
-                  <DoctorCard key={doctor.id} doctor={doctor} />
-                ))
-              : null}
+            {searchData.length > 0 ? (
+              searchData.map((doctor) => (
+                <DoctorCard key={doctor.id} doctor={doctor} />
+              ))
+            ) : (
+              <NoDataFoundBox>
+                <NoDataFoundText>No data found</NoDataFoundText>
+              </NoDataFoundBox>
+            )}
           </CardContainer>
         ) : (
           <CardContainer gap={2}>
