@@ -40,7 +40,7 @@ const GetAppointmentAnimation = () => {
     <MainContainer
       ref={animBox}
       sx={{
-        width: isSm ? "250px" : isMd ? "260px" : isLg ? "380px" : "520px",
+        width: isSm ? "250px" : isMd ? "300px" : isLg ? "380px" : "520px",
       }}
     />
   );
