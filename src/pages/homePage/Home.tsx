@@ -32,7 +32,7 @@ const HeroBox = styled(Box)(({ theme }) => ({
 
   [theme.breakpoints.down("lg")]: {
     margin: "0rem auto",
-    height: "30vh",
+    height: "25vh",
   },
   [theme.breakpoints.down("md")]: {
     margin: "0rem auto",
@@ -131,7 +131,7 @@ const GetAppointmentBox = styled(Box)(({ theme }) => ({
   alignItems: "center",
   flexWrap: "wrap",
   padding: "0 2rem",
-  [theme.breakpoints.down("lg")]: { maxheight: "30vh" },
+  [theme.breakpoints.down("lg")]: { height: "30vh"  },
   [theme.breakpoints.down("md")]: { maxheight: "60vh", padding: "1rem 0.8rem" },
   [theme.breakpoints.down("sm")]: { height: "65vh", padding: "1rem" },
 }));
