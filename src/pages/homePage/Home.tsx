@@ -14,6 +14,8 @@ import SpecializationAnimation from "../../components/lottieAnimation/Specializa
 import doctorImg from "../../assets/doctorImg.png";
 import GetAppointment from "./heroSection/GetAppointment";
 import GetAppointmentAnimation from "../../components/lottieAnimation/GetAppointmentAnimation";
+import BestMedicalTreatmentAnimation from "../../components/lottieAnimation/BestMedicalTreatmentAnimation";
+import BestMedicalStatement from "./heroSection/BestMedicalStatement";
 
 const HeroBox = styled(Box)(({ theme }) => ({
   // margin: "5rem auto",
@@ -29,7 +31,8 @@ const HeroBox = styled(Box)(({ theme }) => ({
   backgroundColor: "#f3f8ffb1",
 
   [theme.breakpoints.down("lg")]: {
-    margin: "4rem auto",
+    margin: "0rem auto",
+    height: "60vh",
   },
   [theme.breakpoints.down("md")]: {
     margin: "0rem auto",
@@ -116,7 +119,7 @@ const Specialization = styled(Box)(({ theme }) => ({
   },
 }));
 
-const DefaultBox = styled(Box)(({ theme }) => ({
+const GetAppointmentBox = styled(Box)(({ theme }) => ({
   height: "80vh",
   backgroundColor: "#f3f8ffb1",
   borderRadius: "30px",
@@ -126,43 +129,62 @@ const DefaultBox = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "space-around",
   alignItems: "center",
-
-  [theme.breakpoints.down("md")]: { margin: "1.5rem 0", height: "40vh" },
-  [theme.breakpoints.down("sm")]: {
-    margin: "1rem 0",
-    height: "40vh",
-    borderRadius: "15px",
-  },
-}));
-
-const GetAppointmentBox = styled(DefaultBox)(({ theme }) => ({
-  display: "flex",
   flexWrap: "wrap",
   padding: "0 2rem",
   [theme.breakpoints.down("md")]: { maxheight: "60vh", padding: "1rem 0.8rem" },
   [theme.breakpoints.down("sm")]: { height: "65vh", padding: "1rem" },
 }));
 
-// const Img = styled("img")(({ theme }) => ({
-//   height: "350px",
-//   width: "350px",
-//   borderRadius: "30px",
+const BestMedicalBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
 
-//   [theme.breakpoints.down("lg")]: {
-//     height: "300px",
-//     width: "480px",
-//   },
-//   [theme.breakpoints.down("md")]: {
-//     height: "200px",
-//     width: "300px",
-//     borderRadius: "20px",
-//   },
-//   [theme.breakpoints.down("sm")]: {
-//     height: "150px",
-//     width: "200px",
-//     borderRadius: "10px",
-//   },
-// }));
+  height: "85vh",
+  backgroundColor: "#f3f8ffb1",
+  borderRadius: "30px",
+  boxShadow: "0px 4px 14px rgba(0, 0, 0, 0.28)",
+  margin: "3rem 0 0",
+
+  [theme.breakpoints.down("md")]: { margin: "1.5rem 0", height: "70vh" },
+  [theme.breakpoints.down("sm")]: {
+    margin: "1rem 0",
+    height: "70vh",
+    borderRadius: "15px",
+  },
+}));
+
+const BestMedicalHeading = styled(Typography)(({ theme }) => ({
+  color: "#15285ce8",
+  fontSize: "2rem",
+  fontWeight: "bold",
+  animation: `${fadeInAnimation} 1s ease-in-out`,
+  letterSpacing: "0.5px",
+  textAlign: "center",
+
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "1.8rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "1.3rem",
+    // margin: "0.2rem 0",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "1rem",
+    margin: "0",
+    letterSpacing: "0.5px",
+  },
+}));
+
+const BestMedicalContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "space-around",
+  alignItems: "center",
+  [theme.breakpoints.down("lg")]: {},
+  [theme.breakpoints.down("md")]: {},
+  [theme.breakpoints.down("sm")]: { flexDirection: "column" },
+}));
 
 function Home() {
   return (
@@ -226,7 +248,16 @@ function Home() {
         </Box>
       </GetAppointmentBox>
 
-      <DefaultBox>other details...</DefaultBox>
+      <BestMedicalBox>
+        <BestMedicalHeading>
+          Consult with our best Doctor for proper Treatment
+        </BestMedicalHeading>
+
+        <BestMedicalContainer>
+          <BestMedicalTreatmentAnimation />
+          <BestMedicalStatement />
+        </BestMedicalContainer>
+      </BestMedicalBox>
     </Box>
   );
 }

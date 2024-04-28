@@ -6,10 +6,11 @@ const Heading = styled(Typography)(({ theme }) => ({
   fontSize: "2.2rem",
   fontWeight: "bold",
   color: "#15285ce8",
-  letterSpacing: "0.85px",
+  letterSpacing: "0.5px",
+  
 
   [theme.breakpoints.down("lg")]: {
-    fontSize: "2.5rem",
+    fontSize: "1.6rem",
   },
   [theme.breakpoints.down("md")]: {
     fontSize: "1.1rem",
@@ -57,7 +58,7 @@ const ListItem = styled("li")(({ theme }) => ({
   color: "#000",
   fontSize: "1.1rem",
   [theme.breakpoints.down("lg")]: {
-    fontSize: "2.5rem",
+    fontSize: "0.9rem",
   },
   [theme.breakpoints.down("md")]: {
     fontSize: "0.75rem",

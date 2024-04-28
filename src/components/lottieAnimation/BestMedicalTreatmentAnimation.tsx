@@ -1,6 +1,6 @@
 import { useRef, useEffect } from "react";
 import Lottie from "lottie-web";
-import animationData from "../../assets/heroAnimation/Animation - 1712590927260.json";
+import animationData from "../../assets/heroAnimation/Animation - 1714235849397.json";
 
 import { AnimationItem } from "lottie-web";
 import { Box, useMediaQuery, useTheme } from "@mui/material";
@@ -10,9 +10,10 @@ const MainContainer = styled(Box)(({ theme }) => ({
   width: "300px",
   display: "flex",
   justifyContent: "center",
+  alignItems: "center",
 }));
 
-const GetAppointmentAnimation = () => {
+const BestMedicalTreatmentAnimation = () => {
   const animBox = useRef<HTMLDivElement | null>(null);
   const animationInstance = useRef<AnimationItem | null>(null);
   const theme = useTheme();
@@ -40,10 +41,10 @@ const GetAppointmentAnimation = () => {
     <MainContainer
       ref={animBox}
       sx={{
-        width: isSm ? "250px" : isMd ? "300px" : isLg ? "400px" : "520px",
+        width: isSm ? "200px" : isMd ? "300px" : isLg ? "380px" : "410px",
       }}
     />
   );
 };
 
-export default GetAppointmentAnimation;
+export default BestMedicalTreatmentAnimation;
