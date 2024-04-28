@@ -8,7 +8,7 @@ const MainContainer = styled(Box)(({ theme }) => ({
   marginTop: "6rem",
   [theme.breakpoints.down("lg")]: {},
   [theme.breakpoints.down("md")]: { width: "45%" },
-  [theme.breakpoints.down("sm")]: { marginTop: "0rem", width: "50%" },
+  [theme.breakpoints.down("sm")]: { marginTop: "0rem", width: "70%" },
 }));
 
 const Heading = styled(Typography)(({ theme }) => ({

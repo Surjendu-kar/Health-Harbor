@@ -32,7 +32,7 @@ const HeroBox = styled(Box)(({ theme }) => ({
 
   [theme.breakpoints.down("lg")]: {
     margin: "0rem auto",
-    height: "40vh",
+    height: "30vh",
   },
   [theme.breakpoints.down("md")]: {
     margin: "0rem auto",
@@ -131,6 +131,7 @@ const GetAppointmentBox = styled(Box)(({ theme }) => ({
   alignItems: "center",
   flexWrap: "wrap",
   padding: "0 2rem",
+  [theme.breakpoints.down("lg")]: { maxheight: "30vh" },
   [theme.breakpoints.down("md")]: { maxheight: "60vh", padding: "1rem 0.8rem" },
   [theme.breakpoints.down("sm")]: { height: "65vh", padding: "1rem" },
 }));
@@ -146,7 +147,7 @@ const BestMedicalBox = styled(Box)(({ theme }) => ({
   borderRadius: "30px",
   boxShadow: "0px 4px 14px rgba(0, 0, 0, 0.28)",
   margin: "3rem 0 0",
-
+  [theme.breakpoints.down("lg")]: { margin: "1.5rem 0", height: "30vh" },
   [theme.breakpoints.down("md")]: { margin: "1.5rem 0", height: "70vh" },
   [theme.breakpoints.down("sm")]: {
     margin: "1rem 0",
@@ -174,6 +175,7 @@ const BestMedicalHeading = styled(Typography)(({ theme }) => ({
     fontSize: "1rem",
     margin: "0",
     letterSpacing: "0.5px",
+    width: "80%",
   },
 }));
 
