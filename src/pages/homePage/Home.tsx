@@ -32,7 +32,7 @@ const HeroBox = styled(Box)(({ theme }) => ({
 
   [theme.breakpoints.down("lg")]: {
     margin: "0rem auto",
-    height: "60vh",
+    height: "40vh",
   },
   [theme.breakpoints.down("md")]: {
     margin: "0rem auto",
@@ -150,7 +150,7 @@ const BestMedicalBox = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down("md")]: { margin: "1.5rem 0", height: "70vh" },
   [theme.breakpoints.down("sm")]: {
     margin: "1rem 0",
-    height: "70vh",
+    height: "60vh",
     borderRadius: "15px",
   },
 }));
