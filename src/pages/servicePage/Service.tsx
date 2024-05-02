@@ -13,7 +13,7 @@ const SubHeading = styled(Typography)(({ theme }) => ({
   fontSize: "h2",
   fontWeight: "bold",
   [theme.breakpoints.down("sm")]: {
-    fontSize: "34px",
+    fontSize: "30px",
     textAlign: "center",
   },
 }));
@@ -22,7 +22,7 @@ const Content = styled(Typography)(({ theme }) => ({
   fontSize: "h6",
 
   [theme.breakpoints.down("sm")]: {
-    fontSize: "16px",
+    fontSize: "14px",
     textAlign: "center",
     margin: "0 1rem",
   },
@@ -34,12 +34,13 @@ const TopContainer = styled(Box)(({ theme }) => ({
   flexDirection: "column",
   paddingTop: "2rem",
   width: "100%",
-  height: "26rem",
+  height: "20rem",
   justifyContent: "center",
   alignItems: "center",
   color: "#494a5f",
   [theme.breakpoints.down("sm")]: {
-    height: "19rem",
+    paddingTop: "0",
+    height: "15rem",
   },
 }));
 
