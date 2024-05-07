@@ -293,7 +293,6 @@ function DoctorDetails() {
   const { state } = useLocation();
   const [showDetails, setShowDetails] = useState(true);
   const [value, setValue] = React.useState<number | null>(2);
-  // const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -316,71 +315,84 @@ function DoctorDetails() {
   };
 
   const handleAppointmentClick = async () => {
-    if (user) {
-      console.log(user.email);
-      console.log(state.doctor.email);
-
-      // Check if the user is a doctor
-      const { data: userData, error: userError } = await supabase
-        .from("doctorInfo")
-        .select("role") // Select the column that stores the user role
-        .eq("email", user.email)
-        .single();
-
-      if (userError) {
-        console.error("Error fetching user data:", userError);
-        toast.error("Error occurred while checking user role.");
-        return;
-      }
-
-      if (user.email === state.doctor.email) {
-        toast.error("You cannot book an appointment with yourself.");
-        return;
-      }
-
-      if (userData && userData.role === "doctor") {
-        // User is a doctor
-        toast.error(
-          "Doctors cannot book appointments. Please log in as a patient."
-        );
-        return;
-      }
-
-      try {
-        const currentDateTime = new Date();
-        const appointmentDate = currentDateTime.toISOString().split("T")[0]; // YYYY-MM-DD
-        const appointmentTime = currentDateTime.toLocaleTimeString("en-US", {
-          hour12: false,
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-
-        const { data, error } = await supabase
-          .from("doctorInfo")
-          .update({
-            bookAppointment: [
-              {
-                user_email: user.email,
-                doctor_id: state.doctor.id,
-                appointment_date: appointmentDate,
-                appointment_time: appointmentTime,
-              },
-            ],
-          })
-          .eq("id", state.doctor.id);
-
-        console.log(data);
-
-        if (error) throw error;
-        toast.success("Appointment booked successfully!");
-        return data;
-      } catch (error) {
-        console.error("Error updating data:", error);
-        toast.error("Error booking appointment.");
-        return null;
-      }
-    } else {
+    if (!user) {
       toast.error("Please login to book an appointment.");
+      return;
+    }
+    if (user.email === state.doctor.email) {
+      toast.error("You cannot book an appointment with yourself.");
+      return;
+    }
+
+    const { data: userData, error: userError } = await supabase
+      .from("doctorInfo")
+      .select("role")
+      .eq("email", user.email)
+      .single();
+
+    if (userData && userData.role === "doctor") {
+      toast.error(
+        "Doctors cannot book appointments. Please log in as a patient."
+      );
+      return;
+    }
+    if (userError) {
+      toast.error("Error occurred while checking user role.");
+      return;
+    }
+    // Fetch  appointments
+    const { data: doctorData, error: doctorError } = await supabase
+      .from("doctorInfo")
+      .select("bookAppointment")
+      .eq("id", state.doctor.id)
+      .single();
+
+    if (doctorError) {
+      toast.error("Error occurred while fetching existing appointments.");
+      return;
+    }
+
+    let existingAppointments = doctorData ? doctorData.bookAppointment : [];
+
+    if (typeof existingAppointments === "string") {
+      try {
+        existingAppointments = JSON.parse(existingAppointments);
+      } catch (parseError) {
+        console.error("Error parsing appointments data:", parseError);
+        existingAppointments = [];
+      }
+    }
+
+    // Remove existing appointments for the same user email to prevent duplicates
+    existingAppointments = existingAppointments.filter(
+      (appointment) => appointment.user_email !== user.email
+    );
+
+    const newAppointment = {
+      user_email: user.email,
+      doctor_id: state.doctor.id,
+      appointment_date: new Date().toISOString().split("T")[0],
+      appointment_time: new Date().toLocaleTimeString("en-US", {
+        hour12: false,
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    };
+
+    const updatedAppointments = [...existingAppointments, newAppointment];
+
+    try {
+      const { data, error } = await supabase
+        .from("doctorInfo")
+        .update({ bookAppointment: updatedAppointments })
+        .eq("id", state.doctor.id);
+
+      if (error) throw error;
+      toast.success("Appointment booked successfully!");
+      console.log(data);
+    } catch (error) {
+      console.error("Error updating data:", error);
+      toast.error("Error booking appointment.");
     }
   };
 

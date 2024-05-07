@@ -21,6 +21,7 @@ const Cell = styled(Box)(() => ({
   flex: 1,
   textAlign: "center",
   fontSize: "12px",
+  letterSpacing: "0.5px",
 }));
 
 type Appointment = {
@@ -40,7 +41,13 @@ function Appointments({
     return (
       <MainContainer>
         <TableContainer>
-          <Row sx={{ backgroundColor: "#c3c9fa59" }}>
+          <Row
+            sx={{
+              backgroundColor: "#c3c9fa59",
+              borderTopRightRadius: "10px",
+              borderTopLeftRadius: "10px",
+            }}
+          >
             <Cell>USER EMAIL</Cell>
             <Cell>GENDER</Cell>
             <Cell>PAYMENT</Cell>
@@ -48,12 +55,14 @@ function Appointments({
             <Cell>BOOKED ON</Cell>
           </Row>
           {appointments.map((appointment, index) => (
-            <Row key={index}>
+            <Row key={index} sx={{ border: "1px solid black" }}>
               <Cell>{appointment.user_email}</Cell>
               <Cell></Cell>
               <Cell></Cell>
               <Cell></Cell>
-              <Cell>{appointment.appointment_date}</Cell>
+              <Cell>
+                {appointment.appointment_date} _ {appointment.appointment_time}
+              </Cell>
             </Row>
           ))}
         </TableContainer>
