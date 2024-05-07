@@ -132,7 +132,7 @@ function ProfileDetails() {
       )}
 
       {activeComponent === "appointments" && fetchedData?.role === "doctor" && (
-        <Appointments user={user} />
+        <Appointments user={user} fetchedData={fetchedData} />
       )}
     </MainContainer>
   );

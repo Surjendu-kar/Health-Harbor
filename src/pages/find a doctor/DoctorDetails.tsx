@@ -315,38 +315,6 @@ function DoctorDetails() {
     setShowDetails(false);
   };
 
-  // const handleAppointmentClick = async () => {
-  //   if (user) {
-  //     console.log(user.email);
-  //     console.log(state.doctor.email);
-
-  //     if (user.email === state.doctor.email) {
-  //       toast.error("You cannot book an appointment with yourself.");
-  //       return;
-  //     }
-  //     // if (user.email !== state.doctor.doctor) {
-  //     // }
-
-  //     try {
-  //       const { data, error } = await supabase
-  //         .from("doctorInfo")
-  //         .update({ bookAppointment: user.email })
-  //         .eq("id", state.doctor.id);
-
-  //       console.log(data);
-
-  //       if (error) throw error;
-  //       toast.success("Appointment booked successfully!");
-  //       return data;
-  //     } catch (error) {
-  //       console.error("Error updating data:", error);
-  //       toast.error("Error booking appointment.");
-  //       return null;
-  //     }
-  //   } else {
-  //     toast.error("Please login to book an appointment.");
-  //   }
-  // };
   const handleAppointmentClick = async () => {
     if (user) {
       console.log(user.email);
@@ -379,9 +347,26 @@ function DoctorDetails() {
       }
 
       try {
+        const currentDateTime = new Date();
+        const appointmentDate = currentDateTime.toISOString().split("T")[0]; // YYYY-MM-DD
+        const appointmentTime = currentDateTime.toLocaleTimeString("en-US", {
+          hour12: false,
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
         const { data, error } = await supabase
           .from("doctorInfo")
-          .update({ bookAppointment: user.email })
+          .update({
+            bookAppointment: [
+              {
+                user_email: user.email,
+                doctor_id: state.doctor.id,
+                appointment_date: appointmentDate,
+                appointment_time: appointmentTime,
+              },
+            ],
+          })
           .eq("id", state.doctor.id);
 
         console.log(data);
