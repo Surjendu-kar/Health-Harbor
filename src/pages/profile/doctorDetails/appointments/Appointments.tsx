@@ -1,30 +1,65 @@
 import { Box, styled } from "@mui/material";
+import { User } from "@supabase/supabase-js";
+
 const MainContainer = styled(Box)(() => ({
   width: "50%",
   margin: "2rem 0",
 }));
-const Heading = styled(Box)(() => ({
+
+const TableContainer = styled(Box)(() => ({
+  display: "flex",
+  flexDirection: "column",
+}));
+
+const Row = styled(Box)(() => ({
   display: "flex",
   justifyContent: "space-around",
-  backgroundColor: "#c3c9fa59",
-}));
-const TextStyle = styled("p")(() => ({
-  margin: 0,
-  fontSize: "12px",
   padding: "0.5rem 0",
 }));
-function Appointments({ user }) {
-  return (
-    <MainContainer>
-      <Heading>
-        <TextStyle>NAME</TextStyle>
-        <TextStyle>GENDER</TextStyle>
-        <TextStyle>PAYMENT</TextStyle>
-        <TextStyle>PRICE</TextStyle>
-        <TextStyle>BOOKED ON</TextStyle>
-      </Heading>
-    </MainContainer>
-  );
+
+const Cell = styled(Box)(() => ({
+  flex: 1,
+  textAlign: "center",
+  fontSize: "12px",
+}));
+
+type Appointment = {
+  bookAppointment: string;
+};
+
+function Appointments({
+  user,
+  fetchedData,
+}: {
+  user: User;
+  fetchedData: Appointment | null;
+}) {
+  if (fetchedData && fetchedData.bookAppointment) {
+    const appointments = JSON.parse(fetchedData.bookAppointment);
+
+    return (
+      <MainContainer>
+        <TableContainer>
+          <Row sx={{ backgroundColor: "#c3c9fa59" }}>
+            <Cell>USER EMAIL</Cell>
+            <Cell>GENDER</Cell>
+            <Cell>PAYMENT</Cell>
+            <Cell>PRICE</Cell>
+            <Cell>BOOKED ON</Cell>
+          </Row>
+          {appointments.map((appointment, index) => (
+            <Row key={index}>
+              <Cell>{appointment.user_email}</Cell>
+              <Cell></Cell>
+              <Cell></Cell>
+              <Cell></Cell>
+              <Cell>{appointment.appointment_date}</Cell>
+            </Row>
+          ))}
+        </TableContainer>
+      </MainContainer>
+    );
+  }
 }
 
 export default Appointments;
