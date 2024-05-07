@@ -34,38 +34,74 @@ type DoctorInfo = {
 
 const MainContainer = styled(Box)(({ theme }) => ({
   display: "flex",
+  flexDirection: "column",
   justifyContent: "center",
+  alignItems: "center",
   width: "100%",
-  height: "100vh",
-  [theme.breakpoints.down("md")]: {
-    height: "60vh",
-  },
-  [theme.breakpoints.down("sm")]: {
-    height: "65vh",
-  },
+  // [theme.breakpoints.down("md")]: {
+  //   height: "60vh",
+  // },
+  // [theme.breakpoints.down("sm")]: {
+  //   height: "65vh",
+  // },
 }));
 
 const Container = styled(Box)(({ theme }) => ({
+  marginTop: "1.5rem",
   width: "80%",
   [theme.breakpoints.down("sm")]: {
+    marginTop: "0.5rem",
     width: "95%",
   },
 }));
 
 const TopContainer = styled(Box)(({ theme }) => ({
+  backgroundColor: "#e9f0ff",
   display: "flex",
   flexDirection: "column",
-  margin: "2rem auto 3rem auto",
-  width: "60%",
-  textAlign: "center",
+  width: "100%",
+  height: "20rem",
+  justifyContent: "center",
+  alignItems: "center",
+  color: "#494a5f",
 
-  [theme.breakpoints.down("md")]: {
-    margin: "1.5rem auto 2rem auto",
-    width: "80%",
+  [theme.breakpoints.down("lg")]: {
+    height: "18rem",
   },
   [theme.breakpoints.down("sm")]: {
-    margin: "1rem auto 1.5rem auto",
-    width: "90%",
+    height: "16rem",
+  },
+
+  [theme.breakpoints.down("sm")]: {
+    height: "15rem",
+  },
+}));
+
+const SubHeading = styled(Typography)(({ theme }) => ({
+  fontSize: "h2",
+  fontWeight: "bold",
+  [theme.breakpoints.down("lg")]: {},
+  [theme.breakpoints.down("md")]: {
+    fontSize: "35px",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "28px",
+    textAlign: "center",
+  },
+}));
+
+const Content = styled(Typography)(({ theme }) => ({
+  fontSize: "h6",
+  // margin: "0 25rem",
+  // textAlign: "center",
+  [theme.breakpoints.down("lg")]: {},
+  [theme.breakpoints.down("md")]: {
+    fontSize: "13px",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "13px",
+    textAlign: "center",
+    margin: "0 2rem",
   },
 }));
 
@@ -173,41 +209,6 @@ const SkeletonStyle = styled(Skeleton)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: { width: "100px", height: "150px" },
 }));
 
-const Heading = styled(Typography)(({ theme }) => ({
-  fontSize: "3rem",
-  fontWeight: "bold",
-  color: "#15285ce8",
-  letterSpacing: "0.85px",
-
-  [theme.breakpoints.down("lg")]: {
-    fontSize: "2.5rem",
-  },
-  [theme.breakpoints.down("md")]: {
-    fontSize: "1.8rem",
-  },
-  [theme.breakpoints.down("sm")]: {
-    fontSize: "1.1rem",
-    letterSpacing: "0.7px",
-  },
-}));
-const Title = styled(Typography)(({ theme }) => ({
-  fontSize: "1.1rem",
-  fontWeight: "bold",
-  color: "#030d28ba",
-  letterSpacing: "1px",
-
-  [theme.breakpoints.down("lg")]: {
-    fontSize: "0.9rem",
-  },
-  [theme.breakpoints.down("md")]: {
-    fontSize: "0.86rem",
-  },
-  [theme.breakpoints.down("sm")]: {
-    fontSize: "0.55rem",
-    letterSpacing: "0.7px",
-  },
-}));
-
 function FindDoctor() {
   const [fetchedData, setFetchedData] = useState<DoctorInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -259,15 +260,17 @@ function FindDoctor() {
 
   return (
     <MainContainer>
-      <Container>
-        <TopContainer>
-          <Heading>Our Specialist</Heading>
-          <Title>
-            HealthHarbor always help to provide proper treatment for all of get
-            proper cure and healty life which is the most focus thing.
-          </Title>
-        </TopContainer>
+      <TopContainer>
+        <SubHeading variant="h3">Our Specialist</SubHeading>
+        <br />
+        <Content variant="h6" textAlign={"center"}>
+          HealthHarbor always help to provide proper treatment <br />
+          for all of get proper cure and healty life which is the most focus
+          thing.
+        </Content>
+      </TopContainer>
 
+      <Container>
         <form onSubmit={handleSubmit}>
           <SearchBox>
             <Box
