@@ -12,19 +12,28 @@ const Heading = styled(Typography)(({ theme }) => ({
 const SubHeading = styled(Typography)(({ theme }) => ({
   fontSize: "h2",
   fontWeight: "bold",
+  [theme.breakpoints.down("lg")]: {},
+  [theme.breakpoints.down("md")]: {
+    fontSize: "35px",
+  },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "30px",
+    fontSize: "28px",
     textAlign: "center",
   },
 }));
 
 const Content = styled(Typography)(({ theme }) => ({
   fontSize: "h6",
-
+  // margin: "0 25rem",
+  // textAlign: "center",
+  [theme.breakpoints.down("lg")]: {},
+  [theme.breakpoints.down("md")]: {
+    fontSize: "13px",
+  },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "14px",
+    fontSize: "13px",
     textAlign: "center",
-    margin: "0 1rem",
+    margin: "0 2rem",
   },
 }));
 
@@ -32,15 +41,20 @@ const TopContainer = styled(Box)(({ theme }) => ({
   backgroundColor: "#e9f0ff",
   display: "flex",
   flexDirection: "column",
-  paddingTop: "2rem",
   width: "100%",
-  height: "20rem",
+  height: "31rem",
   justifyContent: "center",
   alignItems: "center",
   color: "#494a5f",
+  [theme.breakpoints.down("lg")]: {
+    height: "25rem",
+  },
   [theme.breakpoints.down("sm")]: {
-    paddingTop: "0",
-    height: "15rem",
+    height: "21rem",
+  },
+
+  [theme.breakpoints.down("sm")]: {
+    height: "19rem",
   },
 }));
 
@@ -140,10 +154,10 @@ function Service() {
       <TopContainer>
         <SubHeading variant="h3">Our Services</SubHeading>
         <br />
-        <Content variant="h6" textAlign={"center"} margin={"20px"}>
-          HealthHarbor always help to provide proper treatment for all of get
-          proper cure <br />
-          and healthy life which is the most focus thing.
+        <Content variant="h6" textAlign={"center"}>
+          HealthHarbor always help to provide proper treatment <br />
+          for all of get proper cure and healthy life which is the most focus
+          thing.
         </Content>
       </TopContainer>
       <BottomContainer>
