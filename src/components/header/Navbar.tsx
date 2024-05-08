@@ -46,7 +46,7 @@ const StyledLink = styled(Link)(({ theme }) => ({
     fontSize: "0.53rem",
     letterSpacing: "0.7px",
     margin: theme.spacing(0, 0.5),
-    
+
     "&:hover": {
       fontSize: "0.65rem",
     },
@@ -128,6 +128,7 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
 
 const Navbar = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [doctorImage, setDoctorImage] = useState<string>("");
 
   // useEffect(() => {
   //   const getUser = async () => {
@@ -144,8 +145,10 @@ const Navbar = () => {
     const authListener = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_IN") {
         setUser(session?.user ?? null);
+        fetchDoctorImage(session?.user.email); // Fetch doctor image when user signs in
       } else if (event === "SIGNED_OUT") {
         setUser(null);
+        setDoctorImage(""); // Reset doctor image when user signs out
       }
     });
 
@@ -153,6 +156,21 @@ const Navbar = () => {
       // authListener?.unsubscribe();
     };
   }, []);
+
+  const fetchDoctorImage = async (userEmail: string | undefined) => {
+    if (userEmail) {
+      const { data, error } = await supabase
+        .from("doctorInfo")
+        .select("img")
+        .eq("email", userEmail); // Filter by email instead of user_id
+
+      if (error) {
+        console.error("Error fetching doctor image:", error);
+      } else {
+        setDoctorImage(data?.[0]?.img || ""); // Set the fetched doctor image or an empty string if not found
+      }
+    }
+  };
 
   return (
     <NavContainer>
@@ -181,7 +199,7 @@ const Navbar = () => {
           <StyledAvatar
             component={Link}
             to={"/profile"}
-            src={user ? user?.user_metadata?.avatar_url : ""}
+            src={doctorImage || ""}
           />
         </Box>
       ) : (
