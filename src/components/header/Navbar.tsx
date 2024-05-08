@@ -189,7 +189,6 @@ const Navbar = () => {
             component={Link}
             to={"/profile"}
             src={doctorImage || ""}
-            
           />
         </Box>
       ) : (
