@@ -130,25 +130,14 @@ const Navbar = () => {
   const [user, setUser] = useState<User | null>(null);
   const [doctorImage, setDoctorImage] = useState<string>("");
 
-  // useEffect(() => {
-  //   const getUser = async () => {
-  //     const {
-  //       data: { user },
-  //     } = await supabase.auth.getUser();
-  //     setUser(user);
-  //   };
-
-  //   getUser();
-  // }, [user]);
-
   useEffect(() => {
     const authListener = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_IN") {
         setUser(session?.user ?? null);
-        fetchDoctorImage(session?.user.email); // Fetch doctor image when user signs in
+        fetchDoctorImage(session?.user.email);
       } else if (event === "SIGNED_OUT") {
         setUser(null);
-        setDoctorImage(""); // Reset doctor image when user signs out
+        setDoctorImage("");
       }
     });
 
@@ -162,12 +151,12 @@ const Navbar = () => {
       const { data, error } = await supabase
         .from("doctorInfo")
         .select("img")
-        .eq("email", userEmail); // Filter by email instead of user_id
+        .eq("email", userEmail);
 
       if (error) {
         console.error("Error fetching doctor image:", error);
       } else {
-        setDoctorImage(data?.[0]?.img || ""); // Set the fetched doctor image or an empty string if not found
+        setDoctorImage(data?.[0]?.img || "");
       }
     }
   };
