@@ -11,9 +11,13 @@ import {
 import { purple } from "@mui/material/colors";
 import { ButtonProps } from "@mui/material/Button";
 import { styled } from "@mui/system";
-import React from "react";
+import React, { useState } from "react";
 import LocationFields from "../../../../components/locationFields/LocationFields";
 import { ToastContainer, toast } from "react-toastify";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 const MainContainer = styled(Box)(({ theme }) => ({
   width: "50%",
@@ -186,7 +190,105 @@ const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
   },
 }));
 
+const ResponsiveDatePicker = styled(DatePicker)(({ theme }) => ({
+  [theme.breakpoints.down("sm")]: {
+    width: "100%",
+  },
+  "& .MuiInputBase-root": {
+    [theme.breakpoints.down("lg")]: {
+      fontSize: "0.95rem",
+      padding: "0px",
+    },
+    [theme.breakpoints.down("md")]: {
+      fontSize: "0.75rem",
+    },
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.65rem",
+    },
+  },
+  "& .MuiOutlinedInput-input": {
+    [theme.breakpoints.down("lg")]: {
+      height: "20px",
+    },
+    [theme.breakpoints.down("md")]: {
+      height: "10px",
+    },
+    [theme.breakpoints.down("sm")]: {
+      height: "5px",
+      padding: "15px",
+    },
+  },
+}));
+
+const ImgBox = styled(Box)(() => ({
+  display: "flex",
+  alignItems: "center",
+}));
+
+const Img = styled("img")(({ theme }) => ({
+  height: "140px",
+  width: "140px",
+  borderRadius: "10px",
+  transition: "opacity 0.5s ease-in-out, filter 0.5s ease-in-out",
+  opacity: 1,
+  filter: "blur(0px)",
+
+  [theme.breakpoints.down("lg")]: {
+    height: "130px",
+    width: "130px",
+  },
+  [theme.breakpoints.down("md")]: {
+    height: "115px",
+    width: "115px",
+  },
+  [theme.breakpoints.down("sm")]: {
+    height: "75px",
+    width: "75px",
+  },
+}));
+
+const ImgBtn = styled(Button)(({ theme }) => ({
+  letterSpacing: "0.7px",
+  padding: "0px 10px",
+  fontSize: "0.7rem",
+  backgroundColor: "#fff",
+  color: "#000",
+  ":hover": {
+    backgroundColor: "grey",
+    color: "#fff",
+  },
+  // Adjust CloudUploadIcon size based on breakpoints
+  "& .MuiSvgIcon-root": {
+    // Target the icon inside the button
+    fontSize: "1rem", // Default size
+    [theme.breakpoints.down("lg")]: {
+      fontSize: "0.9rem", // Adjust for large screens
+    },
+    [theme.breakpoints.down("md")]: {
+      fontSize: "0.6rem", // Adjust for medium screens
+    },
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.3rem", // Adjust for small screens
+    },
+  },
+  [theme.breakpoints.down("lg")]: {
+    padding: "0px 8px",
+    fontSize: "0.6rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    padding: "0",
+    fontSize: "0.4rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    padding: "0",
+    fontSize: "0.2rem",
+  },
+}));
+
 function PatientInfo({ user, fetchedData }) {
+  const [dateOfBirth, setDateOfBirth] = useState(null);
+  const [documents, setDocuments] = useState([]);
+
   return (
     <>
       <ToastContainer />
@@ -202,6 +304,49 @@ function PatientInfo({ user, fetchedData }) {
             </EditBtn>
           )} */}
         </ProfileTitleContainer>
+        <ImgBox>
+        {/* Img */}
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+          <Img
+            // src={imgPath}
+            alt="profile-image"
+            // style={{
+            //   opacity: isLoading ? 0.5 : 1,
+            //   filter: isLoading ? "blur(2px)" : "blur(0px)",
+            // }}
+            // onLoad={() => setIsLoading(false)}
+          />
+        </Box>
+
+        
+      </ImgBox>
+
+      <label
+        htmlFor="upload-profile-img"
+        style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+      >
+        <input
+          type="file"
+          name="upload-img"
+          id="upload-profile-img"
+          style={{ display: "none" }}
+          // onChange={handleFileInput}
+          // ref={uploadRef}
+        />
+        <ImgBtn
+          variant="contained"
+          tabIndex={-1}
+          startIcon={<CloudUploadIcon />}
+          // onClick={() => {
+          //   if (uploadRef?.current) {
+          //     uploadRef.current.click();
+          //   }
+          // }}
+        >
+          {/* {imgPath && imgPath !== defaultImg ? "Edit" : "Add photo"} */}
+          add photo
+        </ImgBtn>
+      </label>
         <form action="">
           <TitleTextField
             required
@@ -248,7 +393,9 @@ function PatientInfo({ user, fetchedData }) {
               // disabled={!!fetchedData}
               // disabled={!isEditMode}
             >
-              <InputLabel id="demo-simple-select-label">Gender*</InputLabel>
+              <InputLabel id="demo-simple-select-label" required>
+                Gender
+              </InputLabel>
               <ResponsiveSelect
                 required
                 labelId="demo-simple-select-label"
@@ -268,28 +415,83 @@ function PatientInfo({ user, fetchedData }) {
               // disabled={!!fetchedData}
               // disabled={!isEditMode}
             >
-              <InputLabel id="demo-simple-select-label">
-                Specialization*
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <ResponsiveDatePicker
+                  label="Date of Birth"
+                  value={dateOfBirth}
+                  // onChange={(newValue) => setDateOfBirth(newValue)}
+                  // renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
+            </FormControl>
+          </SelectOption>
+
+          <SelectOption>
+            <FormControl fullWidth>
+              <InputLabel id="blood-group-label" required>
+                Allergies
               </InputLabel>
               <ResponsiveSelect
+                labelId="blood-group-label"
+                id="blood-group-select"
                 required
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                // value={specialization}
-                label="specialization"
-                // onChange={(e) => setSpecialization(e.target.value)}
-                sx={{ backgroundColor: "#fff" }}
-                // disabled={!!fetchedData}
+                // value={bloodGroup}
+                // onChange={(e) => setBloodGroup(e.target.value)}
+                label="Blood Group"
               >
-                <MenuItem value="cardiology">Cardiology</MenuItem>
-                <MenuItem value="dentist">Dentist</MenuItem>
-                <MenuItem value="specialized">Specialized</MenuItem>
-                <MenuItem value="urology">Urology</MenuItem>
-                <MenuItem value="neurology">Neurology</MenuItem>
-                <MenuItem value="orthopedic">Orthopedic</MenuItem>
-                <MenuItem value="stomach">Stomach</MenuItem>
+                <MenuItem value="peanuts">Peanuts</MenuItem>
+                <MenuItem value="tree nuts">Tree nuts</MenuItem>
+                <MenuItem value="wheat">Wheat</MenuItem>
+                <MenuItem value="soy">Soy</MenuItem>
+                <MenuItem value="fish">Fish</MenuItem>
+                <MenuItem value="shellfish">Shellfish</MenuItem>
+                <MenuItem value="eggs">Eggs</MenuItem>
+                <MenuItem value="milk">Milk</MenuItem>
+                <MenuItem value="others">Others</MenuItem>
+                <MenuItem value="na">Not Applicable</MenuItem>
               </ResponsiveSelect>
             </FormControl>
+            <FormControl fullWidth>
+              <InputLabel id="blood-group-label" required>Blood Group*</InputLabel>
+              <ResponsiveSelect
+                labelId="blood-group-label"
+                id="blood-group-select"
+                required
+                // value={bloodGroup}
+                // onChange={(e) => setBloodGroup(e.target.value)}
+                label="Blood Group"
+              >
+                <MenuItem value="A+">A+</MenuItem>
+                <MenuItem value="A-">A-</MenuItem>
+                <MenuItem value="B+">B+</MenuItem>
+                <MenuItem value="B-">B-</MenuItem>
+                <MenuItem value="AB+">AB+</MenuItem>
+                <MenuItem value="AB-">AB-</MenuItem>
+                <MenuItem value="O+">O+</MenuItem>
+                <MenuItem value="O-">O-</MenuItem>
+              </ResponsiveSelect>
+            </FormControl>
+          </SelectOption>
+
+          <SelectOption>
+            <TitleTextField
+              sx={{marginTop:"0"}}
+              required
+              fullWidth
+              label="Height (cm)"
+              // value={height}
+              // onChange={(e) => setHeight(e.target.value)}
+              type="number"
+              />
+            <TitleTextField
+              sx={{marginTop:"0"}}
+              required
+              fullWidth
+              label="Weight (kg)"
+              // value={weight}
+              // onChange={(e) => setWeight(e.target.value)}
+              type="number"
+            />
           </SelectOption>
 
           <LocationFields
@@ -299,6 +501,89 @@ function PatientInfo({ user, fetchedData }) {
             // address={address}
             // city={city}
           />
+
+          <Box>
+            <ColorButton
+              variant="contained"
+              // disabled={!isEditMode}
+              sx={{ margin: "1.5rem 0 0.5rem 0.1rem" }}
+            >
+              Emergency Contact
+            </ColorButton>
+            <TitleTextField
+              required
+              id="emergencyName"
+              label="Name"
+              fullWidth
+            />
+            <TitleTextField
+              required
+              id="Relationship"
+              label="Relationship"
+              fullWidth
+            />
+            <TitleTextField
+              required
+              id="emergencyPhone"
+              label="Phone"
+              fullWidth
+            />
+            <TitleTextField id="emergencyEmail" label="Email" fullWidth />
+          </Box>
+
+          <Box>
+            <ColorButton
+              variant="contained"
+              // disabled={!isEditMode}
+              sx={{ margin: "1.5rem 0 0.5rem 0.1rem" }}
+            >
+              Imsurance Information
+            </ColorButton>
+            <TitleTextField
+              label="Provider"
+              fullWidth
+              // value={insuranceInfo.provider}
+              // onChange={(e) =>
+              //   setInsuranceInfo({ ...insuranceInfo, provider: e.target.value })
+              // }
+            />
+            <TitleTextField
+              label="Policy Number"
+              fullWidth
+              // value={insuranceInfo.policyNumber}
+              // onChange={(e) =>
+              //   setInsuranceInfo({
+              //     ...insuranceInfo,
+              //     policyNumber: e.target.value,
+              //   })
+              // }
+            />
+          </Box>
+
+          <Box>
+            {/* <ColorButton
+              variant="contained"
+              // disabled={!isEditMode}
+              sx={{ margin: "1.5rem 0 0.5rem 0.1rem" }}
+            >
+              Upload Documents
+            </ColorButton> */}
+            <br />
+            <Button variant="contained" component="label">
+              Upload Documents (if applicable)
+              <input
+                type="file"
+                multiple
+                hidden
+                onChange={(e) => setDocuments(e.target.files)}
+              />
+            </Button>
+            <Typography variant="body2" color="textSecondary">
+              {documents.length > 0
+                ? `${documents.length} file(s) selected`
+                : "No files selected"}
+            </Typography>
+          </Box>
 
           <Box>
             <ColorButton
