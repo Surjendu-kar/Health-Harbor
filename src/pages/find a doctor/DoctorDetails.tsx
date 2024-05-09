@@ -319,28 +319,49 @@ function DoctorDetails() {
       toast.error("Please login to book an appointment.");
       return;
     }
+
     if (user.email === state.doctor.email) {
       toast.error("You cannot book an appointment with yourself.");
       return;
     }
 
-    const { data: userData, error: userError } = await supabase
-      .from("doctorInfo")
-      .select("role")
+    // Check if the user is a patient or a doctor
+    const { data: userData } = await supabase
+      .from("patientInfo")
+      .select("email")
       .eq("email", user.email)
       .single();
 
-    if (userData && userData.role === "doctor") {
-      toast.error(
-        "Doctors cannot book appointments. Please log in as a patient."
-      );
-      return;
+    if (userData) {
+      // User is a patient, proceed with booking appointment
+      await bookAppointment(user.email);
+    } else {
+      // Check if the user is a doctor
+      const { data: doctorData, error: doctorError } = await supabase
+        .from("doctorInfo")
+        .select("email")
+        .eq("email", user.email)
+        .single();
+
+      if (doctorError) {
+        toast.error("Error occurred while checking user role.");
+        return;
+      }
+
+      if (doctorData) {
+        toast.error(
+          "Doctors cannot book appointments. Please log in as a patient."
+        );
+        return;
+      } else {
+        toast.error("Invalid user. Please check your credentials.");
+        return;
+      }
     }
-    if (userError) {
-      toast.error("Error occurred while checking user role.");
-      return;
-    }
-    // Fetch  appointments
+  };
+
+  const bookAppointment = async (userEmail: string) => {
+    // Fetch existing appointments
     const { data: doctorData, error: doctorError } = await supabase
       .from("doctorInfo")
       .select("bookAppointment")
@@ -365,11 +386,11 @@ function DoctorDetails() {
 
     // Remove existing appointments for the same user email to prevent duplicates
     existingAppointments = existingAppointments.filter(
-      (appointment) => appointment.user_email !== user.email
+      (appointment) => appointment.user_email !== userEmail
     );
 
     const newAppointment = {
-      user_email: user.email,
+      user_email: userEmail,
       doctor_id: state.doctor.id,
       appointment_date: new Date().toISOString().split("T")[0],
       appointment_time: new Date().toLocaleTimeString("en-US", {
@@ -389,7 +410,7 @@ function DoctorDetails() {
 
       if (error) throw error;
       toast.success("Appointment booked successfully!");
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       console.error("Error updating data:", error);
       toast.error("Error booking appointment.");

@@ -193,7 +193,7 @@ function Sidebar({ onMenuSelect }) {
         ) : (
           <FirstContainer>
             <TextStyle onClick={() => onMenuSelect("overview")}>
-              Overview
+              Appointment
             </TextStyle>
             <TextStyle onClick={() => onMenuSelect("profile")}>
               Patient Details

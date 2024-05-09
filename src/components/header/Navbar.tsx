@@ -134,6 +134,8 @@ const Navbar = () => {
     const authListener = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_IN") {
         setUser(session?.user ?? null);
+        console.log(session?.user);
+
         fetchDoctorImage(session?.user.email);
       } else if (event === "SIGNED_OUT") {
         setUser(null);

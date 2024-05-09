@@ -8,16 +8,18 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { purple } from "@mui/material/colors";
 import { ButtonProps } from "@mui/material/Button";
 import { styled } from "@mui/system";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import LocationFields from "../../../../components/locationFields/LocationFields";
 import { ToastContainer, toast } from "react-toastify";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { supabase } from "../../../../supabase/config";
+import defaultImg from "../../../../assets/Default_pfp-removebg-preview.png";
+import dayjs from "dayjs";
 
 const MainContainer = styled(Box)(({ theme }) => ({
   width: "50%",
@@ -285,9 +287,187 @@ const ImgBtn = styled(Button)(({ theme }) => ({
   },
 }));
 
-function PatientInfo({ user, fetchedData }) {
+function PatientInfo({ user }) {
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [gender, setGender] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState(null);
+  const [allergies, setAllergies] = useState("");
+  const [bloodGroup, setBloodGroup] = useState("");
+  const [height, setHeight] = useState("");
+  const [weight, setWeight] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [emergencyContact, setEmergencyContact] = useState({
+    name: "",
+    relationship: "",
+    phone: "",
+    email: "",
+  });
+  const [insuranceInfo, setInsuranceInfo] = useState({
+    provider: "",
+    policyNumber: "",
+  });
   const [documents, setDocuments] = useState([]);
+  const [about, setAbout] = useState("");
+  const [isEditMode, setIsEditMode] = useState<boolean>();
+  const [imgPath, setImgPath] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const uploadRef = useRef<HTMLInputElement>(null);
+
+  const validateForm = () => {
+    const requiredFields = [
+      name,
+      imgPath,
+      phone,
+      gender,
+      dateOfBirth,
+      allergies,
+      bloodGroup,
+      height,
+      weight,
+      address,
+      city,
+      emergencyContact.name,
+      emergencyContact.relationship,
+      emergencyContact.phone,
+    ];
+
+    return requiredFields.every((field) => field);
+  };
+
+  const handleFileInput = async (event) => {
+    setIsLoading(true);
+    const file = event.target.files[0];
+    if (!file) return;
+
+    try {
+      const { data, error } = await supabase.storage
+        .from("patientImg")
+        .upload(`avatar_${Date.now()}`, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (error) throw error;
+
+      if (data && data?.fullPath) {
+        const fullPath = `https://eraerhfcolqnyopznyyb.supabase.co/storage/v1/object/public/${data.fullPath}`;
+        setImgPath(fullPath);
+      }
+
+      toast.success("Upload successful");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) {
+      toast.error("Please fill all required fields.");
+      return;
+    }
+    const patientData = {
+      name: name,
+      img: imgPath,
+      phoneNo: phone,
+      gender: gender,
+      dateOfBirth: dateOfBirth,
+      allergies: allergies,
+      bloodGroup: bloodGroup,
+      height: height,
+      weight: weight,
+      address: address,
+      city: city,
+      emergencyContact: emergencyContact,
+      insuranceInfo: insuranceInfo,
+      docItem: documents,
+      about: about,
+    };
+    if (user) {
+      try {
+        const { data, error } = await supabase
+          .from("patientInfo")
+          .update(patientData)
+          .eq("email", user.email)
+          .select();
+
+        if (error) {
+          console.error("Error updating patientInfo:", error);
+          toast.error("Failed to update patient information.");
+        } else {
+          console.log("PatientInfo updated successfully:", data);
+          toast.success("Patient information updated successfully!");
+        }
+      } catch (error) {
+        console.error("Error updating patientInfo:", error);
+        toast.error("Failed to update patient information.");
+      }
+    }
+  };
+
+  useEffect(() => {
+    const fetchPatientInfo = async () => {
+      if (user) {
+        try {
+          const { data, error } = await supabase
+            .from("patientInfo")
+            .select("*")
+            .eq("email", user.email)
+            .single();
+
+          if (error) {
+            console.error("Error fetching patientInfo:", error);
+          } else {
+            setName(data.name);
+            setPhone(data.phoneNo);
+            setGender(data.gender);
+            setDateOfBirth(data.dateOfBirth ? dayjs(data.dateOfBirth) : null);
+            setAllergies(data.allergies);
+            setBloodGroup(data.bloodGroup);
+            setHeight(data.height);
+            setWeight(data.weight);
+            setAddress(data.address);
+            setCity(data.city);
+            setEmergencyContact(JSON.parse(data.emergencyContact || "[]"));
+            setInsuranceInfo(JSON.parse(data.insuranceInfo || "[]"));
+            setDocuments(data.documents);
+            setAbout(data.about);
+            setIsEditMode(!!data.name);
+            setImgPath(data.img || null);
+          }
+        } catch (error) {
+          console.error("Error fetching patientInfo:", error);
+        }
+      }
+    };
+
+    fetchPatientInfo();
+  }, [user]);
+
+  useEffect(() => {
+    if (imgPath) {
+      const updateImageInDatabase = async () => {
+        try {
+          const { data, error } = await supabase
+            .from("patientInfo")
+            .update({ img: imgPath })
+            .eq("email", user?.email);
+
+          if (error) throw error;
+          // console.log("Database update successful", data);
+        } catch (error) {
+          console.error("Error updating data:", error);
+        }
+      };
+
+      updateImageInDatabase();
+    }
+  }, [imgPath, user?.email]);
 
   return (
     <>
@@ -305,58 +485,55 @@ function PatientInfo({ user, fetchedData }) {
           )} */}
         </ProfileTitleContainer>
         <ImgBox>
-        {/* Img */}
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
-          <Img
-            // src={imgPath}
-            alt="profile-image"
-            // style={{
-            //   opacity: isLoading ? 0.5 : 1,
-            //   filter: isLoading ? "blur(2px)" : "blur(0px)",
-            // }}
-            // onLoad={() => setIsLoading(false)}
-          />
-        </Box>
+          {/* Img */}
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+            <Img
+              src={imgPath ? imgPath : defaultImg}
+              alt="profile-image"
+              style={{
+                opacity: isLoading ? 0.5 : 1,
+                filter: isLoading ? "blur(2px)" : "blur(0px)",
+              }}
+              onLoad={() => setIsLoading(false)}
+            />
+          </Box>
+        </ImgBox>
 
-        
-      </ImgBox>
-
-      <label
-        htmlFor="upload-profile-img"
-        style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
-      >
-        <input
-          type="file"
-          name="upload-img"
-          id="upload-profile-img"
-          style={{ display: "none" }}
-          // onChange={handleFileInput}
-          // ref={uploadRef}
-        />
-        <ImgBtn
-          variant="contained"
-          tabIndex={-1}
-          startIcon={<CloudUploadIcon />}
-          // onClick={() => {
-          //   if (uploadRef?.current) {
-          //     uploadRef.current.click();
-          //   }
-          // }}
+        <label
+          htmlFor="upload-profile-img"
+          style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
         >
-          {/* {imgPath && imgPath !== defaultImg ? "Edit" : "Add photo"} */}
-          add photo
-        </ImgBtn>
-      </label>
+          <input
+            type="file"
+            name="upload-img"
+            id="upload-profile-img"
+            style={{ display: "none" }}
+            onChange={handleFileInput}
+            ref={uploadRef}
+          />
+          <ImgBtn
+            variant="contained"
+            tabIndex={-1}
+            startIcon={<CloudUploadIcon />}
+            onClick={() => {
+              if (uploadRef?.current) {
+                uploadRef.current.click();
+              }
+            }}
+          >
+            {imgPath ? "Edit" : "Add photo"}
+          </ImgBtn>
+        </label>
+
         <form action="">
           <TitleTextField
             required
-            // value={name}
+            value={name}
             id="name"
             label="Name"
-            // onChange={(e) => setName(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
             fullWidth
-            // disabled={!!fetchedData}
-            // disabled={!isEditMode}
+            disabled={isEditMode}
           />
           {user && (
             <TitleTextField
@@ -372,27 +549,16 @@ function PatientInfo({ user, fetchedData }) {
           )}
           <TitleTextField
             required
-            // value={phone}
+            value={phone}
             id="phone"
             label="Phone"
-            // onChange={handlePhoneChange}
+            onChange={(e) => setPhone(e.target.value)}
             fullWidth
-            // disabled={!!fetchedData}
-            // disabled={!isEditMode}
+            disabled={isEditMode}
           />
 
-          {/* {phoneError && (
-          <Typography variant="inherit" sx={{ color: "red" }}>
-            {phoneError}
-          </Typography>
-        )} */}
-
           <SelectOption>
-            <FormControl
-              fullWidth
-              // disabled={!!fetchedData}
-              // disabled={!isEditMode}
-            >
+            <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label" required>
                 Gender
               </InputLabel>
@@ -400,26 +566,27 @@ function PatientInfo({ user, fetchedData }) {
                 required
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                // value={gender}
+                value={gender}
                 label="gender"
-                // onChange={(e) => setGender(e.target.value)}
+                onChange={(e) => setGender(e.target.value)}
                 sx={{ backgroundColor: "#fff" }}
+                disabled={isEditMode}
               >
                 <MenuItem value="male">Male</MenuItem>
                 <MenuItem value="female">Female</MenuItem>
               </ResponsiveSelect>
             </FormControl>
 
-            <FormControl
-              fullWidth
-              // disabled={!!fetchedData}
-              // disabled={!isEditMode}
-            >
+            <FormControl fullWidth>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <ResponsiveDatePicker
                   label="Date of Birth"
                   value={dateOfBirth}
-                  // onChange={(newValue) => setDateOfBirth(newValue)}
+                  onChange={(newValue) =>
+                    setDateOfBirth(newValue.format("YYYY-MM-DD"))
+                  }
+                  disabled={isEditMode}
+
                   // renderInput={(params) => <TextField {...params} />}
                 />
               </LocalizationProvider>
@@ -435,9 +602,10 @@ function PatientInfo({ user, fetchedData }) {
                 labelId="blood-group-label"
                 id="blood-group-select"
                 required
-                // value={bloodGroup}
-                // onChange={(e) => setBloodGroup(e.target.value)}
+                value={allergies}
+                onChange={(e) => setAllergies(e.target.value)}
                 label="Blood Group"
+                disabled={isEditMode}
               >
                 <MenuItem value="peanuts">Peanuts</MenuItem>
                 <MenuItem value="tree nuts">Tree nuts</MenuItem>
@@ -452,14 +620,17 @@ function PatientInfo({ user, fetchedData }) {
               </ResponsiveSelect>
             </FormControl>
             <FormControl fullWidth>
-              <InputLabel id="blood-group-label" required>Blood Group*</InputLabel>
+              <InputLabel id="blood-group-label" required>
+                Blood Group
+              </InputLabel>
               <ResponsiveSelect
                 labelId="blood-group-label"
                 id="blood-group-select"
                 required
-                // value={bloodGroup}
-                // onChange={(e) => setBloodGroup(e.target.value)}
+                value={bloodGroup}
+                onChange={(e) => setBloodGroup(e.target.value)}
                 label="Blood Group"
+                disabled={isEditMode}
               >
                 <MenuItem value="A+">A+</MenuItem>
                 <MenuItem value="A-">A-</MenuItem>
@@ -475,99 +646,132 @@ function PatientInfo({ user, fetchedData }) {
 
           <SelectOption>
             <TitleTextField
-              sx={{marginTop:"0"}}
+              sx={{ marginTop: "0" }}
               required
               fullWidth
               label="Height (cm)"
-              // value={height}
-              // onChange={(e) => setHeight(e.target.value)}
+              value={height}
+              onChange={(e) => setHeight(e.target.value)}
               type="number"
-              />
+              disabled={isEditMode}
+            />
             <TitleTextField
-              sx={{marginTop:"0"}}
+              sx={{ marginTop: "0" }}
               required
               fullWidth
               label="Weight (kg)"
-              // value={weight}
-              // onChange={(e) => setWeight(e.target.value)}
+              value={weight}
+              onChange={(e) => setWeight(e.target.value)}
               type="number"
+              disabled={isEditMode}
             />
           </SelectOption>
 
           <LocationFields
-            isEditMode={true}
-            // setAddress={setAddress}
-            // setCity={setCity}
-            // address={address}
-            // city={city}
+            isEditMode={!isEditMode}
+            setAddress={setAddress}
+            setCity={setCity}
+            address={address}
+            city={city}
           />
 
           <Box>
             <ColorButton
               variant="contained"
-              // disabled={!isEditMode}
               sx={{ margin: "1.5rem 0 0.5rem 0.1rem" }}
+              disabled={isEditMode}
             >
               Emergency Contact
             </ColorButton>
             <TitleTextField
               required
+              value={emergencyContact.name}
               id="emergencyName"
               label="Name"
+              onChange={(e) =>
+                setEmergencyContact({
+                  ...emergencyContact,
+                  name: e.target.value,
+                })
+              }
               fullWidth
+              disabled={isEditMode}
             />
             <TitleTextField
               required
+              value={emergencyContact.relationship}
               id="Relationship"
               label="Relationship"
+              onChange={(e) =>
+                setEmergencyContact({
+                  ...emergencyContact,
+                  relationship: e.target.value,
+                })
+              }
               fullWidth
+              disabled={isEditMode}
             />
             <TitleTextField
               required
+              value={emergencyContact.phone}
               id="emergencyPhone"
               label="Phone"
+              onChange={(e) =>
+                setEmergencyContact({
+                  ...emergencyContact,
+                  phone: e.target.value,
+                })
+              }
               fullWidth
+              disabled={isEditMode}
             />
-            <TitleTextField id="emergencyEmail" label="Email" fullWidth />
+            <TitleTextField
+              value={emergencyContact.email}
+              id="emergencyEmail"
+              label="Email"
+              fullWidth
+              onChange={(e) =>
+                setEmergencyContact({
+                  ...emergencyContact,
+                  email: e.target.value,
+                })
+              }
+              disabled={isEditMode}
+            />
           </Box>
 
           <Box>
             <ColorButton
               variant="contained"
-              // disabled={!isEditMode}
               sx={{ margin: "1.5rem 0 0.5rem 0.1rem" }}
+              disabled={isEditMode}
             >
-              Imsurance Information
+              Insurance Information
             </ColorButton>
             <TitleTextField
               label="Provider"
               fullWidth
-              // value={insuranceInfo.provider}
-              // onChange={(e) =>
-              //   setInsuranceInfo({ ...insuranceInfo, provider: e.target.value })
-              // }
+              value={insuranceInfo.provider}
+              onChange={(e) =>
+                setInsuranceInfo({ ...insuranceInfo, provider: e.target.value })
+              }
+              disabled={isEditMode}
             />
             <TitleTextField
               label="Policy Number"
               fullWidth
-              // value={insuranceInfo.policyNumber}
-              // onChange={(e) =>
-              //   setInsuranceInfo({
-              //     ...insuranceInfo,
-              //     policyNumber: e.target.value,
-              //   })
-              // }
+              value={insuranceInfo.policyNumber}
+              onChange={(e) =>
+                setInsuranceInfo({
+                  ...insuranceInfo,
+                  policyNumber: e.target.value,
+                })
+              }
+              disabled={isEditMode}
             />
           </Box>
 
           <Box>
-            {/* <ColorButton
-              variant="contained"
-              // disabled={!isEditMode}
-              sx={{ margin: "1.5rem 0 0.5rem 0.1rem" }}
-            >
-              Upload Documents
-            </ColorButton> */}
             <br />
             <Button variant="contained" component="label">
               Upload Documents (if applicable)
@@ -579,7 +783,7 @@ function PatientInfo({ user, fetchedData }) {
               />
             </Button>
             <Typography variant="body2" color="textSecondary">
-              {documents.length > 0
+              {documents && documents.length > 0
                 ? `${documents.length} file(s) selected`
                 : "No files selected"}
             </Typography>
@@ -588,30 +792,27 @@ function PatientInfo({ user, fetchedData }) {
           <Box>
             <ColorButton
               variant="contained"
-              // disabled={!isEditMode}
               sx={{ margin: "1.5rem 0 0.5rem 0.1rem" }}
+              disabled={isEditMode}
             >
               About Problem
             </ColorButton>
             <AboutTextField
               fullWidth
-              // onChange={(e) => setAbout(e.target.value)}
+              onChange={(e) => setAbout(e.target.value)}
               sx={{ backgroundColor: "#fff" }}
-              // value={about}
-              // disabled={!!fetchedData}
-              // disabled={!isEditMode}
+              value={about}
+              disabled={isEditMode}
             />
             <Box sx={{ textAlign: "right" }}>
               <ColorButton
                 type="submit"
                 variant="contained"
                 color="primary"
-                // disabled={isEditMode || !isFormValid || isLoading}
-                // disabled={!isEditMode || !isFormValid}
-                // disabled={fetchedData && isEditMode}
-                onClick={() =>
-                  toast.warning(" currently in development phase.")
-                }
+                onClick={(element) => {
+                  handleSubmit(element);
+                }}
+                disabled={isEditMode}
               >
                 Submit
               </ColorButton>
