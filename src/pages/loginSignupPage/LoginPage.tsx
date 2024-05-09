@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../supabase/config";
 import { User } from "@supabase/supabase-js";
 import { useNavigate } from "react-router-dom";
-import { Box, TextField, Typography, styled } from "@mui/material";
+import { Box, TextField, Typography, styled, Button, Modal, IconButton } from "@mui/material";
 import loginImg from "../../assets/loginImg/portrait-doctor.jpg";
 import GoogleLogo from "../../assets/google svg/googleLogo.svg";
 import { ToastContainer, toast } from "react-toastify";
+import CloseIcon from '@mui/icons-material/Close';
 
 const MainContainer = styled(Box)(() => ({
   display: "flex",
@@ -175,11 +176,56 @@ const GoggleImg = styled("img")(({ theme }) => ({
   [theme.breakpoints.down("sm")]: { height: "10px" },
 }));
 
+const ModalContainer = styled(Box)(({ theme }) => ({
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  backgroundColor: '#fff',
+  boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)',
+  borderRadius: '8px',
+  padding: '2rem',
+  outline: 'none',
+  maxWidth: '400px',
+  width: '100%',
+  [theme.breakpoints.down('sm')]: {
+    padding: '1rem',
+    maxWidth: '300px',
+  },
+}));
+
+const ModalHeader = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: '1.5rem',
+  [theme.breakpoints.down('sm')]: {
+    marginBottom: '1rem',
+  },
+}));
+
+const ModalTitle = styled(Typography)(({ theme }) => ({
+  fontSize: '1.5rem',
+  fontWeight: 'bold',
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '1.2rem',
+  },
+}));
+
+const CloseButton = styled(IconButton)(({ theme }) => ({
+  color: theme.palette.text.secondary,
+  [theme.breakpoints.down('sm')]: {
+    padding: '4px',
+  },
+}));
+
 export function LoginPage() {
   const [user, setUser] = useState<User | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
 
   const navigate = useNavigate();
 
@@ -244,6 +290,25 @@ export function LoginPage() {
     }
   };
 
+  const handlePasswordReset = async () => {
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+        redirectTo: 'https://your-app-url.com/reset-password', //Change with the actual URL where your password reset page is hosted
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      toast.success('Password reset email sent. Please check your inbox.');
+      setOpenModal(false);
+      setResetEmail('');
+    } catch (error) {
+      toast.error('Error sending password reset email.');
+      console.error('Error sending password reset email:', error);
+    }
+  };
+
   useEffect(() => {
     const getUser = async () => {
       const {
@@ -268,6 +333,33 @@ export function LoginPage() {
   return (
     <>
       <ToastContainer />
+
+      <Modal open={openModal} onClose={() => setOpenModal(false)}>
+        <ModalContainer>
+          <ModalHeader>
+            <ModalTitle>Reset Password</ModalTitle>
+            <CloseButton onClick={() => setOpenModal(false)}>
+              <CloseIcon />
+            </CloseButton>
+          </ModalHeader>
+          <TextField
+            label="Email"
+            value={resetEmail}
+            onChange={(e) => setResetEmail(e.target.value)}
+            fullWidth
+            margin="normal"
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handlePasswordReset}
+            fullWidth
+            sx={{ marginTop: '1rem' }}
+          >
+            Send Reset Link
+          </Button>
+        </ModalContainer>
+      </Modal>
 
       <MainContainer>
         <Container>
@@ -317,11 +409,14 @@ export function LoginPage() {
               <TextTitle onClick={() => navigate("/signup")}>
                 Don't have an account? Sign up
               </TextTitle>
-              <TextTitle
+              {/* <TextTitle
                 onClick={() =>
                   toast.warning(" currently in development phase.")
                 }
               >
+                Forgot password?
+              </TextTitle> */}
+              <TextTitle onClick={() => setOpenModal(true)}>
                 Forgot password?
               </TextTitle>
             </Box>

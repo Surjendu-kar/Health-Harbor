@@ -12,6 +12,7 @@ import Navbar from "./components/header/Navbar";
 import Footer from "./components/footer/Footer";
 import DoctorDetails from "./pages/find a doctor/DoctorDetails";
 import { SignupPage } from "./pages/loginSignupPage/SignupPage";
+import ResetPassword from "./pages/loginSignupPage/ResetPassword";
 
 const App = () => {
   const navigate = useNavigate();
@@ -55,6 +56,7 @@ const App = () => {
         <Route element={<AboutUs />} path="/about-us" />
         <Route element={<Contact />} path="/contact" />
         <Route element={<ProfileDetails />} path="/profile" />
+        <Route element={<ResetPassword />} path="/reset" />
       </Routes>
       <Footer />
     </>
