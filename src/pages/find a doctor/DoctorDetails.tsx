@@ -5,6 +5,7 @@ import { Box, Rating, Typography, styled, Button } from "@mui/material";
 import { supabase } from "../../supabase/config";
 import { User } from "@supabase/supabase-js";
 import { ToastContainer, toast } from "react-toastify";
+import FeedbackSection from '../../components/feedbackSection/FeedbackSection';
 
 const MainContainer = styled(Box)({
   display: "flex",
@@ -519,7 +520,8 @@ function DoctorDetails() {
           {showDetails ? (
             <ViewDetails fetchedData={state.doctor} />
           ) : (
-            <Box>feedback</Box>
+            // <Box>feedback</Box>
+            <FeedbackSection doctorId={state.doctor.id} />
           )}
         </Container>
       </MainContainer>
