@@ -373,7 +373,6 @@ function PatientInfo({ user }) {
     }
     const patientData = {
       name: name,
-      img: imgPath,
       phoneNo: phone,
       gender: gender,
       dateOfBirth: dateOfBirth,
