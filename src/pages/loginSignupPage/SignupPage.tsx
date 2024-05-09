@@ -255,23 +255,27 @@ export function SignupPage() {
         password: password,
       });
 
-      const { data, error: updateError } = await supabase
-        .from("doctorInfo")
-        .insert({ email: email, role: selectedRole });
-
-      if (signUpError || updateError) {
-        toast.error(signUpError?.message || updateError?.message);
+      if (signUpError) {
+        toast.error(signUpError.message);
       } else {
-        toast.success(
-          "Sign up successful! Please check your email for confirmation."
-        );
-        setTimeout(() => {
-          navigate("/login");
-        }, 1000);
-        setEmail("");
-        setPassword("");
-        setConfirmPassword("");
-        setSelectedRole("");
+        const { error: updateError } = await supabase
+          .from(selectedRole === "patient" ? "patientInfo" : "doctorInfo")
+          .insert({ email: email, role: selectedRole });
+
+        if (updateError) {
+          toast.error(updateError.message);
+        } else {
+          toast.success(
+            "Sign up successful! Please check your email for confirmation."
+          );
+          setTimeout(() => {
+            navigate("/login");
+          }, 1000);
+          setEmail("");
+          setPassword("");
+          setConfirmPassword("");
+          setSelectedRole("");
+        }
       }
     } catch (error) {
       toast.error("An unexpected error occurred.");

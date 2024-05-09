@@ -9,8 +9,8 @@ import DoctorOverView from "./doctorDetails/doctorOverView/DoctorOverView";
 import Appointments from "./doctorDetails/appointments/Appointments";
 import LoadingAnimation from "../../components/lottieAnimation/LoadingAnimation";
 import FetchSpecificDoctor from "../../supabase/FetchSpecificDoctor";
-import PatientOverView from "./patientDetails/patientOverView/PatientOverView";
 import PatientInfo from "./patientDetails/patientInfo/PatientInfo";
+import PatientAppointment from "./patientDetails/patientAppointment/PatientAppointment";
 
 const MainContainer = styled(Box)(({ theme }) => ({
   width: "100%",
@@ -113,27 +113,18 @@ function ProfileDetails() {
       }}
     >
       <Sidebar onMenuSelect={handleMenuSelect} />
-      {activeComponent === "overview" && fetchedData?.role === "doctor" && (
+      {activeComponent === "overview" && fetchedData?.role === "doctor" ? (
         <DoctorOverView user={user} fetchedData={fetchedData} />
-      )}
-      {activeComponent === "overview" && fetchedData?.role === "patient" && (
-        <>
-          <PatientOverView user={user} fetchedData={fetchedData} />
-        </>
-      )}
-
-      {activeComponent === "profile" && fetchedData?.role === "doctor" && (
+      ) : activeComponent === "overview" && fetchedData?.role !== "doctor" ? (
+        <PatientAppointment user={user} />
+      ) : activeComponent === "profile" && fetchedData?.role === "doctor" ? (
         <Info user={user} fetchedData={fetchedData} />
-      )}
-      {activeComponent === "profile" && fetchedData?.role === "patient" && (
-        <>
-          <PatientInfo user={user} fetchedData={fetchedData} />
-        </>
-      )}
-
-      {activeComponent === "appointments" && fetchedData?.role === "doctor" && (
+      ) : activeComponent === "profile" && fetchedData?.role !== "doctor" ? (
+        <PatientInfo user={user} />
+      ) : activeComponent === "appointments" &&
+        fetchedData?.role === "doctor" ? (
         <Appointments user={user} fetchedData={fetchedData} />
-      )}
+      ) : null}
     </MainContainer>
   );
 }

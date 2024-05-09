@@ -15,12 +15,12 @@ const MainContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-function PatientOverView({ user, fetchedData }) {
+function PatientAppointment({ user }) {
   return (
     <MainContainer>
-      patient overview -- <b>currently in development phase.</b>
+      patient appointments -- <b>currently in development phase.</b>
     </MainContainer>
   );
 }
 
-export default PatientOverView;
+export default PatientAppointment;
