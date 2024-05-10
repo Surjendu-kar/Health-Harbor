@@ -12,6 +12,10 @@ import Navbar from "./components/header/Navbar";
 import Footer from "./components/footer/Footer";
 import DoctorDetails from "./pages/find a doctor/DoctorDetails";
 import { SignupPage } from "./pages/loginSignupPage/SignupPage";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import FeedbackSection from "./components/feedbackSection/FeedbackSection";
+
+const theme = createTheme();
 
 const App = () => {
   const navigate = useNavigate();
@@ -19,7 +23,6 @@ const App = () => {
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
       console.log(event, session);
-
       if (event === "INITIAL_SESSION") {
         // handle initial session
       } else if (event === "SIGNED_IN") {
@@ -38,12 +41,12 @@ const App = () => {
 
     return () => {
       // call unsubscribe to remove the callback
-      // subscription.uns
+      // subscription.unsubscribe();
     };
   }, [navigate]);
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <Navbar />
       <Routes>
         <Route element={<Home />} path="/" />
@@ -51,13 +54,14 @@ const App = () => {
         <Route element={<SignupPage />} path="/signup" />
         <Route element={<FindDoctor />} path="/find-a-doctor" />
         <Route element={<DoctorDetails />} path="/doctor-details" />
+        <Route element={<FeedbackSection />} path="/feedback" />
         <Route element={<Service />} path="/service" />
         <Route element={<AboutUs />} path="/about-us" />
         <Route element={<Contact />} path="/contact" />
         <Route element={<ProfileDetails />} path="/profile" />
       </Routes>
       <Footer />
-    </>
+    </ThemeProvider>
   );
 };
 
