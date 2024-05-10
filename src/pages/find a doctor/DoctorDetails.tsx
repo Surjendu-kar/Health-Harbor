@@ -435,12 +435,14 @@ function DoctorDetails() {
       await supabase
         .from("patientInfo")
         .update({
-          appointment: {
-            doctorEmail: state.doctor.email,
-            doctorName: state.doctor.name,
-            appointmentDate: newAppointment.appointment_date,
-            appointmentTime: newAppointment.appointment_time,
-          },
+          appointment: [
+            {
+              doctorEmail: state.doctor.email,
+              doctorName: state.doctor.name,
+              appointmentDate: newAppointment.appointment_date,
+              appointmentTime: newAppointment.appointment_time,
+            },
+          ],
         })
         .eq("email", userEmail);
 
@@ -450,103 +452,6 @@ function DoctorDetails() {
       toast.error("Error booking appointment.");
     }
   };
-  // const bookAppointment = async (userEmail: string) => { // new updated
-  //   // Fetch existing appointments
-  //   const { data: doctorData, error: doctorError } = await supabase
-  //     .from("doctorInfo")
-  //     .select("bookAppointment")
-  //     .eq("id", state.doctor.id)
-  //     .single();
-
-  //   if (doctorError) {
-  //     toast.error("Error occurred while fetching existing appointments.");
-  //     return;
-  //   }
-
-  //   let existingAppointments = doctorData ? doctorData.bookAppointment : [];
-
-  //   if (typeof existingAppointments === "string") {
-  //     try {
-  //       existingAppointments = JSON.parse(existingAppointments);
-  //     } catch (parseError) {
-  //       console.error("Error parsing appointments data:", parseError);
-  //       existingAppointments = [];
-  //     }
-  //   }
-
-  //   // Remove existing appointments for the same user email to prevent duplicates
-  //   existingAppointments = existingAppointments.filter(
-  //     (appointment) => appointment.user_email !== userEmail
-  //   );
-
-  //   const newAppointment = {
-  //     user_email: userEmail,
-  //     doctor_id: state.doctor.id,
-  //     appointment_date: new Date().toISOString().split("T")[0],
-  //     appointment_time: new Date().toLocaleTimeString("en-US", {
-  //       hour12: false,
-  //       hour: "2-digit",
-  //       minute: "2-digit",
-  //     }),
-  //   };
-
-  //   const updatedAppointments = [...existingAppointments, newAppointment];
-
-  //   try {
-  //     const { data, error } = await supabase
-  //       .from("doctorInfo")
-  //       .update({ bookAppointment: updatedAppointments })
-  //       .eq("id", state.doctor.id);
-
-  //     if (error) throw error;
-
-  //     // Fetch existing appointments for the patient
-  //     const { data: patientData, error: patientError } = await supabase
-  //       .from("patientInfo")
-  //       .select("appointment")
-  //       .eq("email", userEmail)
-  //       .single();
-
-  //     if (patientError) {
-  //       throw patientError;
-  //     }
-
-  //     let existingPatientAppointments = patientData?.appointment || [];
-
-  //     // If existingPatientAppointments is a string, parse it as JSON
-  //     if (typeof existingPatientAppointments === "string") {
-  //       try {
-  //         existingPatientAppointments = JSON.parse(existingPatientAppointments);
-  //       } catch (parseError) {
-  //         console.error("Error parsing appointments data:", parseError);
-  //         existingPatientAppointments = [];
-  //       }
-  //     }
-
-  //     // Remove existing appointments for the same doctor to prevent duplicates
-  //     existingPatientAppointments = existingPatientAppointments.filter(
-  //       (appointment) => appointment.doctor_id !== state.doctor.id
-  //     );
-
-  //     const updatedPatientAppointments = [
-  //       ...existingPatientAppointments,
-  //       newAppointment,
-  //     ];
-
-  //     // Update patientInfo table with doctor's email and appointment details
-  //     await supabase
-  //       .from("patientInfo")
-  //       .update({
-  //         appointment: updatedPatientAppointments,
-  //       })
-  //       .eq("email", userEmail);
-
-  //     toast.success("Appointment booked successfully!");
-  //   } catch (error) {
-  //     console.error("Error updating data:", error);
-  //     toast.error("Error booking appointment.");
-  //   }
-  // };
 
   let timeSoltsArray;
   if (state.doctor && typeof state.doctor.timeSlot === "string") {
