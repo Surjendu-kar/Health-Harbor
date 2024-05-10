@@ -158,20 +158,22 @@ function Sidebar({ onMenuSelect }) {
     navigate("/");
   };
   const handleDeleteAc = async () => {
-    try {
-      const { error } = await supabase
-        .from("doctorInfo")
-        .delete()
-        .eq("email", user?.email);
+    toast.warning ("development phase...");
 
-      if (error) {
-        console.error("Error deleting account:", error.message);
-      } else {
-        toast.success("Account deleted successfully");
-      }
-    } catch (error) {
-      console.error("Error deleting account:", error);
-    }
+    // try {
+    //   const { error } = await supabase
+    //     .from("doctorInfo")
+    //     .delete()
+    //     .eq("email", user?.email);
+
+    //   if (error) {
+    //     console.error("Error deleting account:", error.message);
+    //   } else {
+    //     toast.success("Account deleted successfully");
+    //   }
+    // } catch (error) {
+    //   console.error("Error deleting account:", error);
+    // }
   };
 
   return (
