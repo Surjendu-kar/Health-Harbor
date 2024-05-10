@@ -1,70 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Typography, TextField, Button, styled, Rating } from '@mui/material';
-import { supabase } from '../../supabase/config';
+import React, { useState } from 'react';
+import { Box, Typography, TextField, Button, styled, Rating, useMediaQuery, IconButton } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
-
-const TitleTextField = styled(TextField)(({ theme }) => ({
-  marginTop: "1.5rem",
-  display: "block",
-  backgroundColor: "#fff",
-
-  [theme.breakpoints.down("lg")]: {
-    marginTop: "1rem",
-  },
-  [theme.breakpoints.down("md")]: {
-    marginTop: "0.9rem",
-  },
-  [theme.breakpoints.down("sm")]: {
-    marginTop: "0.7rem",
-  },
-
-  "& .MuiInputBase-root": {
-    [theme.breakpoints.down("lg")]: {
-      fontSize: "0.95rem",
-      padding: "0px",
-    },
-    [theme.breakpoints.down("md")]: {
-      fontSize: "0.75rem",
-    },
-    [theme.breakpoints.down("sm")]: {
-      fontSize: "0.65rem",
-    },
-  },
-  "& .MuiOutlinedInput-input": {
-    [theme.breakpoints.down("lg")]: {
-      height: "20px",
-    },
-    [theme.breakpoints.down("md")]: {
-      height: "10px",
-    },
-    [theme.breakpoints.down("sm")]: {
-      height: "5px",
-      padding: "15px",
-    },
-  },
-}));
-
-const Heading = styled(Typography)(({ theme }) => ({
-  fontSize: "1.05rem",
-  marginBottom: "0.5rem",
-  [theme.breakpoints.down("lg")]: {
-    fontSize: "0.1rem",
-    marginBottom: "0.3rem",
-  },
-  [theme.breakpoints.down("md")]: {
-    fontSize: "0.9rem",
-    marginBottom: "0.2rem",
-  },
-  [theme.breakpoints.down("sm")]: {
-    fontSize: "0.75rem",
-    marginBottom: "0.1rem",
-  },
-}));
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 const FeedbackContainer = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: theme.spacing(2),
+  backgroundColor: theme.palette.background.paper,
+  padding: theme.spacing(3),
+  borderRadius: theme.shape.borderRadius,
+  boxShadow: theme.shadows[3],
 }));
 
 const FeedbackItem = styled(Box)(({ theme }) => ({
@@ -72,36 +16,54 @@ const FeedbackItem = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.grey[200],
   borderRadius: theme.shape.borderRadius,
   display: 'flex',
-  alignItems: 'center',
+  flexDirection: 'column',
+  alignItems: 'flex-start',
   gap: theme.spacing(1),
 }));
 
-interface FeedbackSectionProps {
-  doctorId: string;
-}
+const RatingContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(0.5),
+}));
 
-const FeedbackSection: React.FC<FeedbackSectionProps> = ({ doctorId }) => {
+const Heading = styled(Typography)(({ theme }) => ({
+  fontWeight: 'bold',
+  marginBottom: theme.spacing(2),
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '1.2rem',
+  },
+}));
+
+const FeedbackSection: React.FC = () => {
   const [feedback, setFeedback] = useState('');
   const [rating, setRating] = useState<number | null>(null);
-  const [doctorFeedback, setDoctorFeedback] = useState<any[]>([]);
+  const [doctorFeedback, setDoctorFeedback] = useState<
+    { id: string; feedback: string; rating: number; likedBy: string[] }[]
+  >([
+    {
+      id: '1',
+      feedback: 'Great doctor! Very knowledgeable and caring.',
+      rating: 4.5,
+      likedBy: ['user1', 'user2'],
+    },
+    {
+      id: '2',
+      feedback: 'The doctor was patient and answered all my questions.',
+      rating: 5,
+      likedBy: ['user3'],
+    },
+    {
+      id: '3',
+      feedback: 'Could have been more attentive to my concerns.',
+      rating: 3,
+      likedBy: [],
+    },
+  ]);
 
-  useEffect(() => {
-    const fetchDoctorFeedback = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('doctorFeedback')
-          .select('*')
-          .eq('doctorId', doctorId);
-
-        if (error) throw error;
-        setDoctorFeedback(data);
-      } catch (error) {
-        console.error('Error fetching doctor feedback:', error);
-      }
-    };
-
-    fetchDoctorFeedback();
-  }, [doctorId]);
+  const isSmallScreen = useMediaQuery((theme: any) => theme.breakpoints.down('sm'));
+  const isLoggedIn = true; // Replace with your actual login state
+  const currentUser = 'user4'; // Replace with your actual user ID
 
   const handleFeedbackSubmit = async () => {
     if (!feedback.trim()) {
@@ -114,50 +76,100 @@ const FeedbackSection: React.FC<FeedbackSectionProps> = ({ doctorId }) => {
       return;
     }
 
-    try {
-      const { data, error } = await supabase
-        .from('doctorFeedback')
-        .insert([{ feedback, rating, doctorId }]);
+    const newFeedbackItem = {
+      id: Date.now().toString(),
+      feedback,
+      rating,
+      likedBy: [],
+    };
+    setDoctorFeedback([...doctorFeedback, newFeedbackItem]);
+    toast.success('Feedback submitted successfully!');
+    setFeedback('');
+    setRating(null);
+  };
 
-      if (error) throw error;
-      toast.success('Feedback submitted successfully!');
-      setFeedback('');
-      setRating(null);
-      setDoctorFeedback([...doctorFeedback, ...data]);
-    } catch (error) {
-      console.error('Error submitting feedback:', error);
-      toast.error('Error submitting feedback.');
+  const handleLike = (feedbackId: string) => {
+    if (!isLoggedIn) {
+      toast.info('Please login to like the feedback.');
+      return;
     }
+
+    setDoctorFeedback((prevFeedback) =>
+      prevFeedback.map((item) => {
+        if (item.id === feedbackId) {
+          if (item.likedBy.includes(currentUser)) {
+            toast.info('You have already liked this feedback.');
+            return item;
+          }
+          return { ...item, likedBy: [...item.likedBy, currentUser] };
+        }
+        return item;
+      })
+    );
+  };
+
+  const hasLikedFeedback = (feedbackId: string) => {
+    const feedback = doctorFeedback.find((item) => item.id === feedbackId);
+    return feedback?.likedBy.includes(currentUser) || false;
   };
 
   return (
     <FeedbackContainer>
-      <Heading>Leave Feedback</Heading>
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Heading variant="h5">Leave Feedback</Heading>
+      <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
         <Rating
           name="rating"
           value={rating || 0}
           onChange={(_, newValue) => setRating(newValue)}
           precision={0.5}
-          size="large"
+          size={isSmallScreen ? 'medium' : 'large'}
         />
       </Box>
-      <TitleTextField
-        sx={{ marginTop: 0 }}
+      <TextField
         fullWidth
         multiline
-        rows={4}
+        rows={isSmallScreen ? 3 : 4}
         value={feedback}
         onChange={(e) => setFeedback(e.target.value)}
-        label="Write your feedback here..."
+        placeholder="Write your feedback here..."
+        variant="outlined"
+        sx={{ marginBottom: 2 }}
       />
       <Button variant="contained" onClick={handleFeedbackSubmit}>
         Submit Feedback
       </Button>
-      <Heading>Doctor Feedback</Heading>
+      <Heading variant="h5" sx={{ marginTop: 4 }}>
+        Doctor Feedback
+      </Heading>
       {doctorFeedback.map((feedbackItem) => (
         <FeedbackItem key={feedbackItem.id}>
-          <Typography>{feedbackItem.feedback}</Typography>
+          <RatingContainer>
+            <Rating
+              name="rating"
+              value={feedbackItem.rating}
+              precision={0.5}
+              size={isSmallScreen ? 'small' : 'medium'}
+              readOnly
+            />
+            <Typography variant="body2">{feedbackItem.rating}</Typography>
+          </RatingContainer>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Typography>{feedbackItem.feedback}</Typography>
+            <IconButton
+              aria-label="like"
+              onClick={() => handleLike(feedbackItem.id)}
+              size="small"
+              color="error"
+              disabled={!isLoggedIn || hasLikedFeedback(feedbackItem.id)}
+            >
+              {hasLikedFeedback(feedbackItem.id) ? (
+                <FavoriteIcon fontSize="small" />
+              ) : (
+                <FavoriteBorderIcon fontSize="small" />
+              )}
+              <Typography variant="body2">{feedbackItem.likedBy.length}</Typography>
+            </IconButton>
+          </Box>
         </FeedbackItem>
       ))}
       <ToastContainer />
