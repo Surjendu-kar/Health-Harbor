@@ -27,7 +27,7 @@ const Cell = styled(Box)(() => ({
 }));
 
 function PatientAppointment({ user }) {
-  const [appointments, setAppointments] = useState();
+  const [appointments, setAppointments] = useState([]);
 
   useEffect(() => {
     const fetchPatientInfo = async () => {
@@ -38,12 +38,11 @@ function PatientAppointment({ user }) {
             .select("appointment")
             .eq("email", user.email)
             .single();
-          // console.log(data);
 
           if (error) {
             console.error("Error fetching patientInfo:", error);
           } else {
-            setAppointments(data);
+            setAppointments(JSON.parse(data.appointment));
           }
         } catch (error) {
           console.error("Error fetching patientInfo:", error);
@@ -64,21 +63,21 @@ function PatientAppointment({ user }) {
         >
           <Cell>Doctor Email</Cell>
           <Cell>Doctor Name</Cell>
-          <Cell>Payment</Cell>
           <Cell>Appointment Date</Cell>
-          <Cell> Approve</Cell>
+          <Cell>price</Cell>
+          <Cell>Payment</Cell>
         </Row>
-        {/* {appointments.map((appointment, index) => (
+        {appointments.map((appointment, index) => (
           <Row key={index} sx={{ border: "1px solid black" }}>
             <Cell>{appointment.doctorEmail}</Cell>
-            <Cell></Cell>
-            <Cell></Cell>
+            <Cell>{appointment.doctorName}</Cell>
             <Cell></Cell>
             <Cell>
               {appointment.appointmentDate} _ {appointment.appointmentTime}
             </Cell>
+            <Cell></Cell>
           </Row>
-        ))} */}
+        ))}
       </TableContainer>
     </MainContainer>
   );
