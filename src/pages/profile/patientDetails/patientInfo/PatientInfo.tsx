@@ -399,7 +399,6 @@ function PatientInfo({ user }) {
           console.error("Error updating patientInfo:", error);
           toast.error("Failed to update patient information.");
         } else {
-          console.log("PatientInfo updated successfully:", data);
           toast.success("Patient information updated successfully!");
         }
       } catch (error) {

@@ -22,7 +22,7 @@ const App = () => {
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
-      console.log(event, session);
+      // console.log(event, session);
       if (event === "INITIAL_SESSION") {
         // handle initial session
       } else if (event === "SIGNED_IN") {

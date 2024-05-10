@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ViewDetails from "../../components/viewDetails/ViewDetails";
-import { Box, Rating, Typography, styled, Button } from "@mui/material";
+import {
+  Box,
+  Rating,
+  Typography,
+  styled,
+  Button,
+  CircularProgress,
+} from "@mui/material";
 import { supabase } from "../../supabase/config";
 import { User } from "@supabase/supabase-js";
 import { ToastContainer, toast } from "react-toastify";
-import FeedbackSection from '../../components/feedbackSection/FeedbackSection';
+import FeedbackSection from "../../components/feedbackSection/FeedbackSection";
 
 const MainContainer = styled(Box)({
   display: "flex",
@@ -216,35 +223,6 @@ const Solts = styled(Typography)(({ theme }) => ({
   },
 }));
 
-const BookAppointmentBtn = styled(Button)(({ theme }) => ({
-  marginTop: "2rem",
-  fontSize: "0.8rem",
-  color: "#fff",
-  backgroundColor: "#1976d2",
-  padding: "0.5rem 0",
-  "&:hover": {
-    color: "#1976d2",
-    backgroundColor: "#fff",
-  },
-
-  [theme.breakpoints.down("lg")]: {
-    fontSize: "0.7rem",
-    marginTop: "1.5rem",
-    padding: "0.4rem 0",
-  },
-  [theme.breakpoints.down("md")]: {
-    fontSize: "0.55rem",
-    marginTop: "1rem",
-    padding: "0.2rem 0",
-  },
-  [theme.breakpoints.down("sm")]: {
-    fontSize: "0.42rem",
-    marginTop: "0.5rem",
-    padding: "0.1rem 0",
-    borderRadius: "2px",
-  },
-}));
-
 const DetailContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   margin: "2.5rem 0 2rem 0",
@@ -295,6 +273,37 @@ function DoctorDetails() {
   const [showDetails, setShowDetails] = useState(true);
   const [value, setValue] = React.useState<number | null>(2);
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [buttonText, setButtonText] = useState("Book Appointment");
+
+  const BookAppointmentBtn = styled(Button)(({ theme }) => ({
+    marginTop: "2rem",
+    fontSize: "0.8rem",
+    color: isLoading ? "#1976d2" : "#fff",
+    backgroundColor: isLoading ? "#fff" : "#1976d2",
+    padding: "0.5rem 0",
+    "&:hover": {
+      color: "#1976d2",
+      backgroundColor: "#fff",
+    },
+
+    [theme.breakpoints.down("lg")]: {
+      fontSize: "0.7rem",
+      marginTop: "1.5rem",
+      padding: "0.4rem 0",
+    },
+    [theme.breakpoints.down("md")]: {
+      fontSize: "0.55rem",
+      marginTop: "1rem",
+      padding: "0.2rem 0",
+    },
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.42rem",
+      marginTop: "0.5rem",
+      padding: "0.1rem 0",
+      borderRadius: "2px",
+    },
+  }));
 
   useEffect(() => {
     const getUser = async () => {
@@ -326,6 +335,9 @@ function DoctorDetails() {
       return;
     }
 
+    setIsLoading(true);
+    setButtonText("Loading...");
+
     // Check if the user is a patient or a doctor
     const { data: userData } = await supabase
       .from("patientInfo")
@@ -345,20 +357,28 @@ function DoctorDetails() {
         .single();
 
       if (doctorError) {
+        setIsLoading(false);
+        setButtonText("Book Appointment");
         toast.error("Error occurred while checking user role.");
         return;
       }
 
       if (doctorData) {
+        setIsLoading(false);
+        setButtonText("Book Appointment");
         toast.error(
           "Doctors cannot book appointments. Please log in as a patient."
         );
         return;
       } else {
+        setIsLoading(false);
+        setButtonText("Book Appointment");
         toast.error("Invalid user. Please check your credentials.");
         return;
       }
     }
+    setIsLoading(false);
+    setButtonText("Book Appointment");
   };
 
   const bookAppointment = async (userEmail: string) => {
@@ -410,13 +430,123 @@ function DoctorDetails() {
         .eq("id", state.doctor.id);
 
       if (error) throw error;
+
+      // Update patientInfo table with doctor's email and appointment details
+      await supabase
+        .from("patientInfo")
+        .update({
+          appointment: {
+            doctorEmail: state.doctor.email,
+            doctorName: state.doctor.name,
+            appointmentDate: newAppointment.appointment_date,
+            appointmentTime: newAppointment.appointment_time,
+          },
+        })
+        .eq("email", userEmail);
+
       toast.success("Appointment booked successfully!");
-      // console.log(data);
     } catch (error) {
       console.error("Error updating data:", error);
       toast.error("Error booking appointment.");
     }
   };
+  // const bookAppointment = async (userEmail: string) => { // new updated
+  //   // Fetch existing appointments
+  //   const { data: doctorData, error: doctorError } = await supabase
+  //     .from("doctorInfo")
+  //     .select("bookAppointment")
+  //     .eq("id", state.doctor.id)
+  //     .single();
+
+  //   if (doctorError) {
+  //     toast.error("Error occurred while fetching existing appointments.");
+  //     return;
+  //   }
+
+  //   let existingAppointments = doctorData ? doctorData.bookAppointment : [];
+
+  //   if (typeof existingAppointments === "string") {
+  //     try {
+  //       existingAppointments = JSON.parse(existingAppointments);
+  //     } catch (parseError) {
+  //       console.error("Error parsing appointments data:", parseError);
+  //       existingAppointments = [];
+  //     }
+  //   }
+
+  //   // Remove existing appointments for the same user email to prevent duplicates
+  //   existingAppointments = existingAppointments.filter(
+  //     (appointment) => appointment.user_email !== userEmail
+  //   );
+
+  //   const newAppointment = {
+  //     user_email: userEmail,
+  //     doctor_id: state.doctor.id,
+  //     appointment_date: new Date().toISOString().split("T")[0],
+  //     appointment_time: new Date().toLocaleTimeString("en-US", {
+  //       hour12: false,
+  //       hour: "2-digit",
+  //       minute: "2-digit",
+  //     }),
+  //   };
+
+  //   const updatedAppointments = [...existingAppointments, newAppointment];
+
+  //   try {
+  //     const { data, error } = await supabase
+  //       .from("doctorInfo")
+  //       .update({ bookAppointment: updatedAppointments })
+  //       .eq("id", state.doctor.id);
+
+  //     if (error) throw error;
+
+  //     // Fetch existing appointments for the patient
+  //     const { data: patientData, error: patientError } = await supabase
+  //       .from("patientInfo")
+  //       .select("appointment")
+  //       .eq("email", userEmail)
+  //       .single();
+
+  //     if (patientError) {
+  //       throw patientError;
+  //     }
+
+  //     let existingPatientAppointments = patientData?.appointment || [];
+
+  //     // If existingPatientAppointments is a string, parse it as JSON
+  //     if (typeof existingPatientAppointments === "string") {
+  //       try {
+  //         existingPatientAppointments = JSON.parse(existingPatientAppointments);
+  //       } catch (parseError) {
+  //         console.error("Error parsing appointments data:", parseError);
+  //         existingPatientAppointments = [];
+  //       }
+  //     }
+
+  //     // Remove existing appointments for the same doctor to prevent duplicates
+  //     existingPatientAppointments = existingPatientAppointments.filter(
+  //       (appointment) => appointment.doctor_id !== state.doctor.id
+  //     );
+
+  //     const updatedPatientAppointments = [
+  //       ...existingPatientAppointments,
+  //       newAppointment,
+  //     ];
+
+  //     // Update patientInfo table with doctor's email and appointment details
+  //     await supabase
+  //       .from("patientInfo")
+  //       .update({
+  //         appointment: updatedPatientAppointments,
+  //       })
+  //       .eq("email", userEmail);
+
+  //     toast.success("Appointment booked successfully!");
+  //   } catch (error) {
+  //     console.error("Error updating data:", error);
+  //     toast.error("Error booking appointment.");
+  //   }
+  // };
 
   let timeSoltsArray;
   if (state.doctor && typeof state.doctor.timeSlot === "string") {
@@ -502,8 +632,9 @@ function DoctorDetails() {
                 <BookAppointmentBtn
                   variant="outlined"
                   onClick={handleAppointmentClick}
+                  disabled={isLoading}
                 >
-                  Book Appointment
+                  {buttonText}
                 </BookAppointmentBtn>
               </Appointment>
             </Box>

@@ -5,6 +5,7 @@ import { supabase } from "../../../../supabase/config";
 import React, { useEffect, useRef, useState } from "react";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import ViewDetails from "../../../../components/viewDetails/ViewDetails";
+import { ToastContainer, toast } from "react-toastify";
 
 const MainContainer = styled(Box)(({ theme }) => ({
   width: "50%",
@@ -173,8 +174,7 @@ function DoctorOverView({
         const fullPath = `https://eraerhfcolqnyopznyyb.supabase.co/storage/v1/object/public/${data.fullPath}`; //store it in env
         setImgPath(fullPath);
       }
-
-      console.log("Upload successful", data);
+      toast.success("Upload successful");
     } catch (error) {
       console.log(error);
     } finally {
@@ -192,7 +192,7 @@ function DoctorOverView({
             .eq("email", user?.email);
 
           if (error) throw error;
-          console.log("Database update successful", data);
+          toast.success("Doctor information updated successfully");
         } catch (error) {
           console.error("Error updating data:", error);
         }
@@ -203,63 +203,69 @@ function DoctorOverView({
   }, [imgPath, user?.email, fetchedData?.img]);
 
   return (
-    <MainContainer>
-      {/* Img & Name */}
-      <ImgBox>
-        {/* Img */}
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
-          <Img
-            src={imgPath}
-            alt="profile-image"
-            style={{
-              opacity: isLoading ? 0.5 : 1,
-              filter: isLoading ? "blur(2px)" : "blur(0px)",
-            }}
-            onLoad={() => setIsLoading(false)}
-          />
-        </Box>
+    <>
+      <ToastContainer />
 
-        {user && fetchedData && (
-          <NameRatingBox>
-            {/* Name */}
-            <Name>
-              {fetchedData ? fetchedData.name : user?.user_metadata?.full_name}
-            </Name>
+      <MainContainer>
+        {/* Img & Name */}
+        <ImgBox>
+          {/* Img */}
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+            <Img
+              src={imgPath}
+              alt="profile-image"
+              style={{
+                opacity: isLoading ? 0.5 : 1,
+                filter: isLoading ? "blur(2px)" : "blur(0px)",
+              }}
+              onLoad={() => setIsLoading(false)}
+            />
+          </Box>
 
-            {/* Rating */}
-            <ResponsiveRating name="read-only" value={value} readOnly />
-          </NameRatingBox>
-        )}
-      </ImgBox>
+          {user && fetchedData && (
+            <NameRatingBox>
+              {/* Name */}
+              <Name>
+                {fetchedData
+                  ? fetchedData.name
+                  : user?.user_metadata?.full_name}
+              </Name>
 
-      <label
-        htmlFor="upload-profile-img"
-        style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
-      >
-        <input
-          type="file"
-          name="upload-img"
-          id="upload-profile-img"
-          style={{ display: "none" }}
-          onChange={handleFileInput}
-          ref={uploadRef}
-        />
-        <ImgBtn
-          variant="contained"
-          tabIndex={-1}
-          startIcon={<CloudUploadIcon />}
-          onClick={() => {
-            if (uploadRef?.current) {
-              uploadRef.current.click();
-            }
-          }}
+              {/* Rating */}
+              <ResponsiveRating name="read-only" value={value} readOnly />
+            </NameRatingBox>
+          )}
+        </ImgBox>
+
+        <label
+          htmlFor="upload-profile-img"
+          style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
         >
-          {imgPath && imgPath !== defaultImg ? "Edit" : "Add photo"}
-        </ImgBtn>
-      </label>
+          <input
+            type="file"
+            name="upload-img"
+            id="upload-profile-img"
+            style={{ display: "none" }}
+            onChange={handleFileInput}
+            ref={uploadRef}
+          />
+          <ImgBtn
+            variant="contained"
+            tabIndex={-1}
+            startIcon={<CloudUploadIcon />}
+            onClick={() => {
+              if (uploadRef?.current) {
+                uploadRef.current.click();
+              }
+            }}
+          >
+            {imgPath && imgPath !== defaultImg ? "Edit" : "Add photo"}
+          </ImgBtn>
+        </label>
 
-      {user && fetchedData && <ViewDetails fetchedData={fetchedData} />}
-    </MainContainer>
+        {user && fetchedData && <ViewDetails fetchedData={fetchedData} />}
+      </MainContainer>
+    </>
   );
 }
 

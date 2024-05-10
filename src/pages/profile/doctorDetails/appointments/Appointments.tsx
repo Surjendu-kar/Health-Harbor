@@ -48,11 +48,11 @@ function Appointments({
               borderTopLeftRadius: "10px",
             }}
           >
-            <Cell>USER EMAIL</Cell>
-            <Cell>GENDER</Cell>
-            <Cell>PAYMENT</Cell>
-            <Cell>PRICE</Cell>
-            <Cell>BOOKED ON</Cell>
+            <Cell>Patient Email</Cell>
+            <Cell>Gender</Cell>
+            <Cell>Price</Cell>
+            <Cell>Payement</Cell>
+            <Cell>Booked On</Cell>
           </Row>
           {appointments.map((appointment, index) => (
             <Row key={index} sx={{ border: "1px solid black" }}>
