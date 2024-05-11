@@ -268,6 +268,35 @@ const StyleText = styled(Typography)(({ theme, selected }) => ({
   },
 }));
 
+const BookAppointmentBtn = styled(Button)(({ theme }) => ({
+  marginTop: "2rem",
+  fontSize: "0.8rem",
+  color: "#fff",
+  backgroundColor: "#1976d2",
+  padding: "0.5rem 0",
+  "&:hover": {
+    color: "#1976d2",
+    backgroundColor: "#fff",
+  },
+
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "0.7rem",
+    marginTop: "1.5rem",
+    padding: "0.4rem 0",
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.55rem",
+    marginTop: "1rem",
+    padding: "0.2rem 0",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.42rem",
+    marginTop: "0.5rem",
+    padding: "0.1rem 0",
+    borderRadius: "2px",
+  },
+}));
+
 function DoctorDetails() {
   const { state } = useLocation();
   const [showDetails, setShowDetails] = useState(true);
@@ -275,35 +304,6 @@ function DoctorDetails() {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [buttonText, setButtonText] = useState("Book Appointment");
-
-  const BookAppointmentBtn = styled(Button)(({ theme }) => ({
-    marginTop: "2rem",
-    fontSize: "0.8rem",
-    color: isLoading ? "#1976d2" : "#fff",
-    backgroundColor: isLoading ? "#fff" : "#1976d2",
-    padding: "0.5rem 0",
-    "&:hover": {
-      color: "#1976d2",
-      backgroundColor: "#fff",
-    },
-
-    [theme.breakpoints.down("lg")]: {
-      fontSize: "0.7rem",
-      marginTop: "1.5rem",
-      padding: "0.4rem 0",
-    },
-    [theme.breakpoints.down("md")]: {
-      fontSize: "0.55rem",
-      marginTop: "1rem",
-      padding: "0.2rem 0",
-    },
-    [theme.breakpoints.down("sm")]: {
-      fontSize: "0.42rem",
-      marginTop: "0.5rem",
-      padding: "0.1rem 0",
-      borderRadius: "2px",
-    },
-  }));
 
   useEffect(() => {
     const getUser = async () => {
@@ -394,25 +394,58 @@ function DoctorDetails() {
       return;
     }
 
-    let existingAppointments = doctorData ? doctorData.bookAppointment : [];
+    let existingAppointments = [];
 
-    if (typeof existingAppointments === "string") {
+    if (doctorData && doctorData.bookAppointment) {
       try {
-        existingAppointments = JSON.parse(existingAppointments);
+        existingAppointments = JSON.parse(doctorData.bookAppointment);
       } catch (parseError) {
         console.error("Error parsing appointments data:", parseError);
         existingAppointments = [];
       }
+    } else {
+      existingAppointments = [];
     }
 
     // Remove existing appointments for the same user email to prevent duplicates
     existingAppointments = existingAppointments.filter(
-      (appointment) => appointment.user_email !== userEmail
+      (appointment) => appointment?.patientDetails?.patientEmail !== userEmail
     );
 
+    //fetch data from patientInfo for storing it into doctorInfo
+    const { data: patientData, error: patientError } = await supabase
+      .from("patientInfo")
+      .select("*")
+      .eq("email", userEmail)
+      .single();
+
+    if (patientError) {
+      toast.error("Error occurred while fetching patient information.");
+      return;
+    }
+
     const newAppointment = {
-      user_email: userEmail,
-      doctor_id: state.doctor.id,
+      patientDetails: {
+        patientEmail: userEmail,
+        patientId: patientData.id,
+        patientName: patientData.name,
+        patientGender: patientData.gender,
+        patientPhone: patientData.phoneNo,
+        patientHeight: patientData.height,
+        patientWeight: patientData.weight,
+        patientBloodGroup: patientData.bloodGroup,
+        patientDateOfBirth: patientData.dateOfBirth,
+      },
+      patientPrb: {
+        aboutProblem: patientData.about,
+        allergies: patientData.allergies,
+      },
+      patientAddress: {
+        address: patientData.address,
+        city: patientData.city,
+      },
+      emergency: JSON.parse(patientData.emergencyContact),
+
       appointment_date: new Date().toISOString().split("T")[0],
       appointment_time: new Date().toLocaleTimeString("en-US", {
         hour12: false,
