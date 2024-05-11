@@ -67,17 +67,18 @@ function PatientAppointment({ user }) {
           <Cell>price</Cell>
           <Cell>Payment</Cell>
         </Row>
-        {appointments.map((appointment, index) => (
-          <Row key={index} sx={{ border: "1px solid black" }}>
-            <Cell>{appointment.doctorEmail}</Cell>
-            <Cell>{appointment.doctorName}</Cell>
-            <Cell></Cell>
-            <Cell>
-              {appointment.appointmentDate} _ {appointment.appointmentTime}
-            </Cell>
-            <Cell></Cell>
-          </Row>
-        ))}
+        {appointments &&
+          appointments.map((appointment, index) => (
+            <Row key={index} sx={{ border: "1px solid black" }}>
+              <Cell>{appointment.doctorEmail}</Cell>
+              <Cell>{appointment.doctorName}</Cell>
+              <Cell>
+                {appointment.appointmentDate} _ {appointment.appointmentTime}
+              </Cell>
+              <Cell></Cell>
+              <Cell></Cell>
+            </Row>
+          ))}
       </TableContainer>
     </MainContainer>
   );
