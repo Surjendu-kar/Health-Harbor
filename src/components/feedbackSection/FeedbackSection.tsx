@@ -20,7 +20,6 @@ const FeedbackContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(3),
   borderRadius: theme.shape.borderRadius,
   boxShadow: theme.shadows[3],
-  
 }));
 
 const FeedbackItem = styled(Box)(({ theme }) => ({
