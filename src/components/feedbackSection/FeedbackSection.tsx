@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -12,6 +12,8 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { supabase } from "../../supabase/config";
+import { User } from "@supabase/supabase-js";
 
 const FeedbackContainer = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -49,32 +51,24 @@ const FeedbackSection: React.FC = () => {
   const [rating, setRating] = useState<number | null>(null);
   const [doctorFeedback, setDoctorFeedback] = useState<
     { id: string; feedback: string; rating: number; likedBy: string[] }[]
-  >([
-    {
-      id: "1",
-      feedback: "Great doctor! Very knowledgeable and caring.",
-      rating: 4.5,
-      likedBy: ["user1", "user2"],
-    },
-    {
-      id: "2",
-      feedback: "The doctor was patient and answered all my questions.",
-      rating: 5,
-      likedBy: ["user3"],
-    },
-    {
-      id: "3",
-      feedback: "Could have been more attentive to my concerns.",
-      rating: 3,
-      likedBy: [],
-    },
-  ]);
+  >([]);
+
+  const [user, setUser] = useState<User | null>(null);
 
   const isSmallScreen = useMediaQuery((theme: any) =>
     theme.breakpoints.down("sm")
   );
-  const isLoggedIn = true; // Replace with your actual login state
-  const currentUser = "user4"; // Replace with your actual user ID
+
+  useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUser(user);
+    };
+
+    getUser();
+  }, []);
 
   const handleFeedbackSubmit = async () => {
     if (!feedback.trim()) {
@@ -100,7 +94,7 @@ const FeedbackSection: React.FC = () => {
   };
 
   const handleLike = (feedbackId: string) => {
-    if (!isLoggedIn) {
+    if (!user) {
       toast.info("Please login to like the feedback.");
       return;
     }
@@ -108,11 +102,11 @@ const FeedbackSection: React.FC = () => {
     setDoctorFeedback((prevFeedback) =>
       prevFeedback.map((item) => {
         if (item.id === feedbackId) {
-          if (item.likedBy.includes(currentUser)) {
+          if (item.likedBy.includes(user.id)) {
             toast.info("You have already liked this feedback.");
             return item;
           }
-          return { ...item, likedBy: [...item.likedBy, currentUser] };
+          return { ...item, likedBy: [...item.likedBy, user.id] };
         }
         return item;
       })
@@ -121,7 +115,7 @@ const FeedbackSection: React.FC = () => {
 
   const hasLikedFeedback = (feedbackId: string) => {
     const feedback = doctorFeedback.find((item) => item.id === feedbackId);
-    return feedback?.likedBy.includes(currentUser) || false;
+    return feedback?.likedBy.includes(user?.id || "") || false;
   };
 
   return (
@@ -171,7 +165,7 @@ const FeedbackSection: React.FC = () => {
               onClick={() => handleLike(feedbackItem.id)}
               size="small"
               color={hasLikedFeedback(feedbackItem.id) ? "error" : "default"}
-              disabled={!isLoggedIn}
+              disabled={!user}
             >
               {hasLikedFeedback(feedbackItem.id) ? (
                 <FavoriteIcon fontSize="small" />
