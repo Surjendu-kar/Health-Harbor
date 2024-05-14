@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ViewDetails from "../../components/viewDetails/ViewDetails";
-import {
-  Box,
-  Rating,
-  Typography,
-  styled,
-  Button,
-  CircularProgress,
-} from "@mui/material";
+import { Box, Rating, Typography, styled, Button } from "@mui/material";
 import { supabase } from "../../supabase/config";
 import { User } from "@supabase/supabase-js";
 import { ToastContainer, toast } from "react-toastify";
 import FeedbackSection from "../../components/feedbackSection/FeedbackSection";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 const MainContainer = styled(Box)({
   display: "flex",
@@ -304,6 +299,8 @@ function DoctorDetails() {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [buttonText, setButtonText] = useState("Book Appointment");
+  const [patientData, setPatientData] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getUser = async () => {
@@ -311,10 +308,40 @@ function DoctorDetails() {
         data: { user },
       } = await supabase.auth.getUser();
       setUser(user);
+
+      if (user) {
+        const { data: patientInfo, error } = await supabase
+          .from("patientInfo")
+          .select("*")
+          .eq("email", user.email);
+
+        if (error) {
+          // console.error("Error fetching patient data:", error);
+        } else {
+          setPatientData(patientInfo[0]);
+        }
+      }
     };
 
     getUser();
-  }, [user]);
+  }, []);
+
+  const isPatientDataComplete = (data) => {
+    return (
+      data?.name &&
+      data.gender &&
+      data.phoneNo &&
+      data.height &&
+      data.weight &&
+      data.bloodGroup &&
+      data.dateOfBirth &&
+      data.about &&
+      data.allergies &&
+      data.address &&
+      data.city &&
+      data.emergencyContact
+    );
+  };
 
   const handleAboutClick = () => {
     setShowDetails(true);
@@ -335,6 +362,29 @@ function DoctorDetails() {
       return;
     }
 
+    if (
+      patientData?.role === "patient" &&
+      !isPatientDataComplete(patientData)
+    ) {
+      confirmAlert({
+        title: "Incomplete Profile",
+        message:
+          "Your profile is incomplete. Would you like to navigate to the profile page to update your information?",
+        buttons: [
+          {
+            label: "Yes",
+            onClick: () => navigate("/profile"),
+          },
+          {
+            label: "No",
+            onClick: () => {},
+          },
+        ],
+      });
+
+      return;
+    }
+
     setIsLoading(true);
     setButtonText("Loading...");
 
@@ -346,7 +396,6 @@ function DoctorDetails() {
       .single();
 
     if (userData) {
-      // User is a patient, proceed with booking appointment
       await bookAppointment(user.email);
     } else {
       // Check if the user is a doctor
@@ -435,23 +484,18 @@ function DoctorDetails() {
         patientWeight: patientData.weight,
         patientBloodGroup: patientData.bloodGroup,
         patientDateOfBirth: patientData.dateOfBirth,
-      },
-      patientPrb: {
         aboutProblem: patientData.about,
         allergies: patientData.allergies,
-      },
-      patientAddress: {
         address: patientData.address,
         city: patientData.city,
+        emergency: JSON.parse(patientData.emergencyContact),
+        // appointment_date: new Date().toISOString().split("T")[0],
+        // appointment_time: new Date().toLocaleTimeString("en-US", {
+        //   hour12: false,
+        //   hour: "2-digit",
+        //   minute: "2-digit",
+        // }),
       },
-      emergency: JSON.parse(patientData.emergencyContact),
-
-      appointment_date: new Date().toISOString().split("T")[0],
-      appointment_time: new Date().toLocaleTimeString("en-US", {
-        hour12: false,
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
     };
 
     const updatedAppointments = [...existingAppointments, newAppointment];
@@ -503,8 +547,8 @@ function DoctorDetails() {
     const hour = parseInt(hours, 10);
     const ampm = hour >= 12 ? "pm" : "am";
     let hour12 = hour % 12;
-    if (hour12 === 0) hour12 = 12; // Convert "00" to "12"
-    const minuteFormatted = minutes === "00" ? "" : `:${minutes}`; // Omit minutes if ":00"
+    if (hour12 === 0) hour12 = 12;
+    const minuteFormatted = minutes === "00" ? "" : `:${minutes}`;
     return `${hour12}${minuteFormatted} ${ampm}`;
   };
 

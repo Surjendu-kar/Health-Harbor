@@ -318,23 +318,30 @@ function PatientInfo({ user }) {
 
   const validateForm = () => {
     const requiredFields = [
-      name,
-      imgPath,
-      phone,
-      gender,
-      dateOfBirth,
-      allergies,
-      bloodGroup,
-      height,
-      weight,
-      address,
-      city,
-      emergencyContact.name,
-      emergencyContact.relationship,
-      emergencyContact.phone,
+      { field: name, label: "Name" },
+      { field: imgPath, label: "Profile Image" },
+      { field: phone, label: "Phone" },
+      { field: gender, label: "Gender" },
+      { field: dateOfBirth, label: "Date of Birth" },
+      { field: allergies, label: "Allergies" },
+      { field: bloodGroup, label: "Blood Group" },
+      { field: height, label: "Height" },
+      { field: weight, label: "Weight" },
+      { field: address, label: "Address" },
+      { field: city, label: "City" },
+      { field: emergencyContact.name, label: "Emergency Contact Name" },
+      {
+        field: emergencyContact.relationship,
+        label: "Emergency Contact Relationship",
+      },
+      { field: emergencyContact.phone, label: "Emergency Contact Phone" },
     ];
 
-    return requiredFields.every((field) => field);
+    const missingFields = requiredFields
+      .filter((field) => !field.field)
+      .map((field) => field.label);
+
+    return missingFields;
   };
 
   const handleFileInput = async (event) => {
@@ -367,8 +374,14 @@ function PatientInfo({ user }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) {
-      toast.error("Please fill all required fields.");
+    const missingFields = validateForm();
+
+    if (missingFields.length > 0) {
+      const errorMessage = `Please fill in the following required fields: ${missingFields.join(
+        ", "
+      )}`;
+      toast.error(errorMessage);
+      // Highlight or scroll to the missing fields
       return;
     }
     const patientData = {
