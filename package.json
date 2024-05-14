@@ -16,6 +16,8 @@
     "@mui/lab": "^5.0.0-alpha.170",
     "@mui/material": "^5.15.5",
     "@mui/x-date-pickers": "^6.19.0",
+    "@stripe/react-stripe-js": "^2.7.1",
+    "@stripe/stripe-js": "^3.4.0",
     "@supabase/auth-ui-react": "^0.4.7",
     "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/supabase-js": "^2.39.3",
