@@ -14,12 +14,16 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { supabase } from "../../supabase/config";
 import { User } from "@supabase/supabase-js";
+import { useTheme } from "@mui/material/styles";
 
 const FeedbackContainer = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
-  padding: theme.spacing(3),
-  borderRadius: theme.shape.borderRadius,
+  padding: "1.25rem",
+  borderRadius: "5px",
   boxShadow: theme.shadows[3],
+  [theme.breakpoints.down("lg")]: {},
+  [theme.breakpoints.down("md")]: { padding: "1rem" },
+  [theme.breakpoints.down("sm")]: { padding: "0.5rem" },
 }));
 
 const FeedbackItem = styled(Box)(({ theme }) => ({
@@ -31,6 +35,12 @@ const FeedbackItem = styled(Box)(({ theme }) => ({
   flexDirection: "column",
   alignItems: "flex-start",
   gap: theme.spacing(0),
+  [theme.breakpoints.down("lg")]: { marginBottom: "0.7rem" },
+  [theme.breakpoints.down("md")]: {},
+  [theme.breakpoints.down("sm")]: {
+    marginBottom: "0.25rem",
+    padding: "0.5rem 0.75rem",
+  },
 }));
 
 const RatingContainer = styled(Box)(({ theme }) => ({
@@ -41,35 +51,117 @@ const RatingContainer = styled(Box)(({ theme }) => ({
 
 const GetRating = styled(Rating)(({ theme }) => ({
   fontSize: theme.typography.pxToRem(22),
-  [theme.breakpoints.down("sm")]: {
-    fontSize: theme.typography.pxToRem(12),
+  [theme.breakpoints.down("lg")]: {
+    fontSize: theme.typography.pxToRem(16),
   },
   [theme.breakpoints.down("md")]: {
     fontSize: theme.typography.pxToRem(14),
   },
-  [theme.breakpoints.down("lg")]: {
-    fontSize: theme.typography.pxToRem(16),
+  [theme.breakpoints.down("sm")]: {
+    fontSize: theme.typography.pxToRem(12),
   },
 }));
 
 const ShowRating = styled(Rating)(({ theme }) => ({
   fontSize: theme.typography.pxToRem(18),
-  [theme.breakpoints.down("sm")]: {
-    fontSize: theme.typography.pxToRem(12),
+  [theme.breakpoints.down("lg")]: {
+    fontSize: theme.typography.pxToRem(16),
   },
   [theme.breakpoints.down("md")]: {
     fontSize: theme.typography.pxToRem(14),
   },
-  [theme.breakpoints.down("lg")]: {
-    fontSize: theme.typography.pxToRem(16),
+  [theme.breakpoints.down("sm")]: {
+    fontSize: theme.typography.pxToRem(12),
   },
 }));
 
 const Heading = styled(Typography)(({ theme }) => ({
   fontWeight: "bold",
-  marginBottom: theme.spacing(2),
+  fontSize: "1.2rem",
+  marginBottom: "1.5rem",
+
+  [theme.breakpoints.down("lg")]: { fontSize: "1rem", marginBottom: "1rem" },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.8rem",
+    marginBottom: "0.9rem",
+  },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "1.2rem",
+    fontSize: "0.7rem",
+    marginBottom: "0.5rem",
+  },
+}));
+
+const Title = styled(Typography)(({ theme }) => ({
+  fontSize: "0.92rem",
+  fontWeight: "bold",
+  [theme.breakpoints.down("lg")]: {},
+  [theme.breakpoints.down("md")]: {},
+  [theme.breakpoints.down("sm")]: { fontSize: "0.65rem" },
+}));
+const SubTitle = styled(Typography)(({ theme }) => ({
+  fontSize: "0.8rem",
+  [theme.breakpoints.down("lg")]: {},
+  [theme.breakpoints.down("md")]: {},
+  [theme.breakpoints.down("sm")]: { fontSize: "0.55rem" },
+}));
+
+const SubmitBtn = styled(Button)(({ theme }) => ({
+  marginBottom: "2rem",
+
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "0.8rem",
+    marginBottom: "1.75rem",
+  },
+  [theme.breakpoints.down("md")]: { fontSize: "0.75rem" },
+  [theme.breakpoints.down("sm")]: {
+    marginBottom: "1rem",
+    fontSize: "0.5rem",
+    padding: "0.25rem 1rem",
+  },
+}));
+
+const LikeIcon = styled(FavoriteBorderIcon)(({ theme }) => ({
+  fontSize: theme.typography.pxToRem(17),
+  [theme.breakpoints.down("md")]: {
+    fontSize: theme.typography.pxToRem(14),
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: theme.typography.pxToRem(10),
+  },
+}));
+
+const LikedIcon = styled(FavoriteIcon)(({ theme }) => ({
+  fontSize: theme.typography.pxToRem(17),
+  [theme.breakpoints.down("md")]: {
+    fontSize: theme.typography.pxToRem(14),
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: theme.typography.pxToRem(10),
+  },
+}));
+
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  marginBottom: "1rem",
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "0.8rem",
+    "& .MuiInputBase-root": {
+      fontSize: "0.9rem",
+      padding: "1rem",
+    },
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.8rem",
+    "& .MuiInputBase-root": {
+      fontSize: "0.7rem",
+      padding: "0.7rem",
+    },
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.7rem",
+    "& .MuiInputBase-root": {
+      fontSize: "0.6rem",
+      padding: "0.5rem",
+    },
   },
 }));
 
@@ -309,11 +401,13 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
     return feedback?.likedBy.includes(user?.email || "") || false;
   };
 
+  const theme = useTheme();
+
   return (
     <FeedbackContainer>
       {user && (
         <>
-          <Heading variant="h5">Leave Feedback</Heading>
+          <Heading>Leave Feedback</Heading>
           <Box sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}>
             <GetRating
               name="rating"
@@ -326,7 +420,7 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
       )}
       {user ? (
         <>
-          <TextField
+          <StyledTextField
             fullWidth
             multiline
             rows={isSmallScreen ? 3 : 4}
@@ -334,31 +428,28 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
             onChange={(e) => setFeedback(e.target.value)}
             placeholder="Write your feedback here..."
             variant="outlined"
-            sx={{ marginBottom: 2 }}
           />
-          <Button
+          <SubmitBtn
             variant="contained"
             onClick={handleFeedbackSubmit}
             disabled={!user}
           >
             Submit Feedback
-          </Button>
+          </SubmitBtn>
         </>
       ) : (
         <Typography variant="body1" sx={{ marginBottom: 2 }}>
           Log in to submit feedback.
         </Typography>
       )}
-      <Heading variant="h5" sx={{ marginTop: 4 }}>
-        Doctor Feedback
-      </Heading>
+      <Heading>Doctor Feedback</Heading>
       {Array.isArray(doctorFeedback) && doctorFeedback.length > 0 ? (
         doctorFeedback.map((feedbackItem) => (
           <FeedbackItem key={feedbackItem.id}>
             <Box sx={{ display: "flex" }} gap={1}>
-              <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+              <Title variant="subtitle1">
                 {feedbackItem.name || "Anonymous"}
-              </Typography>
+              </Title>
               <RatingContainer>
                 <ShowRating
                   name="rating"
@@ -368,8 +459,17 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
                 />
               </RatingContainer>
             </Box>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-              <Typography>{feedbackItem.feedback}</Typography>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 0.5,
+                [theme.breakpoints.down("sm")]: {
+                  gap: 0.2,
+                },
+              }}
+            >
+              <SubTitle>{feedbackItem.feedback}</SubTitle>
               <IconButton
                 aria-label="like"
                 onClick={() => handleLike(feedbackItem.id)}
@@ -378,13 +478,13 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
                 disabled={!user}
               >
                 {hasLikedFeedback(feedbackItem.id) ? (
-                  <FavoriteIcon fontSize="small" />
+                  <LikedIcon />
                 ) : (
-                  <FavoriteBorderIcon fontSize="small" />
+                  <LikeIcon />
                 )}
-                <Typography variant="body2">
+                <SubTitle variant="body2">
                   {feedbackItem.likedBy.length}
-                </Typography>
+                </SubTitle>
               </IconButton>
             </Box>
           </FeedbackItem>

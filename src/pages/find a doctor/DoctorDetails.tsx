@@ -16,7 +16,9 @@ const MainContainer = styled(Box)({
 
 const Container = styled(Box)(({ theme }) => ({
   width: "60%",
-
+  [theme.breakpoints.down("lg")]: {
+    width: "80%",
+  },
   [theme.breakpoints.down("md")]: {
     width: "80%",
   },
