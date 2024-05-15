@@ -633,7 +633,7 @@ function DoctorDetails() {
           {showDetails ? (
             <ViewDetails fetchedData={state.doctor} />
           ) : (
-            <FeedbackSection doctorId={state.doctor.id} />
+            <FeedbackSection fetchedData={state.doctor} />
           )}
         </Container>
       </MainContainer>
