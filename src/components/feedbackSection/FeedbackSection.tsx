@@ -306,7 +306,7 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
 
   const hasLikedFeedback = (feedbackId) => {
     const feedback = doctorFeedback.find((item) => item.id === feedbackId);
-    return feedback?.likedBy.includes(user?.email || "") || false; 
+    return feedback?.likedBy.includes(user?.email || "") || false;
   };
 
   return (
@@ -352,7 +352,7 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
       <Heading variant="h5" sx={{ marginTop: 4 }}>
         Doctor Feedback
       </Heading>
-      {Array.isArray(doctorFeedback) &&
+      {Array.isArray(doctorFeedback) && doctorFeedback.length > 0 ? (
         doctorFeedback.map((feedbackItem) => (
           <FeedbackItem key={feedbackItem.id}>
             <Box sx={{ display: "flex" }} gap={1}>
@@ -388,7 +388,12 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
               </IconButton>
             </Box>
           </FeedbackItem>
-        ))}
+        ))
+      ) : (
+        <Typography variant="body2" sx={{ marginTop: 2, fontStyle: "italic" }}>
+          There is no feedback yet.
+        </Typography>
+      )}
       <ToastContainer />
     </FeedbackContainer>
   );
