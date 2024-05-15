@@ -141,6 +141,19 @@ type DoctorInfo = {
   about: string;
 };
 
+const ShowRating = styled(Rating)(({ theme }) => ({
+  fontSize: theme.typography.pxToRem(18),
+  [theme.breakpoints.down("sm")]: {
+    fontSize: theme.typography.pxToRem(12),
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: theme.typography.pxToRem(14),
+  },
+  [theme.breakpoints.down("lg")]: {
+    fontSize: theme.typography.pxToRem(16),
+  },
+}));
+
 function DoctorOverView({
   user,
   fetchedData,
@@ -150,7 +163,7 @@ function DoctorOverView({
 }) {
   const [imgPath, setImgPath] = useState(fetchedData?.img || defaultImg);
   const [isLoading, setIsLoading] = useState(false);
-  const [value, setValue] = React.useState<number | null>(2);
+  const [value, setValue] = React.useState<number | null>(3);
 
   const uploadRef = useRef<HTMLInputElement>(null);
 
@@ -202,6 +215,45 @@ function DoctorOverView({
     }
   }, [imgPath, user?.email, fetchedData?.img]);
 
+  useEffect(() => {
+    const fetchRatings = async () => {
+      if (fetchedData) {
+        try {
+          const { data: doctorInfo, error } = await supabase
+            .from("doctorInfo")
+            .select("feedback")
+            .eq("email", fetchedData.email)
+            .single();
+
+          if (error) {
+            console.error("Error fetching doctor info:", error);
+            toast.error("Failed to fetch doctor information.");
+            return;
+          }
+
+          if (doctorInfo && doctorInfo.feedback) {
+            const feedback = JSON.parse(doctorInfo.feedback);
+            const totalRating = feedback.reduce(
+              (acc, curr) => acc + curr.rating,
+              0
+            );
+            const averageRating =
+              feedback.length > 0 ? totalRating / feedback.length : 3;
+            setValue(averageRating);
+          } else {
+            setValue(3);
+          }
+        } catch (error) {
+          console.error("Error processing doctor info:", error);
+          toast.error("Error processing feedback data.");
+          setValue(3);
+        }
+      }
+    };
+
+    fetchRatings();
+  }, [fetchedData]);
+
   return (
     <>
       <ToastContainer />
@@ -232,7 +284,12 @@ function DoctorOverView({
               </Name>
 
               {/* Rating */}
-              <ResponsiveRating name="read-only" value={value} readOnly />
+              <ShowRating
+                name="read-only"
+                value={value}
+                precision={0.5}
+                readOnly
+              />
             </NameRatingBox>
           )}
         </ImgBox>
