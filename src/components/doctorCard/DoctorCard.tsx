@@ -50,6 +50,8 @@ const CardMediaStyle = styled(CardMedia)(({ theme }) => ({
 
 const Heading = styled(Typography)(({ theme }) => ({
   fontSize: "1.05rem",
+  paddingLeft: "4px",
+
   [theme.breakpoints.down("lg")]: {
     fontSize: "0.9rem",
   },
@@ -58,11 +60,13 @@ const Heading = styled(Typography)(({ theme }) => ({
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "0.6rem",
+    paddingLeft: "0px",
   },
 }));
 
 const Title = styled(Typography)(({ theme }) => ({
   fontSize: "0.8rem",
+  paddingLeft: "4px",
 
   [theme.breakpoints.down("lg")]: {
     fontSize: "0.7rem",
@@ -72,6 +76,7 @@ const Title = styled(Typography)(({ theme }) => ({
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "0.5rem",
+    paddingLeft: "0px",
   },
 }));
 
@@ -92,14 +97,14 @@ const CardContentStyle = styled(CardContent)(({ theme }) => ({
 
 const ShowRating = styled(Rating)(({ theme }) => ({
   fontSize: theme.typography.pxToRem(18),
-  [theme.breakpoints.down("sm")]: {
-    fontSize: theme.typography.pxToRem(12),
+  [theme.breakpoints.down("lg")]: {
+    fontSize: theme.typography.pxToRem(16),
   },
   [theme.breakpoints.down("md")]: {
     fontSize: theme.typography.pxToRem(14),
   },
-  [theme.breakpoints.down("lg")]: {
-    fontSize: theme.typography.pxToRem(16),
+  [theme.breakpoints.down("sm")]: {
+    fontSize: theme.typography.pxToRem(8),
   },
 }));
 
