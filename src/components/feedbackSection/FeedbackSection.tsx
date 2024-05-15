@@ -315,16 +315,18 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
 
   return (
     <FeedbackContainer>
-      <Heading variant="h5">Leave Feedback</Heading>
       {user && (
-        <Box sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}>
-          <GetRating
-            name="rating"
-            value={rating || 0}
-            onChange={(_, newValue) => setRating(newValue)}
-            precision={0.5}
-          />
-        </Box>
+        <>
+          <Heading variant="h5">Leave Feedback</Heading>
+          <Box sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}>
+            <GetRating
+              name="rating"
+              value={rating || 0}
+              onChange={(_, newValue) => setRating(newValue)}
+              precision={0.5}
+            />
+          </Box>
+        </>
       )}
       {user ? (
         <>
@@ -368,7 +370,6 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
                   precision={0.5}
                   readOnly
                 />
-                <Typography variant="body2">{feedbackItem.rating}</Typography>
               </RatingContainer>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
