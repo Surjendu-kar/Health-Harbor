@@ -23,19 +23,46 @@ const FeedbackContainer = styled(Box)(({ theme }) => ({
 }));
 
 const FeedbackItem = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(2),
+  marginBottom: "1rem",
+  padding: "1rem",
   backgroundColor: theme.palette.grey[200],
-  borderRadius: theme.shape.borderRadius,
+  borderRadius: "10px",
   display: "flex",
   flexDirection: "column",
   alignItems: "flex-start",
-  gap: theme.spacing(1),
+  gap: theme.spacing(0),
 }));
 
 const RatingContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   gap: theme.spacing(0.5),
+}));
+
+const GetRating = styled(Rating)(({ theme }) => ({
+  fontSize: theme.typography.pxToRem(22),
+  [theme.breakpoints.down("sm")]: {
+    fontSize: theme.typography.pxToRem(12),
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: theme.typography.pxToRem(14),
+  },
+  [theme.breakpoints.down("lg")]: {
+    fontSize: theme.typography.pxToRem(16),
+  },
+}));
+
+const ShowRating = styled(Rating)(({ theme }) => ({
+  fontSize: theme.typography.pxToRem(18),
+  [theme.breakpoints.down("sm")]: {
+    fontSize: theme.typography.pxToRem(12),
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: theme.typography.pxToRem(14),
+  },
+  [theme.breakpoints.down("lg")]: {
+    fontSize: theme.typography.pxToRem(16),
+  },
 }));
 
 const Heading = styled(Typography)(({ theme }) => ({
@@ -291,12 +318,11 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
       <Heading variant="h5">Leave Feedback</Heading>
       {user && (
         <Box sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}>
-          <Rating
+          <GetRating
             name="rating"
             value={rating || 0}
             onChange={(_, newValue) => setRating(newValue)}
             precision={0.5}
-            size={isSmallScreen ? "medium" : "large"}
           />
         </Box>
       )}
@@ -331,20 +357,21 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
       {Array.isArray(doctorFeedback) &&
         doctorFeedback.map((feedbackItem) => (
           <FeedbackItem key={feedbackItem.id}>
-            <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-              {feedbackItem.name || "Anonymous"}
-            </Typography>
-            <RatingContainer>
-              <Rating
-                name="rating"
-                value={feedbackItem.rating}
-                precision={0.5}
-                size={isSmallScreen ? "small" : "medium"}
-                readOnly
-              />
-              <Typography variant="body2">{feedbackItem.rating}</Typography>
-            </RatingContainer>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Box sx={{ display: "flex" }} gap={1}>
+              <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+                {feedbackItem.name || "Anonymous"}
+              </Typography>
+              <RatingContainer>
+                <ShowRating
+                  name="rating"
+                  value={feedbackItem.rating}
+                  precision={0.5}
+                  readOnly
+                />
+                <Typography variant="body2">{feedbackItem.rating}</Typography>
+              </RatingContainer>
+            </Box>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
               <Typography>{feedbackItem.feedback}</Typography>
               <IconButton
                 aria-label="like"
