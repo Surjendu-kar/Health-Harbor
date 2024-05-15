@@ -157,7 +157,6 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
       if (patientData && patientData.appointment) {
         const appointments = JSON.parse(patientData.appointment);
 
-        // Check if the user has an appointment with the doctor matching fetchedData.email
         const hasValidAppointment = appointments.some(
           (appointment) =>
             appointment.doctorEmail === fetchedData.email &&
@@ -175,7 +174,7 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
         toast.info("No valid appointments found.");
         return;
       }
-      // Fetch user's name and proceed to submit feedback
+      // Fetch user's name
       userName = patientData.name || "Anonymous";
     } catch (err) {
       console.error("Error retrieving user information:", err);
@@ -235,13 +234,12 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
         if (item.id === feedbackId) {
           const isAlreadyLiked = item.likedBy.includes(userEmail);
           const updatedLikedBy = isAlreadyLiked
-            ? item.likedBy.filter((email) => email !== userEmail) // Remove the user's email if already liked
-            : [...item.likedBy, userEmail]; // Add the user's email if not already liked
+            ? item.likedBy.filter((email) => email !== userEmail)
+            : [...item.likedBy, userEmail];
 
-          // Perform the database update asynchronously
           updateFeedbackInDatabase(feedbackId, updatedLikedBy, isAlreadyLiked);
 
-          return { ...item, likedBy: updatedLikedBy }; // Update the state with the new likedBy array
+          return { ...item, likedBy: updatedLikedBy };
         }
         return item;
       })
@@ -267,7 +265,6 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
         return;
       }
 
-      // Parse the feedback JSON string into an array
       let feedbackArray;
       try {
         feedbackArray = JSON.parse(existingData.feedback);
@@ -281,7 +278,6 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
         return;
       }
 
-      // Update the feedback array with the new likedBy array
       const updatedFeedback = feedbackArray.map((item) => {
         if (item.id === feedbackId) {
           return { ...item, likedBy };
@@ -310,7 +306,7 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
 
   const hasLikedFeedback = (feedbackId) => {
     const feedback = doctorFeedback.find((item) => item.id === feedbackId);
-    return feedback?.likedBy.includes(user?.email || "") || false; // Now checking against user.email
+    return feedback?.likedBy.includes(user?.email || "") || false; 
   };
 
   return (

@@ -138,7 +138,7 @@ const DoctorCard = ({ doctor }) => {
               0
             );
             const averageRating = totalRating / feedback.length;
-            setRating(parseFloat(averageRating.toFixed(1))); // Ensures the average is a float and rounded to one decimal
+            setRating(parseFloat(averageRating.toFixed(1)));
           }
         }
       } catch (error) {
