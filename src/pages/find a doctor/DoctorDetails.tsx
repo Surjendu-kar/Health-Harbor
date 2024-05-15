@@ -552,6 +552,47 @@ function DoctorDetails() {
     return `${hour12}${minuteFormatted} ${ampm}`;
   };
 
+  //fetch feedback
+  useEffect(() => {
+    const fetchDoctorInfo = async () => {
+      try {
+        const { data: doctorInfo, error } = await supabase
+          .from("doctorInfo")
+          .select("feedback")
+          .eq("email", state.doctor.email)
+          .single();
+
+        if (error) {
+          console.error("Error fetching doctor info:", error);
+          toast.error("Failed to fetch doctor information.");
+          return;
+        }
+
+        if (doctorInfo && doctorInfo.feedback) {
+          const feedback = JSON.parse(doctorInfo.feedback);
+          if (feedback.length > 0) {
+            const totalRating = feedback.reduce(
+              (acc, curr) => acc + curr.rating,
+              0
+            );
+            const averageRating = totalRating / feedback.length;
+            setValue(parseFloat(averageRating.toFixed(1)));
+          } else {
+            setValue(3);
+          }
+        } else {
+          setValue(3);
+        }
+      } catch (error) {
+        console.error("Error processing doctor info:", error);
+        toast.error("Error processing feedback data.");
+        setValue(3);
+      }
+    };
+
+    fetchDoctorInfo();
+  }, [state.doctor.email]);
+
   return (
     <>
       <ToastContainer />
@@ -564,7 +605,12 @@ function DoctorDetails() {
               <NameRatingBox>
                 <Specialization>{state.doctor.specialization}</Specialization>
                 <Name>{state.doctor.name}</Name>
-                <ResponsiveRating name="read-only" value={value} readOnly />
+                <ResponsiveRating
+                  name="read-only"
+                  value={value}
+                  readOnly
+                  precision={0.5}
+                />
               </NameRatingBox>
             </ImgContainer>
 

@@ -23,19 +23,46 @@ const FeedbackContainer = styled(Box)(({ theme }) => ({
 }));
 
 const FeedbackItem = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(2),
+  marginBottom: "1rem",
+  padding: "1rem",
   backgroundColor: theme.palette.grey[200],
-  borderRadius: theme.shape.borderRadius,
+  borderRadius: "10px",
   display: "flex",
   flexDirection: "column",
   alignItems: "flex-start",
-  gap: theme.spacing(1),
+  gap: theme.spacing(0),
 }));
 
 const RatingContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   gap: theme.spacing(0.5),
+}));
+
+const GetRating = styled(Rating)(({ theme }) => ({
+  fontSize: theme.typography.pxToRem(22),
+  [theme.breakpoints.down("sm")]: {
+    fontSize: theme.typography.pxToRem(12),
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: theme.typography.pxToRem(14),
+  },
+  [theme.breakpoints.down("lg")]: {
+    fontSize: theme.typography.pxToRem(16),
+  },
+}));
+
+const ShowRating = styled(Rating)(({ theme }) => ({
+  fontSize: theme.typography.pxToRem(18),
+  [theme.breakpoints.down("sm")]: {
+    fontSize: theme.typography.pxToRem(12),
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: theme.typography.pxToRem(14),
+  },
+  [theme.breakpoints.down("lg")]: {
+    fontSize: theme.typography.pxToRem(16),
+  },
 }));
 
 const Heading = styled(Typography)(({ theme }) => ({
@@ -130,7 +157,6 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
       if (patientData && patientData.appointment) {
         const appointments = JSON.parse(patientData.appointment);
 
-        // Check if the user has an appointment with the doctor matching fetchedData.email
         const hasValidAppointment = appointments.some(
           (appointment) =>
             appointment.doctorEmail === fetchedData.email &&
@@ -148,7 +174,7 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
         toast.info("No valid appointments found.");
         return;
       }
-      // Fetch user's name and proceed to submit feedback
+      // Fetch user's name
       userName = patientData.name || "Anonymous";
     } catch (err) {
       console.error("Error retrieving user information:", err);
@@ -208,13 +234,12 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
         if (item.id === feedbackId) {
           const isAlreadyLiked = item.likedBy.includes(userEmail);
           const updatedLikedBy = isAlreadyLiked
-            ? item.likedBy.filter((email) => email !== userEmail) // Remove the user's email if already liked
-            : [...item.likedBy, userEmail]; // Add the user's email if not already liked
+            ? item.likedBy.filter((email) => email !== userEmail)
+            : [...item.likedBy, userEmail];
 
-          // Perform the database update asynchronously
           updateFeedbackInDatabase(feedbackId, updatedLikedBy, isAlreadyLiked);
 
-          return { ...item, likedBy: updatedLikedBy }; // Update the state with the new likedBy array
+          return { ...item, likedBy: updatedLikedBy };
         }
         return item;
       })
@@ -240,7 +265,6 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
         return;
       }
 
-      // Parse the feedback JSON string into an array
       let feedbackArray;
       try {
         feedbackArray = JSON.parse(existingData.feedback);
@@ -254,7 +278,6 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
         return;
       }
 
-      // Update the feedback array with the new likedBy array
       const updatedFeedback = feedbackArray.map((item) => {
         if (item.id === feedbackId) {
           return { ...item, likedBy };
@@ -283,22 +306,23 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
 
   const hasLikedFeedback = (feedbackId) => {
     const feedback = doctorFeedback.find((item) => item.id === feedbackId);
-    return feedback?.likedBy.includes(user?.email || "") || false; // Now checking against user.email
+    return feedback?.likedBy.includes(user?.email || "") || false;
   };
 
   return (
     <FeedbackContainer>
-      <Heading variant="h5">Leave Feedback</Heading>
       {user && (
-        <Box sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}>
-          <Rating
-            name="rating"
-            value={rating || 0}
-            onChange={(_, newValue) => setRating(newValue)}
-            precision={0.5}
-            size={isSmallScreen ? "medium" : "large"}
-          />
-        </Box>
+        <>
+          <Heading variant="h5">Leave Feedback</Heading>
+          <Box sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}>
+            <GetRating
+              name="rating"
+              value={rating || 0}
+              onChange={(_, newValue) => setRating(newValue)}
+              precision={0.5}
+            />
+          </Box>
+        </>
       )}
       {user ? (
         <>
@@ -328,23 +352,23 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
       <Heading variant="h5" sx={{ marginTop: 4 }}>
         Doctor Feedback
       </Heading>
-      {Array.isArray(doctorFeedback) &&
+      {Array.isArray(doctorFeedback) && doctorFeedback.length > 0 ? (
         doctorFeedback.map((feedbackItem) => (
           <FeedbackItem key={feedbackItem.id}>
-            <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-              {feedbackItem.name || "Anonymous"}
-            </Typography>
-            <RatingContainer>
-              <Rating
-                name="rating"
-                value={feedbackItem.rating}
-                precision={0.5}
-                size={isSmallScreen ? "small" : "medium"}
-                readOnly
-              />
-              <Typography variant="body2">{feedbackItem.rating}</Typography>
-            </RatingContainer>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Box sx={{ display: "flex" }} gap={1}>
+              <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+                {feedbackItem.name || "Anonymous"}
+              </Typography>
+              <RatingContainer>
+                <ShowRating
+                  name="rating"
+                  value={feedbackItem.rating}
+                  precision={0.5}
+                  readOnly
+                />
+              </RatingContainer>
+            </Box>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
               <Typography>{feedbackItem.feedback}</Typography>
               <IconButton
                 aria-label="like"
@@ -364,7 +388,12 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
               </IconButton>
             </Box>
           </FeedbackItem>
-        ))}
+        ))
+      ) : (
+        <Typography variant="body2" sx={{ marginTop: 2, fontStyle: "italic" }}>
+          There is no feedback yet.
+        </Typography>
+      )}
       <ToastContainer />
     </FeedbackContainer>
   );

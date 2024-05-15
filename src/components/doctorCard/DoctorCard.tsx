@@ -1,13 +1,15 @@
 // DoctorCard.js
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardMedia,
   CardContent,
   Typography,
   styled,
+  Rating,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../../supabase/config";
 
 const StyleCard = styled(Card)(({ theme }) => ({
   maxWidth: 200,
@@ -88,7 +90,21 @@ const CardContentStyle = styled(CardContent)(({ theme }) => ({
   },
 }));
 
+const ShowRating = styled(Rating)(({ theme }) => ({
+  fontSize: theme.typography.pxToRem(18),
+  [theme.breakpoints.down("sm")]: {
+    fontSize: theme.typography.pxToRem(12),
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: theme.typography.pxToRem(14),
+  },
+  [theme.breakpoints.down("lg")]: {
+    fontSize: theme.typography.pxToRem(16),
+  },
+}));
+
 const DoctorCard = ({ doctor }) => {
+  const [rating, setRating] = useState(3);
   const qualificationsArray = JSON.parse(doctor.qualifications);
   const degrees = qualificationsArray.map((q) => q.degree).join(", ");
   // const universities = qualificationsArray.map((q) => q.university).join(", ");
@@ -99,6 +115,39 @@ const DoctorCard = ({ doctor }) => {
       {q.university}
     </Title>
   ));
+  // fetch feedback
+  useEffect(() => {
+    const fetchDoctorInfo = async () => {
+      try {
+        const { data: doctorInfo, error } = await supabase
+          .from("doctorInfo")
+          .select("feedback")
+          .eq("email", doctor.email)
+          .single();
+
+        if (error) {
+          console.error("Error fetching doctor info:", error);
+          return;
+        }
+
+        if (doctorInfo && doctorInfo.feedback) {
+          const feedback = JSON.parse(doctorInfo.feedback);
+          if (feedback.length > 0) {
+            const totalRating = feedback.reduce(
+              (acc, curr) => acc + curr.rating,
+              0
+            );
+            const averageRating = totalRating / feedback.length;
+            setRating(parseFloat(averageRating.toFixed(1)));
+          }
+        }
+      } catch (error) {
+        console.error("Error processing doctor info:", error);
+      }
+    };
+
+    fetchDoctorInfo();
+  }, [doctor.email]);
 
   return (
     <StyleCard
@@ -111,6 +160,7 @@ const DoctorCard = ({ doctor }) => {
           {doctor.specialization} ({degrees})
         </Title>
         {universityComponents}
+        <ShowRating name="read-only" value={rating} precision={0.5} readOnly />
       </CardContentStyle>
     </StyleCard>
   );
