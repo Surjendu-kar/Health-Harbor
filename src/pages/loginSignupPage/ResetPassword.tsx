@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { supabase } from "../../supabase/config";
 import { useNavigate } from "react-router-dom";
 import {
@@ -75,6 +75,17 @@ const ResetPassword = () => {
   const [accessToken, setAccessToken] = useState("");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const getAccessToken = async () => {
+      const session = await supabase.auth.getSession();
+      if (session?.data?.session?.access_token) {
+        setAccessToken(session.data.session.access_token);
+      }
+    };
+
+    getAccessToken();
+  }, []);
+
   const handlePasswordReset = async () => {
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
@@ -82,10 +93,9 @@ const ResetPassword = () => {
     }
 
     try {
-      const { error } = await supabase.auth.updateUser(
-        { password: password },
-        accessToken
-      );
+      const { error } = await supabase.auth.updateUser({
+        password: password,
+      });
 
       if (error) {
         toast.error(error.message);
@@ -115,13 +125,13 @@ const ResetPassword = () => {
         <Heading variant="h4" gutterBottom>
           Reset Password
         </Heading>
-        {/* <TitleTextField
+        <TitleTextField
           label="Access Token"
           value={accessToken}
-          onChange={(e) => setAccessToken(e.target.value)}
           margin="normal"
           fullWidth
-        /> */}
+          disabled
+        />
         <TitleTextField
           label="New Password"
           type="password"

@@ -8,6 +8,9 @@ import { ToastContainer, toast } from "react-toastify";
 import FeedbackSection from "../../components/feedbackSection/FeedbackSection";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements, ElementsConsumer } from "@stripe/react-stripe-js";
+import PaymentModal from "../../components/stripeCheckout/PaymentModal";
 
 const MainContainer = styled(Box)({
   display: "flex",
@@ -303,6 +306,8 @@ function DoctorDetails() {
   const [buttonText, setButtonText] = useState("Book Appointment");
   const [patientData, setPatientData] = useState(null);
   const navigate = useNavigate();
+  const [openPaymentModal, setOpenPaymentModal] = useState(false);
+  const [stripePromise, setStripePromise] = useState(null);
 
   useEffect(() => {
     const getUser = async () => {
@@ -323,6 +328,11 @@ function DoctorDetails() {
           setPatientData(patientInfo[0]);
         }
       }
+
+      const loadStripePromise = loadStripe(
+        "pk_test_51PFVoxSIuGoHL7gaUvRh8gHcusZBk6N5b583P0Xrbzz3d1UNyZqZGQeSpluqWCS2z49M9SjhDpGINfHXPeUzaVAP00rCuqE7XU"
+      );
+      setStripePromise(loadStripePromise);
     };
 
     getUser();
@@ -398,7 +408,9 @@ function DoctorDetails() {
       .single();
 
     if (userData) {
-      await bookAppointment(user.email);
+      setOpenPaymentModal(true);
+
+      // await bookAppointment(user.email);
     } else {
       // Check if the user is a doctor
       const { data: doctorData, error: doctorError } = await supabase
@@ -430,6 +442,11 @@ function DoctorDetails() {
     }
     setIsLoading(false);
     setButtonText("Book Appointment");
+  };
+
+  const handlePaymentSuccess = async () => {
+    // Proceed with booking the appointment
+    bookAppointment(user?.email);
   };
 
   const bookAppointment = async (userEmail: string) => {
@@ -685,6 +702,29 @@ function DoctorDetails() {
           )}
         </Container>
       </MainContainer>
+
+      {stripePromise && (
+        <Elements stripe={stripePromise}>
+          <PaymentModal
+            open={openPaymentModal}
+            onClose={() => setOpenPaymentModal(false)}
+            onPaymentSuccess={handlePaymentSuccess}
+            price={state.doctor.price}
+          >
+            <ElementsConsumer>
+              {({ elements, stripe }) => (
+                <ModernPaymentForm
+                  elements={elements}
+                  stripe={stripe}
+                  onPaymentSuccess={handlePaymentSuccess}
+                  onClose={() => setOpenPaymentModal(false)}
+                  price={state.doctor.price}
+                />
+              )}
+            </ElementsConsumer>
+          </PaymentModal>
+        </Elements>
+      )}
     </>
   );
 }
