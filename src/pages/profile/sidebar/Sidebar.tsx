@@ -5,6 +5,8 @@ import { User } from "@supabase/supabase-js";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import FetchSpecificDoctor from "../../../supabase/FetchSpecificDoctor";
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import CSS
 
 const MainContainer = styled(Box)(({ theme }) => ({
   margin: "2rem 5rem",
@@ -153,27 +155,61 @@ function Sidebar({ onMenuSelect }) {
   }, [user?.email, fetchedData]);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
-    navigate("/");
+    confirmAlert({
+      title: 'Logout Confirmation',
+      message: 'Are you sure you want to logout?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: async () => {
+            await supabase.auth.signOut();
+            setUser(null);
+            navigate('/');
+          }
+        },
+        {
+          label: 'No',
+          onClick: () => { /* Do nothing */ }
+        }
+      ]
+    });
   };
   const handleDeleteAc = async () => {
-    toast.warning ("development phase...");
-
-    // try {
-    //   const { error } = await supabase
-    //     .from("doctorInfo")
-    //     .delete()
-    //     .eq("email", user?.email);
-
-    //   if (error) {
-    //     console.error("Error deleting account:", error.message);
-    //   } else {
-    //     toast.success("Account deleted successfully");
-    //   }
-    // } catch (error) {
-    //   console.error("Error deleting account:", error);
-    // }
+    confirmAlert({
+      title: 'Delete Account Confirmation',
+      message: 'Are you sure you want to delete your account? This action cannot be undone.',
+      buttons: [
+        {
+          label: 'Yes, Delete Account',
+          
+          // onClick: async () => {
+          //   try {
+          //     const { error } = await supabase
+          //       .from("doctorInfo")
+          //       .delete()
+          //       .eq("email", user?.email);
+  
+          //     if (error) {
+          //       console.error("Error deleting account:", error.message);
+          //       toast.error("An error occurred while deleting your account.");
+          //     } else {
+          //       await supabase.auth.signOut();
+          //       setUser(null);
+          //       navigate("/");
+          //       toast.success("Account deleted successfully");
+          //     }
+          //   } catch (error) {
+          //     console.error("Error deleting account:", error);
+          //     toast.error("An error occurred while deleting your account.");
+          //   }
+          // }
+        },
+        {
+          label: 'No, Keep Account',
+          onClick: () => { /* Do nothing */ }
+        }
+      ]
+    });
   };
 
   return (
