@@ -181,7 +181,7 @@ function Sidebar({ onMenuSelect }) {
       buttons: [
         {
           label: 'Yes, Delete Account',
-          
+          onClick: () => { /* Do nothing */ }
           // onClick: async () => {
           //   try {
           //     const { error } = await supabase
