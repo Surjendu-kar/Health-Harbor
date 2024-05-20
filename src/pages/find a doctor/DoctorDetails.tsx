@@ -75,7 +75,7 @@ const Img = styled("img")(({ theme }) => ({
     width: "130px",
   },
   [theme.breakpoints.down("sm")]: {
-    height: "90px",
+    height: "100px",
     width: "90px",
     borderRadius: "7px",
   },
@@ -129,7 +129,7 @@ const Name = styled(Typography)(({ theme }) => ({
     fontSize: "0.8rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.6rem",
+    fontSize: "0.55rem",
   },
 }));
 
@@ -190,7 +190,7 @@ const TimeSoltHeading = styled(Typography)(({ theme }) => ({
     fontSize: "0.7rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.58rem",
+    fontSize: "0.5rem",
   },
 }));
 const TimeSoltContainer = styled(Box)(({ theme }) => ({
@@ -219,7 +219,7 @@ const Solts = styled(Typography)(({ theme }) => ({
     fontSize: "0.7rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.57rem",
+    fontSize: "0.47rem",
   },
 }));
 
@@ -622,7 +622,10 @@ function DoctorDetails() {
             <ImgContainer>
               <Img src={state.doctor.img} />
               <NameRatingBox>
-                <Specialization>{state.doctor.specialization}</Specialization>
+                <Specialization>
+                  {state.doctor.specialization.charAt(0).toUpperCase() +
+                    state.doctor.specialization.slice(1)}
+                </Specialization>
                 <Name>{state.doctor.name}</Name>
                 <ResponsiveRating
                   name="read-only"

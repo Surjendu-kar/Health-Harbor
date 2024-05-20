@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../../supabase/config";
 
 const StyleCard = styled(Card)(({ theme }) => ({
-  maxWidth: 200,
+  width: 200,
   margin: 10,
   borderRadius: "5px",
   boxShadow: "1px 5px 8px rgba(0, 0, 0, 0.2)",
@@ -26,17 +26,17 @@ const StyleCard = styled(Card)(({ theme }) => ({
     maxWidth: 190,
   },
   [theme.breakpoints.down("md")]: {
-    maxWidth: 120,
+    maxWidth: 150,
     margin: 7,
   },
   [theme.breakpoints.down("sm")]: {
-    maxWidth: 90,
+    width: 120,
     margin: 5,
   },
 }));
 
 const CardMediaStyle = styled(CardMedia)(({ theme }) => ({
-  height: 190,
+  height: 220,
   [theme.breakpoints.down("lg")]: {
     height: 180,
   },
@@ -44,7 +44,7 @@ const CardMediaStyle = styled(CardMedia)(({ theme }) => ({
     height: 140,
   },
   [theme.breakpoints.down("sm")]: {
-    height: 100,
+    height: 130,
   },
 }));
 
@@ -59,7 +59,7 @@ const Heading = styled(Typography)(({ theme }) => ({
     fontSize: "0.7rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.6rem",
+    fontSize: "0.65rem",
     paddingLeft: "0px",
   },
 }));
@@ -75,7 +75,7 @@ const Title = styled(Typography)(({ theme }) => ({
     fontSize: "0.6rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.5rem",
+    fontSize: "0.55rem",
     paddingLeft: "0px",
   },
 }));
@@ -104,7 +104,7 @@ const ShowRating = styled(Rating)(({ theme }) => ({
     fontSize: theme.typography.pxToRem(14),
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: theme.typography.pxToRem(8),
+    fontSize: theme.typography.pxToRem(9),
   },
 }));
 
@@ -162,7 +162,9 @@ const DoctorCard = ({ doctor }) => {
       <CardContentStyle>
         <Heading>{doctor.name}</Heading>
         <Title variant="body2" color="text.secondary">
-          {doctor.specialization} ({degrees})
+          {doctor.specialization.charAt(0).toUpperCase() +
+            doctor.specialization.slice(1)}{" "}
+          ({degrees})
         </Title>
         {universityComponents}
         <ShowRating name="read-only" value={rating} precision={0.5} readOnly />

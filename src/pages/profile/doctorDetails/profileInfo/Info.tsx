@@ -382,7 +382,7 @@ function Info({
   return (
     <MainContainer>
       <ProfileTitleContainer>
-        <ProfileTitle>Profile Information</ProfileTitle>
+        <ProfileTitle>Doctor Information</ProfileTitle>
         {fetchedData && (
           <EditBtn onClick={toggleEditMode}>
             {isEditMode ? <Check /> : <Edit />}

@@ -101,6 +101,38 @@ const LogoLink = styled(StyledLink)(({ theme }) => ({
   },
 }));
 
+const SignInLink = styled(StyledLink)(({ theme }) => ({
+  fontSize: "1.15rem",
+  margin: theme.spacing(0, 0.05),
+  position: "relative",
+  "&::after": {
+    content: '""',
+    position: "absolute",
+    left: 0,
+    bottom: 0,
+    height: "1px",
+    width: "100%",
+    backgroundColor: "#fff",
+    transition: "all ease 1s",
+  },
+
+  "&:hover::after": {
+    width: "0%",
+  },
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "1.2rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.95rem",
+    letterSpacing: "1.2px",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.7rem",
+    letterSpacing: "1px",
+    margin: theme.spacing(0),
+  },
+}));
+
 const StyledAvatar = styled(Avatar)(({ theme }) => ({
   width: "36px",
   height: "36px",
@@ -194,7 +226,7 @@ const Navbar = () => {
           />
         </Box>
       ) : (
-        <StyledLink to="/login">Signin</StyledLink>
+        <SignInLink to="/login">Signin</SignInLink>
       )}
     </NavContainer>
   );

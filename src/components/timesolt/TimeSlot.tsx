@@ -15,6 +15,7 @@ import { styled } from "@mui/system";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { useTheme } from "@mui/material/styles";
 dayjs.extend(customParseFormat);
 
 const MainContainer = styled(Box)(({ theme }) => ({
@@ -49,7 +50,7 @@ const Text = styled(Typography)(({ theme }) => ({
 }));
 
 const FormControlStyle = styled(FormControl)(({ theme }) => ({
-  flex: 1,
+  // flex: 1,
   width: "100%",
   [theme.breakpoints.down("lg")]: {},
   [theme.breakpoints.down("md")]: {},
@@ -163,10 +164,19 @@ function TimeSlot({
   useEffect(() => {
     onTimeSlotChange(timeSlot);
   }, [timeSlot, onTimeSlotChange]);
+  
+  const theme = useTheme();
 
   return (
     <MainContainer>
-      <Box>
+      <Box
+        sx={{
+          width: "30%",
+          [theme.breakpoints.down("sm")]: {
+            width: "100%",
+          },
+        }}
+      >
         <Text color={isEditMode ? "inherit" : "grey.600"}>Day</Text>
 
         <FormControlStyle>
