@@ -94,14 +94,28 @@ const NameRatingBox = styled(Box)(({ theme }) => ({
   },
 }));
 
+const AddressContainer = styled(Typography)(({ theme }) => ({
+  fontSize: "0.9rem",
+
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "0.8rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.7rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.6rem",
+  },
+}));
+
 const Specialization = styled(Typography)(({ theme }) => ({
   fontSize: "0.8rem",
   padding: "0.5rem 0.8rem",
-  maxWidth: "50%",
   borderRadius: "5px",
   backgroundColor: "#d1e2ff",
   textAlign: "center",
-
+  marginBottom: "0.5rem",
+  
   [theme.breakpoints.down("lg")]: {
     fontSize: "0.8rem",
     padding: "0.4rem 0.6rem",
@@ -112,8 +126,7 @@ const Specialization = styled(Typography)(({ theme }) => ({
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "0.55rem",
-    padding: "0rem 0.3rem",
-    maxWidth: "70%",
+    padding: "0.1rem 0.2rem",
     borderRadius: "3px",
   },
 }));
@@ -633,6 +646,9 @@ function DoctorDetails() {
                   readOnly
                   precision={0.5}
                 />
+                <AddressContainer>
+                  {state.doctor.address}, {state.doctor.city}
+                </AddressContainer>
               </NameRatingBox>
             </ImgContainer>
 
