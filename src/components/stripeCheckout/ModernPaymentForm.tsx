@@ -1,47 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
+import React, { useState, useEffect } from "react";
+import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import {
   Box,
   Button,
   Grid,
   TextField,
   Typography,
-  Zoom,
   RadioGroup,
   Radio,
   FormControlLabel,
   MenuItem,
   Select,
   InputLabel,
-} from '@mui/material';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import { green } from '@mui/material/colors';
+} from "@mui/material";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import { green } from "@mui/material/colors";
 
-// Mock list of banks for demonstration purposes
 const banks = [
-  'State Bank of India',
-  'HDFC Bank',
-  'ICICI Bank',
-  'Axis Bank',
-  'Punjab National Bank',
-  'Bank of Baroda',
-  'Kotak Mahindra Bank',
-  'Canara Bank',
-  'Union Bank of India',
-  'Bank of India',
+  "State Bank of India",
+  "HDFC Bank",
+  "ICICI Bank",
+  "Axis Bank",
+  "Punjab National Bank",
+  "Bank of Baroda",
+  "Kotak Mahindra Bank",
+  "Canara Bank",
+  "Union Bank of India",
+  "Bank of India",
 ];
 
 const ModernPaymentForm = ({ onPaymentSuccess, onClose, price }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
-  const [cardholderName, setCardholderName] = useState('');
+  const [cardholderName, setCardholderName] = useState("");
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [successMessageTimeout, setSuccessMessageTimeout] = useState(null);
-  const [paymentMethod, setPaymentMethod] = useState('card');
-  const [selectedBank, setSelectedBank] = useState('');
-  const [accountNumber, setAccountNumber] = useState('');
-  const [ifscCode, setIfscCode] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState("card");
+  const [selectedBank, setSelectedBank] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
+  const [ifscCode, setIfscCode] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -52,41 +50,40 @@ const ModernPaymentForm = ({ onPaymentSuccess, onClose, price }) => {
 
     setIsProcessingPayment(true);
 
-    if (paymentMethod === 'card') {
+    if (paymentMethod === "card") {
       const cardElement = elements.getElement(CardElement);
 
       if (!cardElement) {
         return;
       }
 
-      const { error, paymentMethod: stripePaymentMethod } = await stripe.createPaymentMethod({
-        type: 'card',
-        card: cardElement,
-        billing_details: {
-          name: cardholderName,
-        },
-      });
+      const { error, paymentMethod: stripePaymentMethod } =
+        await stripe.createPaymentMethod({
+          type: "card",
+          card: cardElement,
+          billing_details: {
+            name: cardholderName,
+          },
+        });
 
       if (error) {
-        console.error('Error creating payment method:', error);
+        console.error("Error creating payment method:", error);
         setIsProcessingPayment(false);
       } else {
-        console.log('Payment method created:', stripePaymentMethod);
-        showSuccessMessageWithDelay(); // Show success message after delay
+        console.log("Payment method created:", stripePaymentMethod);
+        showSuccessMessageWithDelay();
         setIsProcessingPayment(false);
       }
-    } else if (paymentMethod === 'upi') {
-      // UPI payment logic
-      console.log('UPI payment initiated');
-      showSuccessMessageWithDelay(); // Show success message after delay
+    } else if (paymentMethod === "upi") {
+      console.log("UPI payment initiated");
+      showSuccessMessageWithDelay();
       setIsProcessingPayment(false);
-    } else if (paymentMethod === 'netbanking') {
-      // Net banking payment logic
-      console.log('Net banking payment initiated');
-      console.log('Selected Bank:', selectedBank);
-      console.log('Account Number:', accountNumber);
-      console.log('IFSC Code:', ifscCode);
-      showSuccessMessageWithDelay(); // Show success message after delay
+    } else if (paymentMethod === "netbanking") {
+      console.log("Net banking payment initiated");
+      console.log("Selected Bank:", selectedBank);
+      console.log("Account Number:", accountNumber);
+      console.log("IFSC Code:", ifscCode);
+      showSuccessMessageWithDelay();
       setIsProcessingPayment(false);
     }
   };
@@ -95,12 +92,11 @@ const ModernPaymentForm = ({ onPaymentSuccess, onClose, price }) => {
     const timeout = setTimeout(() => {
       setShowSuccessMessage(true);
 
-      // Close the modal and show the toast notification after the delay
       setTimeout(() => {
-        onClose(); // Close the modal
+        onClose();
         onPaymentSuccess();
-      }, 3000); // Adjust the delay as needed (set to 3 seconds here)
-    }, 3000); // Show the success message after 3 seconds
+      }, 3000);
+    }, 3000);
 
     setSuccessMessageTimeout(timeout);
   };
@@ -114,8 +110,16 @@ const ModernPaymentForm = ({ onPaymentSuccess, onClose, price }) => {
   return (
     <>
       {!showSuccessMessage ? (
-        <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: { xs: '100%', md: 400 } }}>
-          <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', marginBottom: 2 }}>
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{ maxWidth: { xs: "100%", md: 400 } }}
+        >
+          <Typography
+            variant="h5"
+            gutterBottom
+            sx={{ fontWeight: "bold", marginBottom: 2 }}
+          >
             Payment Details
           </Typography>
 
@@ -127,13 +131,21 @@ const ModernPaymentForm = ({ onPaymentSuccess, onClose, price }) => {
                 value={paymentMethod}
                 onChange={(e) => setPaymentMethod(e.target.value)}
               >
-                <FormControlLabel value="card" control={<Radio />} label="Credit/Debit Card" />
+                <FormControlLabel
+                  value="card"
+                  control={<Radio />}
+                  label="Credit/Debit Card"
+                />
                 <FormControlLabel value="upi" control={<Radio />} label="UPI" />
-                <FormControlLabel value="netbanking" control={<Radio />} label="Net Banking" />
+                <FormControlLabel
+                  value="netbanking"
+                  control={<Radio />}
+                  label="Net Banking"
+                />
               </RadioGroup>
             </Grid>
 
-            {paymentMethod === 'card' && (
+            {paymentMethod === "card" && (
               <>
                 <Grid item xs={12}>
                   <TextField
@@ -154,14 +166,14 @@ const ModernPaymentForm = ({ onPaymentSuccess, onClose, price }) => {
                     options={{
                       style: {
                         base: {
-                          fontSize: '16px',
-                          color: '#424770',
-                          '::placeholder': {
-                            color: '#aab7c4',
+                          fontSize: "16px",
+                          color: "#424770",
+                          "::placeholder": {
+                            color: "#aab7c4",
                           },
                         },
                         invalid: {
-                          color: '#9e2146',
+                          color: "#9e2146",
                         },
                       },
                     }}
@@ -170,7 +182,7 @@ const ModernPaymentForm = ({ onPaymentSuccess, onClose, price }) => {
               </>
             )}
 
-            {paymentMethod === 'upi' && (
+            {paymentMethod === "upi" && (
               <Grid item xs={12}>
                 {/* UPI payment form fields */}
                 <TextField
@@ -185,7 +197,7 @@ const ModernPaymentForm = ({ onPaymentSuccess, onClose, price }) => {
               </Grid>
             )}
 
-            {paymentMethod === 'netbanking' && (
+            {paymentMethod === "netbanking" && (
               <>
                 <Grid item xs={12}>
                   <InputLabel id="bank-label" required>
@@ -244,12 +256,12 @@ const ModernPaymentForm = ({ onPaymentSuccess, onClose, price }) => {
                 disabled={isProcessingPayment}
                 fullWidth
                 sx={{
-                  fontWeight: 'bold',
-                  padding: '12px 24px',
-                  borderRadius: '30px',
+                  fontWeight: "bold",
+                  padding: "12px 24px",
+                  borderRadius: "30px",
                 }}
               >
-                {isProcessingPayment ? 'Processing...' : `Pay ${price} INR`}
+                {isProcessingPayment ? "Processing..." : `Pay ${price} INR`}
               </Button>
             </Grid>
           </Grid>
@@ -257,15 +269,18 @@ const ModernPaymentForm = ({ onPaymentSuccess, onClose, price }) => {
       ) : (
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100%',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100%",
           }}
         >
           <CheckCircleOutlineIcon sx={{ color: green[500], fontSize: 60 }} />
-          <Typography variant="h5" sx={{ color: green[500], fontWeight: 'bold', marginTop: 2 }}>
+          <Typography
+            variant="h5"
+            sx={{ color: green[500], fontWeight: "bold", marginTop: 2 }}
+          >
             Payment Successful!
           </Typography>
         </Box>

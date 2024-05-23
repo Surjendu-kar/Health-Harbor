@@ -6,6 +6,8 @@ import React, { useEffect, useRef, useState } from "react";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import ViewDetails from "../../../../components/viewDetails/ViewDetails";
 import { ToastContainer, toast } from "react-toastify";
+import CloseIcon from "@mui/icons-material/Close";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const MainContainer = styled(Box)(({ theme }) => ({
   width: "50%",
@@ -112,16 +114,16 @@ const Name = styled(Typography)(({ theme }) => ({
   },
 }));
 
-const ResponsiveRating = styled(Rating)(({ theme }) => ({
-  fontSize: "0.9rem",
+const AddressCity = styled(Typography)(({ theme }) => ({
+  fontSize: "0.8rem",
   [theme.breakpoints.down("lg")]: {
-    fontSize: "0.8rem",
+    fontSize: "0.7rem",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.6rem",
+    fontSize: "0.65rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.5rem",
+    fontSize: "0.55rem",
   },
 }));
 
@@ -143,14 +145,14 @@ type DoctorInfo = {
 
 const ShowRating = styled(Rating)(({ theme }) => ({
   fontSize: theme.typography.pxToRem(18),
-  [theme.breakpoints.down("sm")]: {
-    fontSize: theme.typography.pxToRem(12),
+  [theme.breakpoints.down("lg")]: {
+    fontSize: theme.typography.pxToRem(16),
   },
   [theme.breakpoints.down("md")]: {
     fontSize: theme.typography.pxToRem(14),
   },
-  [theme.breakpoints.down("lg")]: {
-    fontSize: theme.typography.pxToRem(16),
+  [theme.breakpoints.down("sm")]: {
+    fontSize: theme.typography.pxToRem(9),
   },
 }));
 
@@ -277,11 +279,34 @@ function DoctorOverView({
           {user && fetchedData && (
             <NameRatingBox>
               {/* Name */}
-              <Name>
-                {fetchedData
-                  ? fetchedData.name
-                  : user?.user_metadata?.full_name}
-              </Name>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Name>
+                  {fetchedData
+                    ? fetchedData.name
+                    : user?.user_metadata?.full_name}
+                </Name>
+                {fetchedData && fetchedData?.approved === "YES" ? (
+                  <CheckCircleIcon
+                    sx={{
+                      fontSize: {
+                        xs: "0.8rem", // Small screens
+                        sm: "1rem", // Medium screens
+                        md: "1.2rem", // Large screens
+                      },
+                    }}
+                  />
+                ) : (
+                  <CloseIcon
+                    sx={{
+                      fontSize: {
+                        xs: "0.5rem", // Small screens
+                        sm: "1.2rem", // Medium screens
+                        md: "1.4rem", // Large screens
+                      },
+                    }}
+                  />
+                )}
+              </Box>
 
               {/* Rating */}
               <ShowRating
@@ -290,6 +315,14 @@ function DoctorOverView({
                 precision={0.5}
                 readOnly
               />
+              {fetchedData && (
+                <Box sx={{ display: "flex", gap: 1 }}>
+                  <AddressCity variant="body2">
+                    {fetchedData.address},
+                  </AddressCity>
+                  <AddressCity variant="body2">{fetchedData.city}</AddressCity>
+                </Box>
+              )}
             </NameRatingBox>
           )}
         </ImgBox>
