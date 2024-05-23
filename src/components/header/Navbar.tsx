@@ -240,7 +240,7 @@ const Navbar = () => {
         sx={{ display: { xs: 'block', md: 'none' }, color: '#fff' }}
         onClick={toggleDrawer(true)}
       >
-        <MenuIcon />
+        <MenuIcon sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem', md: '1.8rem' } }} />
       </IconButton>
 
       <Drawer anchor="right" open={isDrawerOpen} onClose={toggleDrawer(false)}>
