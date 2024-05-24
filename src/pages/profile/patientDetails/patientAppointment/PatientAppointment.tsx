@@ -100,7 +100,7 @@ function PatientAppointment({ user }) {
                   : "Not set by doctor yet"}
               </Cell>
               <Cell>
-                <CheckIcon color="success" />
+                {appointment.payment && <CheckIcon color="success" />}
               </Cell>
             </Row>
           ))}

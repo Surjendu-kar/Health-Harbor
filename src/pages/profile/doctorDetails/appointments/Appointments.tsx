@@ -44,6 +44,7 @@ const Cell = styled(Box)(({ theme }) => ({
   letterSpacing: "0.5px",
   borderRight: "1px solid black",
   padding: "1rem 0.25rem",
+  wordBreak: "break-word",
 }));
 
 const FlexCell = styled(Box)(({ theme }) => ({
@@ -233,7 +234,7 @@ function Appointments({ user, fetchedData }: { user: User; fetchedData }) {
             <CellHeading>About problem</CellHeading>
             <CellHeading>EmergencyContact</CellHeading>
             <CellHeading>Payement</CellHeading>
-            <CellHeading sx={{ flex: 1 }}>Booked On</CellHeading>
+            <CellHeading sx={{ flex: 1 }}>Appointment Date & Time</CellHeading>
           </Row>
           {appointments &&
             appointments.map((appointment, index) => (
@@ -299,11 +300,8 @@ function Appointments({ user, fetchedData }: { user: User; fetchedData }) {
                     alignItems: "center",
                   }}
                 >
-                  {appointment?.appointmentDate &&
-                  appointment?.appointmentTime ? (
-                    <>
-                      <CheckIcon color="success" />
-                    </>
+                  {appointment?.patientDetails?.payment ? (
+                    <CheckIcon color="success" />
                   ) : (
                     <CloseIcon color="error" />
                   )}

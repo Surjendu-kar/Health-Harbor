@@ -115,7 +115,7 @@ const Specialization = styled(Typography)(({ theme }) => ({
   backgroundColor: "#d1e2ff",
   textAlign: "center",
   marginBottom: "0.5rem",
-  
+
   [theme.breakpoints.down("lg")]: {
     fontSize: "0.8rem",
     padding: "0.4rem 0.6rem",
@@ -521,6 +521,7 @@ function DoctorDetails() {
         address: patientData.address,
         city: patientData.city,
         emergency: JSON.parse(patientData.emergencyContact),
+        payment: true,
         // appointment_date: new Date().toISOString().split("T")[0],
         // appointment_time: new Date().toLocaleTimeString("en-US", {
         //   hour12: false,
@@ -550,6 +551,7 @@ function DoctorDetails() {
               doctorName: state.doctor.name,
               appointmentDate: newAppointment.appointment_date,
               appointmentTime: newAppointment.appointment_time,
+              payment: true,
             },
           ],
         })
