@@ -11,11 +11,11 @@ const NavContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'space-around',
   alignItems: 'center',
-  padding: '0.5rem 1rem',
+  padding: '0.5rem 0',
   backgroundColor: '#1D2B53',
   width: '100%',
   [theme.breakpoints.down('md')]: {
-    padding: '0.5rem',
+    padding: '0.5rem 0',
   },
 }));
 
