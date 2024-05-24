@@ -655,7 +655,7 @@ function DoctorDetails() {
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Appointment>
                 <TicketPriceContainer>
-                  <Solts sx={{ padding: "0" }}>Ticket price: </Solts>
+                  <Solts sx={{ padding: "0" }}>Clinic price: </Solts>
                   <Solts
                     sx={{
                       padding: "0",

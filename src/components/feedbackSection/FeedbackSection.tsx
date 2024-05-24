@@ -8,6 +8,7 @@ import {
   Rating,
   useMediaQuery,
   IconButton,
+  LinearProgress,
 } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -173,6 +174,7 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
   >([]);
 
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const isSmallScreen = useMediaQuery((theme: any) =>
     theme.breakpoints.down("sm")
@@ -184,7 +186,8 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
         data: { user },
       } = await supabase.auth.getUser();
       setUser(user);
-      fetchFeedbackData();
+      await fetchFeedbackData();
+      setIsLoading(false);
     };
 
     getUser();
@@ -403,7 +406,15 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
 
   const theme = useTheme();
 
-  return (
+  const LoadingIndicator = () => (
+    <Box sx={{ width: "100%" }}>
+      <LinearProgress />
+    </Box>
+  );
+
+  return isLoading ? (
+    <LoadingIndicator />
+  ) : (
     <FeedbackContainer>
       {user && (
         <>
