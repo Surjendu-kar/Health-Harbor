@@ -1,7 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ViewDetails from "../../components/viewDetails/ViewDetails";
 import { Box, Rating, Typography, styled, Button } from "@mui/material";
+import { supabase } from "../../supabase/config";
+import { User } from "@supabase/supabase-js";
+import { ToastContainer, toast } from "react-toastify";
+import FeedbackSection from "../../components/feedbackSection/FeedbackSection";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements, ElementsConsumer } from "@stripe/react-stripe-js";
+import PaymentModal from "../../components/stripeCheckout/PaymentModal";
 
 const MainContainer = styled(Box)({
   display: "flex",
@@ -10,7 +19,9 @@ const MainContainer = styled(Box)({
 
 const Container = styled(Box)(({ theme }) => ({
   width: "60%",
-
+  [theme.breakpoints.down("lg")]: {
+    width: "80%",
+  },
   [theme.breakpoints.down("md")]: {
     width: "80%",
   },
@@ -64,7 +75,7 @@ const Img = styled("img")(({ theme }) => ({
     width: "130px",
   },
   [theme.breakpoints.down("sm")]: {
-    height: "90px",
+    height: "100px",
     width: "90px",
     borderRadius: "7px",
   },
@@ -83,13 +94,27 @@ const NameRatingBox = styled(Box)(({ theme }) => ({
   },
 }));
 
+const AddressContainer = styled(Typography)(({ theme }) => ({
+  fontSize: "0.9rem",
+
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "0.8rem",
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.7rem",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.6rem",
+  },
+}));
+
 const Specialization = styled(Typography)(({ theme }) => ({
   fontSize: "0.8rem",
   padding: "0.5rem 0.8rem",
-  maxWidth: "50%",
   borderRadius: "5px",
   backgroundColor: "#d1e2ff",
   textAlign: "center",
+  marginBottom: "0.5rem",
 
   [theme.breakpoints.down("lg")]: {
     fontSize: "0.8rem",
@@ -101,8 +126,7 @@ const Specialization = styled(Typography)(({ theme }) => ({
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "0.55rem",
-    padding: "0rem 0.3rem",
-    maxWidth: "70%",
+    padding: "0.1rem 0.2rem",
     borderRadius: "3px",
   },
 }));
@@ -118,7 +142,7 @@ const Name = styled(Typography)(({ theme }) => ({
     fontSize: "0.8rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.6rem",
+    fontSize: "0.55rem",
   },
 }));
 
@@ -179,7 +203,7 @@ const TimeSoltHeading = styled(Typography)(({ theme }) => ({
     fontSize: "0.7rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.58rem",
+    fontSize: "0.5rem",
   },
 }));
 const TimeSoltContainer = styled(Box)(({ theme }) => ({
@@ -208,36 +232,7 @@ const Solts = styled(Typography)(({ theme }) => ({
     fontSize: "0.7rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.57rem",
-  },
-}));
-
-const BookAppointmentBtn = styled(Button)(({ theme }) => ({
-  marginTop: "2rem",
-  fontSize: "0.8rem",
-  color: "#fff",
-  backgroundColor: "#1976d2",
-  padding: "0.5rem 0",
-  "&:hover": {
-    color: "#1976d2",
-    backgroundColor: "#fff",
-  },
-
-  [theme.breakpoints.down("lg")]: {
-    fontSize: "0.7rem",
-    marginTop: "1.5rem",
-    padding: "0.4rem 0",
-  },
-  [theme.breakpoints.down("md")]: {
-    fontSize: "0.55rem",
-    marginTop: "1rem",
-    padding: "0.2rem 0",
-  },
-  [theme.breakpoints.down("sm")]: {
-    fontSize: "0.42rem",
-    marginTop: "0.5rem",
-    padding: "0.1rem 0",
-    borderRadius: "2px",
+    fontSize: "0.47rem",
   },
 }));
 
@@ -286,11 +281,92 @@ const StyleText = styled(Typography)(({ theme, selected }) => ({
   },
 }));
 
+const BookAppointmentBtn = styled(Button)(({ theme }) => ({
+  marginTop: "2rem",
+  fontSize: "0.8rem",
+  color: "#fff",
+  backgroundColor: "#1976d2",
+  padding: "0.5rem 0",
+  "&:hover": {
+    color: "#1976d2",
+    backgroundColor: "#fff",
+  },
+
+  [theme.breakpoints.down("lg")]: {
+    fontSize: "0.7rem",
+    marginTop: "1.5rem",
+    padding: "0.4rem 0",
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: "0.55rem",
+    marginTop: "1rem",
+    padding: "0.2rem 0",
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.42rem",
+    marginTop: "0.5rem",
+    padding: "0.1rem 0",
+    borderRadius: "2px",
+  },
+}));
+
 function DoctorDetails() {
   const { state } = useLocation();
   const [showDetails, setShowDetails] = useState(true);
   const [value, setValue] = React.useState<number | null>(2);
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [buttonText, setButtonText] = useState("Book Appointment");
+  const [patientData, setPatientData] = useState(null);
   const navigate = useNavigate();
+  const [openPaymentModal, setOpenPaymentModal] = useState(false);
+  const [stripePromise, setStripePromise] = useState(null);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUser(user);
+
+      if (user) {
+        const { data: patientInfo, error } = await supabase
+          .from("patientInfo")
+          .select("*")
+          .eq("email", user.email);
+
+        if (error) {
+          // console.error("Error fetching patient data:", error);
+        } else {
+          setPatientData(patientInfo[0]);
+        }
+      }
+
+      const loadStripePromise = loadStripe(
+        "pk_test_51PFVoxSIuGoHL7gaUvRh8gHcusZBk6N5b583P0Xrbzz3d1UNyZqZGQeSpluqWCS2z49M9SjhDpGINfHXPeUzaVAP00rCuqE7XU"
+      );
+      setStripePromise(loadStripePromise);
+    };
+
+    getUser();
+  }, []);
+
+  const isPatientDataComplete = (data) => {
+    return (
+      data?.name &&
+      data.gender &&
+      data.phoneNo &&
+      data.height &&
+      data.weight &&
+      data.bloodGroup &&
+      data.dateOfBirth &&
+      data.about &&
+      data.allergies &&
+      data.address &&
+      data.city &&
+      data.emergencyContact
+    );
+  };
 
   const handleAboutClick = () => {
     setShowDetails(true);
@@ -298,6 +374,194 @@ function DoctorDetails() {
 
   const handleFeedbackClick = () => {
     setShowDetails(false);
+  };
+
+  const handleAppointmentClick = async () => {
+    if (!user) {
+      toast.error("Please login to book an appointment.");
+      return;
+    }
+
+    if (user.email === state.doctor.email) {
+      toast.error("You cannot book an appointment with yourself.");
+      return;
+    }
+
+    if (
+      patientData?.role === "patient" &&
+      !isPatientDataComplete(patientData)
+    ) {
+      confirmAlert({
+        title: "Incomplete Profile",
+        message:
+          "Your profile is incomplete. Would you like to navigate to the profile page to update your information?",
+        buttons: [
+          {
+            label: "Yes",
+            onClick: () => navigate("/profile"),
+          },
+          {
+            label: "No",
+            onClick: () => {},
+          },
+        ],
+      });
+
+      return;
+    }
+
+    setIsLoading(true);
+    setButtonText("Loading...");
+
+    // Check if the user is a patient or a doctor
+    const { data: userData } = await supabase
+      .from("patientInfo")
+      .select("email")
+      .eq("email", user.email)
+      .single();
+
+    if (userData) {
+      setOpenPaymentModal(true);
+
+      // await bookAppointment(user.email);
+    } else {
+      // Check if the user is a doctor
+      const { data: doctorData, error: doctorError } = await supabase
+        .from("doctorInfo")
+        .select("email")
+        .eq("email", user.email)
+        .single();
+
+      if (doctorError) {
+        setIsLoading(false);
+        setButtonText("Book Appointment");
+        toast.error("Error occurred while checking user role.");
+        return;
+      }
+
+      if (doctorData) {
+        setIsLoading(false);
+        setButtonText("Book Appointment");
+        toast.error(
+          "Doctors cannot book appointments. Please log in as a patient."
+        );
+        return;
+      } else {
+        setIsLoading(false);
+        setButtonText("Book Appointment");
+        toast.error("Invalid user. Please check your credentials.");
+        return;
+      }
+    }
+    setIsLoading(false);
+    setButtonText("Book Appointment");
+  };
+
+  const handlePaymentSuccess = async () => {
+    // Proceed with booking the appointment
+    bookAppointment(user?.email);
+  };
+
+  const bookAppointment = async (userEmail: string) => {
+    // Fetch existing appointments
+    const { data: doctorData, error: doctorError } = await supabase
+      .from("doctorInfo")
+      .select("bookAppointment")
+      .eq("id", state.doctor.id)
+      .single();
+
+    if (doctorError) {
+      toast.error("Error occurred while fetching existing appointments.");
+      return;
+    }
+
+    let existingAppointments = [];
+
+    if (doctorData && doctorData.bookAppointment) {
+      try {
+        existingAppointments = JSON.parse(doctorData.bookAppointment);
+      } catch (parseError) {
+        console.error("Error parsing appointments data:", parseError);
+        existingAppointments = [];
+      }
+    } else {
+      existingAppointments = [];
+    }
+
+    // Remove existing appointments for the same user email to prevent duplicates
+    existingAppointments = existingAppointments.filter(
+      (appointment) => appointment?.patientDetails?.patientEmail !== userEmail
+    );
+
+    //fetch data from patientInfo for storing it into doctorInfo
+    const { data: patientData, error: patientError } = await supabase
+      .from("patientInfo")
+      .select("*")
+      .eq("email", userEmail)
+      .single();
+
+    if (patientError) {
+      toast.error("Error occurred while fetching patient information.");
+      return;
+    }
+
+    const newAppointment = {
+      patientDetails: {
+        patientEmail: userEmail,
+        patientId: patientData.id,
+        patientName: patientData.name,
+        patientGender: patientData.gender,
+        patientPhone: patientData.phoneNo,
+        patientHeight: patientData.height,
+        patientWeight: patientData.weight,
+        patientBloodGroup: patientData.bloodGroup,
+        patientDateOfBirth: patientData.dateOfBirth,
+        aboutProblem: patientData.about,
+        allergies: patientData.allergies,
+        address: patientData.address,
+        city: patientData.city,
+        emergency: JSON.parse(patientData.emergencyContact),
+        payment: true,
+        // appointment_date: new Date().toISOString().split("T")[0],
+        // appointment_time: new Date().toLocaleTimeString("en-US", {
+        //   hour12: false,
+        //   hour: "2-digit",
+        //   minute: "2-digit",
+        // }),
+      },
+    };
+
+    const updatedAppointments = [...existingAppointments, newAppointment];
+
+    try {
+      const { data, error } = await supabase
+        .from("doctorInfo")
+        .update({ bookAppointment: updatedAppointments })
+        .eq("id", state.doctor.id);
+
+      if (error) throw error;
+
+      // Update patientInfo table with doctor's email and appointment details
+      await supabase
+        .from("patientInfo")
+        .update({
+          appointment: [
+            {
+              doctorEmail: state.doctor.email,
+              doctorName: state.doctor.name,
+              appointmentDate: newAppointment.appointment_date,
+              appointmentTime: newAppointment.appointment_time,
+              payment: true,
+            },
+          ],
+        })
+        .eq("email", userEmail);
+
+      toast.success("Appointment booked successfully!");
+    } catch (error) {
+      console.error("Error updating data:", error);
+      toast.error("Error booking appointment.");
+    }
   };
 
   let timeSoltsArray;
@@ -317,88 +581,172 @@ function DoctorDetails() {
     const hour = parseInt(hours, 10);
     const ampm = hour >= 12 ? "pm" : "am";
     let hour12 = hour % 12;
-    if (hour12 === 0) hour12 = 12; // Convert "00" to "12"
-    const minuteFormatted = minutes === "00" ? "" : `:${minutes}`; // Omit minutes if ":00"
+    if (hour12 === 0) hour12 = 12;
+    const minuteFormatted = minutes === "00" ? "" : `:${minutes}`;
     return `${hour12}${minuteFormatted} ${ampm}`;
   };
 
+  //fetch feedback
+  useEffect(() => {
+    const fetchDoctorInfo = async () => {
+      try {
+        const { data: doctorInfo, error } = await supabase
+          .from("doctorInfo")
+          .select("feedback")
+          .eq("email", state.doctor.email)
+          .single();
+
+        if (error) {
+          console.error("Error fetching doctor info:", error);
+          toast.error("Failed to fetch doctor information.");
+          return;
+        }
+
+        if (doctorInfo && doctorInfo.feedback) {
+          const feedback = JSON.parse(doctorInfo.feedback);
+          if (feedback.length > 0) {
+            const totalRating = feedback.reduce(
+              (acc, curr) => acc + curr.rating,
+              0
+            );
+            const averageRating = totalRating / feedback.length;
+            setValue(parseFloat(averageRating.toFixed(1)));
+          } else {
+            setValue(3);
+          }
+        } else {
+          setValue(3);
+        }
+      } catch (error) {
+        console.error("Error processing doctor info:", error);
+        toast.error("Error processing feedback data.");
+        setValue(3);
+      }
+    };
+
+    fetchDoctorInfo();
+  }, [state.doctor.email]);
+
   return (
-    <MainContainer>
-      <Container>
-        <TopContainer>
-          <ImgContainer>
-            <Img src={state.doctor.img} />
-            <NameRatingBox>
-              <Specialization>{state.doctor.specialization}</Specialization>
-              <Name>{state.doctor.name}</Name>
-              <ResponsiveRating name="read-only" value={value} readOnly />
-            </NameRatingBox>
-          </ImgContainer>
+    <>
+      <ToastContainer />
 
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Appointment>
-              <TicketPriceContainer>
-                <Solts sx={{ padding: "0" }}>Ticket price: </Solts>
-                <Solts
-                  sx={{
-                    padding: "0",
-                    fontWeight: "bold",
-                    letterSpacing: "0.3px",
-                  }}
+      <MainContainer>
+        <Container>
+          <TopContainer>
+            <ImgContainer>
+              <Img src={state.doctor.img} />
+              <NameRatingBox>
+                <Specialization>
+                  {state.doctor.specialization.charAt(0).toUpperCase() +
+                    state.doctor.specialization.slice(1)}
+                </Specialization>
+                <Name>{state.doctor.name}</Name>
+                <ResponsiveRating
+                  name="read-only"
+                  value={value}
+                  readOnly
+                  precision={0.5}
+                />
+                <AddressContainer>
+                  {state.doctor.address}, {state.doctor.city}
+                </AddressContainer>
+              </NameRatingBox>
+            </ImgContainer>
+
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Appointment>
+                <TicketPriceContainer>
+                  <Solts sx={{ padding: "0" }}>Clinic price: </Solts>
+                  <Solts
+                    sx={{
+                      padding: "0",
+                      fontWeight: "bold",
+                      letterSpacing: "0.3px",
+                    }}
+                  >
+                    {state.doctor.price}
+                  </Solts>
+                </TicketPriceContainer>
+
+                <TimeSoltHeading>Available TimeSolts: </TimeSoltHeading>
+
+                <TimeSoltContainer>
+                  <Box>
+                    {timeSoltsArray &&
+                      timeSoltsArray.map((each) => {
+                        return (
+                          <Solts>
+                            {each.day.charAt(0).toUpperCase() +
+                              each.day.slice(1)}
+                            :
+                          </Solts>
+                        );
+                      })}
+                  </Box>
+                  <Box>
+                    {timeSoltsArray &&
+                      timeSoltsArray.map((each) => {
+                        return (
+                          <Solts>
+                            {formatTime12Hour(each.startTime)} -{" "}
+                            {formatTime12Hour(each.endTime)}
+                          </Solts>
+                        );
+                      })}
+                  </Box>
+                </TimeSoltContainer>
+
+                <BookAppointmentBtn
+                  variant="outlined"
+                  onClick={handleAppointmentClick}
+                  disabled={isLoading}
                 >
-                  {state.doctor.price}
-                </Solts>
-              </TicketPriceContainer>
+                  {buttonText}
+                </BookAppointmentBtn>
+              </Appointment>
+            </Box>
+          </TopContainer>
 
-              <TimeSoltHeading>Available TimeSolts: </TimeSoltHeading>
+          <DetailContainer sx={{ gap: 2 }}>
+            <StyleText onClick={handleAboutClick} selected={showDetails}>
+              About
+            </StyleText>
+            <StyleText onClick={handleFeedbackClick} selected={!showDetails}>
+              Feedback
+            </StyleText>
+          </DetailContainer>
+          {showDetails ? (
+            <ViewDetails fetchedData={state.doctor} />
+          ) : (
+            <FeedbackSection fetchedData={state.doctor} />
+          )}
+        </Container>
+      </MainContainer>
 
-              <TimeSoltContainer>
-                <Box>
-                  {timeSoltsArray &&
-                    timeSoltsArray.map((each) => {
-                      return (
-                        <Solts>
-                          {each.day.charAt(0).toUpperCase() + each.day.slice(1)}
-                          :
-                        </Solts>
-                      );
-                    })}
-                </Box>
-                <Box>
-                  {timeSoltsArray &&
-                    timeSoltsArray.map((each) => {
-                      return (
-                        <Solts>
-                          {formatTime12Hour(each.startTime)} -{" "}
-                          {formatTime12Hour(each.endTime)}
-                        </Solts>
-                      );
-                    })}
-                </Box>
-              </TimeSoltContainer>
-
-              <BookAppointmentBtn variant="outlined">
-                Book Appointment
-              </BookAppointmentBtn>
-            </Appointment>
-          </Box>
-        </TopContainer>
-
-        <DetailContainer sx={{ gap: 2 }}>
-          <StyleText onClick={handleAboutClick} selected={showDetails}>
-            About
-          </StyleText>
-          <StyleText onClick={handleFeedbackClick} selected={!showDetails}>
-            Feedback
-          </StyleText>
-        </DetailContainer>
-        {showDetails ? (
-          <ViewDetails fetchedData={state.doctor} />
-        ) : (
-          <Box>feedback</Box>
-        )}
-      </Container>
-    </MainContainer>
+      {stripePromise && (
+        <Elements stripe={stripePromise}>
+          <PaymentModal
+            open={openPaymentModal}
+            onClose={() => setOpenPaymentModal(false)}
+            onPaymentSuccess={handlePaymentSuccess}
+            price={state.doctor.price}
+          >
+            <ElementsConsumer>
+              {({ elements, stripe }) => (
+                <ModernPaymentForm
+                  elements={elements}
+                  stripe={stripe}
+                  onPaymentSuccess={handlePaymentSuccess}
+                  onClose={() => setOpenPaymentModal(false)}
+                  price={state.doctor.price}
+                />
+              )}
+            </ElementsConsumer>
+          </PaymentModal>
+        </Elements>
+      )}
+    </>
   );
 }
 

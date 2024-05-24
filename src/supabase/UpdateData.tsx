@@ -7,7 +7,7 @@ async function UpdateData(userEmail, updates) {
       .update(updates)
       .eq("email", userEmail);
 
-    console.log(data);
+    // console.log(data);
 
     if (error) throw error;
     return data;

@@ -5,6 +5,9 @@ import { supabase } from "../../../../supabase/config";
 import React, { useEffect, useRef, useState } from "react";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import ViewDetails from "../../../../components/viewDetails/ViewDetails";
+import { ToastContainer, toast } from "react-toastify";
+import CloseIcon from "@mui/icons-material/Close";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const MainContainer = styled(Box)(({ theme }) => ({
   width: "50%",
@@ -111,16 +114,16 @@ const Name = styled(Typography)(({ theme }) => ({
   },
 }));
 
-const ResponsiveRating = styled(Rating)(({ theme }) => ({
-  fontSize: "0.9rem",
+const AddressCity = styled(Typography)(({ theme }) => ({
+  fontSize: "0.8rem",
   [theme.breakpoints.down("lg")]: {
-    fontSize: "0.8rem",
+    fontSize: "0.7rem",
   },
   [theme.breakpoints.down("md")]: {
-    fontSize: "0.6rem",
+    fontSize: "0.65rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.5rem",
+    fontSize: "0.55rem",
   },
 }));
 
@@ -140,6 +143,19 @@ type DoctorInfo = {
   about: string;
 };
 
+const ShowRating = styled(Rating)(({ theme }) => ({
+  fontSize: theme.typography.pxToRem(18),
+  [theme.breakpoints.down("lg")]: {
+    fontSize: theme.typography.pxToRem(16),
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: theme.typography.pxToRem(14),
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: theme.typography.pxToRem(9),
+  },
+}));
+
 function DoctorOverView({
   user,
   fetchedData,
@@ -149,7 +165,7 @@ function DoctorOverView({
 }) {
   const [imgPath, setImgPath] = useState(fetchedData?.img || defaultImg);
   const [isLoading, setIsLoading] = useState(false);
-  const [value, setValue] = React.useState<number | null>(2);
+  const [value, setValue] = React.useState<number | null>(3);
 
   const uploadRef = useRef<HTMLInputElement>(null);
 
@@ -173,8 +189,7 @@ function DoctorOverView({
         const fullPath = `https://eraerhfcolqnyopznyyb.supabase.co/storage/v1/object/public/${data.fullPath}`; //store it in env
         setImgPath(fullPath);
       }
-
-      console.log("Upload successful", data);
+      toast.success("Upload successful");
     } catch (error) {
       console.log(error);
     } finally {
@@ -192,7 +207,7 @@ function DoctorOverView({
             .eq("email", user?.email);
 
           if (error) throw error;
-          console.log("Database update successful", data);
+          toast.success("Doctor information updated successfully");
         } catch (error) {
           console.error("Error updating data:", error);
         }
@@ -202,64 +217,145 @@ function DoctorOverView({
     }
   }, [imgPath, user?.email, fetchedData?.img]);
 
+  useEffect(() => {
+    const fetchRatings = async () => {
+      if (fetchedData) {
+        try {
+          const { data: doctorInfo, error } = await supabase
+            .from("doctorInfo")
+            .select("feedback")
+            .eq("email", fetchedData.email)
+            .single();
+
+          if (error) {
+            console.error("Error fetching doctor info:", error);
+            toast.error("Failed to fetch doctor information.");
+            return;
+          }
+
+          if (doctorInfo && doctorInfo.feedback) {
+            const feedback = JSON.parse(doctorInfo.feedback);
+            const totalRating = feedback.reduce(
+              (acc, curr) => acc + curr.rating,
+              0
+            );
+            const averageRating =
+              feedback.length > 0 ? totalRating / feedback.length : 3;
+            setValue(averageRating);
+          } else {
+            setValue(3);
+          }
+        } catch (error) {
+          console.error("Error processing doctor info:", error);
+          toast.error("Error processing feedback data.");
+          setValue(3);
+        }
+      }
+    };
+
+    fetchRatings();
+  }, [fetchedData]);
+
   return (
-    <MainContainer>
-      {/* Img & Name */}
-      <ImgBox>
-        {/* Img */}
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
-          <Img
-            src={imgPath}
-            alt="profile-image"
-            style={{
-              opacity: isLoading ? 0.5 : 1,
-              filter: isLoading ? "blur(2px)" : "blur(0px)",
-            }}
-            onLoad={() => setIsLoading(false)}
-          />
-        </Box>
+    <>
+      <ToastContainer />
 
-        {user && fetchedData && (
-          <NameRatingBox>
-            {/* Name */}
-            <Name>
-              {fetchedData ? fetchedData.name : user?.user_metadata?.full_name}
-            </Name>
+      <MainContainer>
+        {/* Img & Name */}
+        <ImgBox>
+          {/* Img */}
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+            <Img
+              src={imgPath}
+              alt="profile-image"
+              style={{
+                opacity: isLoading ? 0.5 : 1,
+                filter: isLoading ? "blur(2px)" : "blur(0px)",
+              }}
+              onLoad={() => setIsLoading(false)}
+            />
+          </Box>
 
-            {/* Rating */}
-            <ResponsiveRating name="read-only" value={value} readOnly />
-          </NameRatingBox>
-        )}
-      </ImgBox>
+          {user && fetchedData && (
+            <NameRatingBox>
+              {/* Name */}
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Name>
+                  {fetchedData
+                    ? fetchedData.name
+                    : user?.user_metadata?.full_name}
+                </Name>
+                {fetchedData && fetchedData?.approved === "YES" ? (
+                  <CheckCircleIcon
+                    sx={{
+                      fontSize: {
+                        xs: "0.8rem", // Small screens
+                        sm: "1rem", // Medium screens
+                        md: "1.2rem", // Large screens
+                      },
+                    }}
+                  />
+                ) : (
+                  <CloseIcon
+                    sx={{
+                      fontSize: {
+                        xs: "0.5rem", // Small screens
+                        sm: "1.2rem", // Medium screens
+                        md: "1.4rem", // Large screens
+                      },
+                    }}
+                  />
+                )}
+              </Box>
 
-      <label
-        htmlFor="upload-profile-img"
-        style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
-      >
-        <input
-          type="file"
-          name="upload-img"
-          id="upload-profile-img"
-          style={{ display: "none" }}
-          onChange={handleFileInput}
-          ref={uploadRef}
-        />
-        <ImgBtn
-          variant="contained"
-          tabIndex={-1}
-          startIcon={<CloudUploadIcon />}
-          onClick={() => {
-            if (uploadRef?.current) {
-              uploadRef.current.click();
-            }
-          }}
+              {/* Rating */}
+              <ShowRating
+                name="read-only"
+                value={value}
+                precision={0.5}
+                readOnly
+              />
+              {fetchedData && (
+                <Box sx={{ display: "flex", gap: 1 }}>
+                  <AddressCity variant="body2">
+                    {fetchedData.address},
+                  </AddressCity>
+                  <AddressCity variant="body2">{fetchedData.city}</AddressCity>
+                </Box>
+              )}
+            </NameRatingBox>
+          )}
+        </ImgBox>
+
+        <label
+          htmlFor="upload-profile-img"
+          style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
         >
-          {imgPath && imgPath !== defaultImg ? "Edit" : "Add photo"}
-        </ImgBtn>
-      </label>
+          <input
+            type="file"
+            name="upload-img"
+            id="upload-profile-img"
+            style={{ display: "none" }}
+            onChange={handleFileInput}
+            ref={uploadRef}
+          />
+          <ImgBtn
+            variant="contained"
+            tabIndex={-1}
+            startIcon={<CloudUploadIcon />}
+            onClick={() => {
+              if (uploadRef?.current) {
+                uploadRef.current.click();
+              }
+            }}
+          >
+            {imgPath && imgPath !== defaultImg ? "Edit" : "Add photo"}
+          </ImgBtn>
+        </label>
 
-      {user && fetchedData && <ViewDetails fetchedData={fetchedData} />}
-    </MainContainer>
+        {user && fetchedData && <ViewDetails fetchedData={fetchedData} />}
+      </MainContainer>
+    </>
   );
 }
 

@@ -1,16 +1,18 @@
 // DoctorCard.js
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardMedia,
   CardContent,
   Typography,
   styled,
+  Rating,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../../supabase/config";
 
 const StyleCard = styled(Card)(({ theme }) => ({
-  maxWidth: 200,
+  width: 200,
   margin: 10,
   borderRadius: "5px",
   boxShadow: "1px 5px 8px rgba(0, 0, 0, 0.2)",
@@ -24,17 +26,17 @@ const StyleCard = styled(Card)(({ theme }) => ({
     maxWidth: 190,
   },
   [theme.breakpoints.down("md")]: {
-    maxWidth: 120,
+    maxWidth: 150,
     margin: 7,
   },
   [theme.breakpoints.down("sm")]: {
-    maxWidth: 90,
+    width: 120,
     margin: 5,
   },
 }));
 
 const CardMediaStyle = styled(CardMedia)(({ theme }) => ({
-  height: 190,
+  height: 220,
   [theme.breakpoints.down("lg")]: {
     height: 180,
   },
@@ -42,12 +44,14 @@ const CardMediaStyle = styled(CardMedia)(({ theme }) => ({
     height: 140,
   },
   [theme.breakpoints.down("sm")]: {
-    height: 100,
+    height: 130,
   },
 }));
 
 const Heading = styled(Typography)(({ theme }) => ({
   fontSize: "1.05rem",
+  paddingLeft: "4px",
+
   [theme.breakpoints.down("lg")]: {
     fontSize: "0.9rem",
   },
@@ -55,12 +59,14 @@ const Heading = styled(Typography)(({ theme }) => ({
     fontSize: "0.7rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.6rem",
+    fontSize: "0.65rem",
+    paddingLeft: "0px",
   },
 }));
 
 const Title = styled(Typography)(({ theme }) => ({
   fontSize: "0.8rem",
+  paddingLeft: "4px",
 
   [theme.breakpoints.down("lg")]: {
     fontSize: "0.7rem",
@@ -69,7 +75,8 @@ const Title = styled(Typography)(({ theme }) => ({
     fontSize: "0.6rem",
   },
   [theme.breakpoints.down("sm")]: {
-    fontSize: "0.5rem",
+    fontSize: "0.55rem",
+    paddingLeft: "0px",
   },
 }));
 
@@ -88,7 +95,21 @@ const CardContentStyle = styled(CardContent)(({ theme }) => ({
   },
 }));
 
+const ShowRating = styled(Rating)(({ theme }) => ({
+  fontSize: theme.typography.pxToRem(18),
+  [theme.breakpoints.down("lg")]: {
+    fontSize: theme.typography.pxToRem(16),
+  },
+  [theme.breakpoints.down("md")]: {
+    fontSize: theme.typography.pxToRem(14),
+  },
+  [theme.breakpoints.down("sm")]: {
+    fontSize: theme.typography.pxToRem(9),
+  },
+}));
+
 const DoctorCard = ({ doctor }) => {
+  const [rating, setRating] = useState(3);
   const qualificationsArray = JSON.parse(doctor.qualifications);
   const degrees = qualificationsArray.map((q) => q.degree).join(", ");
   // const universities = qualificationsArray.map((q) => q.university).join(", ");
@@ -99,6 +120,39 @@ const DoctorCard = ({ doctor }) => {
       {q.university}
     </Title>
   ));
+  // fetch feedback
+  useEffect(() => {
+    const fetchDoctorInfo = async () => {
+      try {
+        const { data: doctorInfo, error } = await supabase
+          .from("doctorInfo")
+          .select("feedback")
+          .eq("email", doctor.email)
+          .single();
+
+        if (error) {
+          console.error("Error fetching doctor info:", error);
+          return;
+        }
+
+        if (doctorInfo && doctorInfo.feedback) {
+          const feedback = JSON.parse(doctorInfo.feedback);
+          if (feedback.length > 0) {
+            const totalRating = feedback.reduce(
+              (acc, curr) => acc + curr.rating,
+              0
+            );
+            const averageRating = totalRating / feedback.length;
+            setRating(parseFloat(averageRating.toFixed(1)));
+          }
+        }
+      } catch (error) {
+        console.error("Error processing doctor info:", error);
+      }
+    };
+
+    fetchDoctorInfo();
+  }, [doctor.email]);
 
   return (
     <StyleCard
@@ -108,9 +162,12 @@ const DoctorCard = ({ doctor }) => {
       <CardContentStyle>
         <Heading>{doctor.name}</Heading>
         <Title variant="body2" color="text.secondary">
-          {doctor.specialization} ({degrees})
+          {doctor.specialization.charAt(0).toUpperCase() +
+            doctor.specialization.slice(1)}{" "}
+          ({degrees})
         </Title>
         {universityComponents}
+        <ShowRating name="read-only" value={rating} precision={0.5} readOnly />
       </CardContentStyle>
     </StyleCard>
   );

@@ -1,0 +1,16 @@
+{
+    "buildCommand": "npm run build",
+    "routes": [
+        {
+            "src": "^/(_next|static)/",
+            "headers": {
+                "Cache-Control": "s-maxage=31536000,immutable"
+            },
+            "continue": true
+        },
+        {
+            "src": "/[^.]+",
+            "dest": "/index.html"
+        }
+    ]
+}
