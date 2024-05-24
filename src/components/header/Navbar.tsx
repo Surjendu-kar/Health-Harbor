@@ -8,6 +8,7 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  Typography,
 } from "@mui/material";
 import { Menu as MenuIcon, Close as CloseIcon } from "@mui/icons-material";
 import { styled } from "@mui/system";
@@ -143,7 +144,7 @@ const SignInLink = styled(StyledLink)(({ theme }) => ({
   },
 }));
 
-const StyledAvatar = styled(Avatar)(({ theme }) => ({
+const MenubarStyledAvatar = styled(Avatar)(({ theme }) => ({
   width: "36px",
   height: "36px",
   border: "2px solid white",
@@ -156,14 +157,18 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
     width: "33px",
     height: "33px",
   },
+}));
+
+const StyledAvatar = styled(MenubarStyledAvatar)(({ theme }) => ({
   [theme.breakpoints.down("md")]: {
-    width: "25px",
-    height: "25px",
+    // "& .MuiAvatar-root": {
+      display: "none", // Hide the StyledAvatar component on medium screens
+    // },
   },
   [theme.breakpoints.down("sm")]: {
-    width: "20px",
-    height: "20px",
-    border: "1px solid white",
+    // "& .MuiAvatar-root": {
+      display: "none", // Hide the StyledAvatar component on small screens
+    // },
   },
 }));
 
@@ -265,7 +270,16 @@ const Navbar = () => {
           onClick={toggleDrawer(false)}
           onKeyDown={toggleDrawer(false)}
         >
-          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", padding: "0 1rem"}}>
+            {user && (
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <MenubarStyledAvatar
+                  component={Link}
+                  to="/profile"
+                  src={doctorImage || ""}
+                />
+              </Box>
+            )}
             <IconButton onClick={toggleDrawer(false)} sx={{ color: "#fff" }}>
               <CloseIcon />
             </IconButton>
@@ -308,10 +322,7 @@ const Navbar = () => {
               </ListItemButton>
             </ListItem>
             {!user && (
-              <ListItem
-                disablePadding
-                sx={{ display: { xs: "flex", md: "none" } }}
-              >
+              <ListItem disablePadding>
                 <ListItemButton
                   component={Link}
                   to="/login"
@@ -329,6 +340,8 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+
 
 //below we fixed the avatar img prb but there is another prb occur
 

@@ -20,6 +20,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { supabase } from "../../../../supabase/config";
 import defaultImg from "../../../../assets/Default_pfp-removebg-preview.png";
 import dayjs from "dayjs";
+import { Edit, Check } from "@mui/icons-material";
 
 const MainContainer = styled(Box)(({ theme }) => ({
   width: "50%",
@@ -400,23 +401,52 @@ function PatientInfo({ user }) {
       docItem: documents,
       about: about,
     };
+
     if (user) {
       try {
-        const { data, error } = await supabase
+        const { data: existingData, error: fetchError } = await supabase
           .from("patientInfo")
-          .update(patientData)
+          .select("*")
           .eq("email", user.email)
-          .select();
+          .single();
 
-        if (error) {
-          console.error("Error updating patientInfo:", error);
-          toast.error("Failed to update patient information.");
+        if (fetchError) {
+          console.error("Error fetching patientInfo:", fetchError);
+          toast.error("Failed to fetch patient information.");
         } else {
-          toast.success("Patient information updated successfully!");
+          if (existingData) {
+            // Update existing data
+            const { data: updateData, error: updateError } = await supabase
+              .from("patientInfo")
+              .update(patientData)
+              .eq("email", user.email)
+              .select();
+
+            if (updateError) {
+              console.error("Error updating patientInfo:", updateError);
+              toast.error("Failed to update patient information.");
+            } else {
+              toast.success("Patient information updated successfully!");
+              setIsEditMode(false); // Exit edit mode after successful update
+            }
+          } else {
+            // Insert new data
+            const { data: insertData, error: insertError } = await supabase
+              .from("patientInfo")
+              .insert([{ email: user.email, ...patientData }]);
+
+            if (insertError) {
+              console.error("Error inserting patientInfo:", insertError);
+              toast.error("Failed to insert patient information.");
+            } else {
+              toast.success("Patient information inserted successfully!");
+              setIsEditMode(false); // Exit edit mode after successful insert
+            }
+          }
         }
       } catch (error) {
-        console.error("Error updating patientInfo:", error);
-        toast.error("Failed to update patient information.");
+        console.error("Error updating/inserting patientInfo:", error);
+        toast.error("Failed to update/insert patient information.");
       }
     }
   };
@@ -433,6 +463,7 @@ function PatientInfo({ user }) {
 
           if (error) {
             console.error("Error fetching patientInfo:", error);
+            setIsEditMode(false);
           } else {
             setName(data.name);
             setPhone(data.phoneNo);
@@ -448,11 +479,12 @@ function PatientInfo({ user }) {
             setInsuranceInfo(JSON.parse(data.insuranceInfo || "[]"));
             setDocuments(data.documents);
             setAbout(data.about);
-            setIsEditMode(!!data.name);
+            setIsEditMode(!data.name);
             setImgPath(data.img || null);
           }
         } catch (error) {
           console.error("Error fetching patientInfo:", error);
+          setIsEditMode(false);
         }
       }
     };
@@ -494,6 +526,9 @@ function PatientInfo({ user }) {
                {isEditMode ? <Check /> : <Edit />} 
             </EditBtn>
           )} */}
+          <EditBtn onClick={() => setIsEditMode(!isEditMode)}>
+            {isEditMode ? <Check  /> : <Edit />}
+          </EditBtn>
         </ProfileTitleContainer>
         <ImgBox>
           {/* Img */}
@@ -544,7 +579,7 @@ function PatientInfo({ user }) {
             label="Name"
             onChange={(e) => setName(e.target.value)}
             fullWidth
-            disabled={isEditMode}
+            disabled={!isEditMode}
           />
           {user && (
             <TitleTextField
@@ -565,7 +600,7 @@ function PatientInfo({ user }) {
             label="Phone"
             onChange={(e) => setPhone(e.target.value)}
             fullWidth
-            disabled={isEditMode}
+            disabled={!isEditMode}
           />
 
           <SelectOption>
@@ -581,7 +616,7 @@ function PatientInfo({ user }) {
                 label="gender"
                 onChange={(e) => setGender(e.target.value)}
                 sx={{ backgroundColor: "#fff" }}
-                disabled={isEditMode}
+                disabled={!isEditMode}
               >
                 <MenuItem value="male">Male</MenuItem>
                 <MenuItem value="female">Female</MenuItem>
@@ -596,7 +631,7 @@ function PatientInfo({ user }) {
                   onChange={(newValue) =>
                     setDateOfBirth(newValue.format("YYYY-MM-DD"))
                   }
-                  disabled={isEditMode}
+                  disabled={!isEditMode}
 
                   // renderInput={(params) => <TextField {...params} />}
                 />
@@ -616,7 +651,7 @@ function PatientInfo({ user }) {
                 value={allergies}
                 onChange={(e) => setAllergies(e.target.value)}
                 label="Blood Group"
-                disabled={isEditMode}
+                disabled={!isEditMode}
               >
                 <MenuItem value="peanuts">Peanuts</MenuItem>
                 <MenuItem value="tree nuts">Tree nuts</MenuItem>
@@ -641,7 +676,7 @@ function PatientInfo({ user }) {
                 value={bloodGroup}
                 onChange={(e) => setBloodGroup(e.target.value)}
                 label="Blood Group"
-                disabled={isEditMode}
+                disabled={!isEditMode}
               >
                 <MenuItem value="A+">A+</MenuItem>
                 <MenuItem value="A-">A-</MenuItem>
@@ -664,7 +699,7 @@ function PatientInfo({ user }) {
               value={height}
               onChange={(e) => setHeight(e.target.value)}
               type="number"
-              disabled={isEditMode}
+              disabled={!isEditMode}
             />
             <TitleTextField
               sx={{ marginTop: "0" }}
@@ -674,12 +709,12 @@ function PatientInfo({ user }) {
               value={weight}
               onChange={(e) => setWeight(e.target.value)}
               type="number"
-              disabled={isEditMode}
+              disabled={!isEditMode}
             />
           </SelectOption>
 
           <LocationFields
-            isEditMode={!isEditMode}
+            isEditMode={isEditMode}
             setAddress={setAddress}
             setCity={setCity}
             address={address}
@@ -690,7 +725,7 @@ function PatientInfo({ user }) {
             <ColorButton
               variant="contained"
               sx={{ margin: "1.5rem 0 0.5rem 0.1rem" }}
-              disabled={isEditMode}
+              disabled={!isEditMode}
             >
               Emergency Contact
             </ColorButton>
@@ -706,7 +741,7 @@ function PatientInfo({ user }) {
                 })
               }
               fullWidth
-              disabled={isEditMode}
+              disabled={!isEditMode}
             />
             <TitleTextField
               required
@@ -720,7 +755,7 @@ function PatientInfo({ user }) {
                 })
               }
               fullWidth
-              disabled={isEditMode}
+              disabled={!isEditMode}
             />
             <TitleTextField
               required
@@ -734,7 +769,7 @@ function PatientInfo({ user }) {
                 })
               }
               fullWidth
-              disabled={isEditMode}
+              disabled={!isEditMode}
             />
             <TitleTextField
               value={emergencyContact.email}
@@ -747,7 +782,7 @@ function PatientInfo({ user }) {
                   email: e.target.value,
                 })
               }
-              disabled={isEditMode}
+              disabled={!isEditMode}
             />
           </Box>
 
@@ -755,7 +790,7 @@ function PatientInfo({ user }) {
             <ColorButton
               variant="contained"
               sx={{ margin: "1.5rem 0 0.5rem 0.1rem" }}
-              disabled={isEditMode}
+              disabled={!isEditMode}
             >
               Insurance Information
             </ColorButton>
@@ -766,7 +801,7 @@ function PatientInfo({ user }) {
               onChange={(e) =>
                 setInsuranceInfo({ ...insuranceInfo, provider: e.target.value })
               }
-              disabled={isEditMode}
+              disabled={!isEditMode}
             />
             <TitleTextField
               label="Policy Number"
@@ -778,7 +813,7 @@ function PatientInfo({ user }) {
                   policyNumber: e.target.value,
                 })
               }
-              disabled={isEditMode}
+              disabled={!isEditMode}
             />
           </Box>
 
@@ -791,6 +826,7 @@ function PatientInfo({ user }) {
                 multiple
                 hidden
                 onChange={(e) => setDocuments(e.target.files)}
+                disabled={!isEditMode}
               />
             </Button>
             <Typography variant="body2" color="textSecondary">
@@ -804,7 +840,7 @@ function PatientInfo({ user }) {
             <ColorButton
               variant="contained"
               sx={{ margin: "1.5rem 0 0.5rem 0.1rem" }}
-              disabled={isEditMode}
+              disabled={!isEditMode}
             >
               About Problem
             </ColorButton>
@@ -813,7 +849,7 @@ function PatientInfo({ user }) {
               onChange={(e) => setAbout(e.target.value)}
               sx={{ backgroundColor: "#fff" }}
               value={about}
-              disabled={isEditMode}
+              disabled={!isEditMode}
             />
             <Box sx={{ textAlign: "right" }}>
               <ColorButton
@@ -823,7 +859,7 @@ function PatientInfo({ user }) {
                 onClick={(element) => {
                   handleSubmit(element);
                 }}
-                disabled={isEditMode}
+                disabled={!isEditMode}
               >
                 Submit
               </ColorButton>
