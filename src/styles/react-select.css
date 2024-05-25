@@ -1,0 +1,29 @@
+/* react-select.css */
+.react-select__control {
+    min-height: 38px;
+  }
+  
+  .react-select__control,
+  .react-select__menu {
+    border-radius: 20px;
+  }
+  
+  .react-select__value-container {
+    padding: 0 8px;
+  }
+  
+  .react-select__input-container {
+    margin: 0 8px;
+  }
+  
+  .react-select__placeholder {
+    color: #999;
+  }
+  
+  .react-select__option {
+    padding: 8px 12px;
+  }
+  
+  .react-select__menu-list {
+    padding: 8px 0;
+  }

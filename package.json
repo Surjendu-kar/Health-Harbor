@@ -28,6 +28,7 @@
     "react-confirm-alert": "^3.0.6",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.3",
+    "react-select": "^5.8.0",
     "react-toastify": "^10.0.5",
     "styled-components": "^6.1.8",
     "supabase": "^1.131.5"
