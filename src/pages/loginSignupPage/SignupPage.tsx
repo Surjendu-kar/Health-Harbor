@@ -189,6 +189,24 @@ const PasswordTextField = styled(UserTextField)(({ theme }) => ({
   marginTop: "0.8rem",
   [theme.breakpoints.down("md")]: { marginTop: "0.5rem" },
   [theme.breakpoints.down("sm")]: { marginTop: "0.3rem" },
+  "& .MuiOutlinedInput-root": {
+    "&:hover fieldset": {
+      borderColor: "transparent",
+    },
+  },
+}));
+
+const IconButtonStyled = styled(IconButton)(({ theme }) => ({
+  [theme.breakpoints.down("md")]: {
+    '& svg': {
+      fontSize: "1.25rem",
+    }
+  },
+  [theme.breakpoints.down("sm")]: {
+    '& svg': {
+      fontSize: "1rem",
+    }
+  }
 }));
 
 const ButtonBox = styled(Box)(({ theme }) => ({
@@ -364,13 +382,13 @@ export function SignupPage() {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton
+                      <IconButtonStyled
                         aria-label="toggle password visibility"
                         onClick={() => setShowPassword(!showPassword)}
                         edge="end"
                       >
                         {showPassword ? <FaEyeSlash /> : <FaEye />}
-                      </IconButton>
+                      </IconButtonStyled>
                     </InputAdornment>
                   ),
                 }}
@@ -389,13 +407,13 @@ export function SignupPage() {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton
+                      <IconButtonStyled
                         aria-label="toggle password visibility"
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                         edge="end"
                       >
                         {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-                      </IconButton>
+                      </IconButtonStyled>
                     </InputAdornment>
                   ),
                 }}

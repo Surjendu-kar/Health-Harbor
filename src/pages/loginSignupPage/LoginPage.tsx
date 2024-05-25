@@ -85,6 +85,7 @@ const TextTitle = styled(Typography)(({ theme }) => ({
   [theme.breakpoints.down("md")]: { fontSize: "0.6rem" },
   [theme.breakpoints.down("sm")]: { fontSize: "0.45rem" },
 }));
+
 const TextFieldBox = styled(Box)(({ theme }) => ({
   margin: "2rem 0 0",
   width: "90%",
@@ -216,6 +217,19 @@ const CloseButton = styled(IconButton)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     padding: "4px",
   },
+}));
+
+const IconButtonStyled = styled(IconButton)(({ theme }) => ({
+  [theme.breakpoints.down("md")]: {
+    '& svg': {
+      fontSize: "1.25rem",
+    }
+  },
+  [theme.breakpoints.down("sm")]: {
+    '& svg': {
+      fontSize: "1rem",
+    }
+  }
 }));
 
 export function LoginPage() {
@@ -365,13 +379,13 @@ export function LoginPage() {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton
+                      <IconButtonStyled
                         aria-label="toggle password visibility"
                         onClick={() => setShowPassword(!showPassword)}
                         edge="end"
                       >
                         {showPassword ? <FaEyeSlash /> : <FaEye />}
-                      </IconButton>
+                      </IconButtonStyled>
                     </InputAdornment>
                   ),
                 }}
