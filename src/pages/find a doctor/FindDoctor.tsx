@@ -299,18 +299,6 @@ function FindDoctor() {
     }
   }, [fetchedData]);
 
-  // Handle city input change
-  const handleCityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCity(event.target.value);
-  };
-
-  // Handle specialization select change
-  const handleSpecializationChange = (
-    event: React.ChangeEvent<{ value: unknown }>
-  ) => {
-    setSpecialization(event.target.value as string);
-  };
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const filteredData = fetchedData.filter(
