@@ -61,8 +61,8 @@ const GetAppointmentBtn = styled(Typography)(({ theme }) => ({
 }));
 
 const VideoContainer = styled(Card)(({ theme }) => ({
-  width: "100%",
-  maxWidth: "600px",
+  width: "700px",
+  // maxWidth: "600px",
   margin: "0 auto",
   boxShadow: theme.shadows[3],
   borderRadius: theme.shape.borderRadius,
@@ -128,9 +128,6 @@ function GetAppointment() {
         threshold: 0.5,
       });
       observer.observe(sectionRef.current);
-      return () => {
-        observer.unobserve(sectionRef.current);
-      };
     }
   }, []);
 
