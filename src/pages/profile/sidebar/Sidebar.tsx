@@ -178,39 +178,35 @@ function Sidebar({ onMenuSelect }) {
   };
   const handleDeleteAc = async () => {
     confirmAlert({
-      title: "Delete Account Confirmation",
-      message:
-        "Are you sure you want to delete your account? This action cannot be undone.",
+      title: "Delete Account Data Confirmation",
+      message: "Are you sure you want to delete your account data? This will remove all your personal information, but your account will remain active. This action cannot be undone.",
       buttons: [
         {
-          label: "Yes, Delete Account",
-          onClick: () => {
-            /* Do nothing */
+          label: "Yes, Delete Account Data",
+          onClick: async () => {
+            try {
+              const { error } = await supabase
+                .from("doctorInfo")
+                .delete()
+                .eq("email", user?.email);
+    
+              if (error) {
+                console.error("Error deleting account data:", error.message);
+                toast.error("An error occurred while deleting your account data.");
+              } else {
+                // No need to sign out the user since the account is not being deleted
+                setUser(null); // Reset the user state to reflect the deletion of account data
+                navigate("/"); // Navigate to the desired route after data deletion
+                toast.success("Account data deleted successfully");
+              }
+            } catch (error) {
+              console.error("Error deleting account data:", error);
+              toast.error("An error occurred while deleting your account data.");
+            }
           },
-          // onClick: async () => {
-          //   try {
-          //     const { error } = await supabase
-          //       .from("doctorInfo")
-          //       .delete()
-          //       .eq("email", user?.email);
-
-          //     if (error) {
-          //       console.error("Error deleting account:", error.message);
-          //       toast.error("An error occurred while deleting your account.");
-          //     } else {
-          //       await supabase.auth.signOut();
-          //       setUser(null);
-          //       navigate("/");
-          //       toast.success("Account deleted successfully");
-          //     }
-          //   } catch (error) {
-          //     console.error("Error deleting account:", error);
-          //     toast.error("An error occurred while deleting your account.");
-          //   }
-          // }
         },
         {
-          label: "No, Keep Account",
+          label: "No, Keep Account Data",
           onClick: () => {
             /* Do nothing */
           },
