@@ -128,9 +128,6 @@ function GetAppointment() {
         threshold: 0.5,
       });
       observer.observe(sectionRef.current);
-      return () => {
-        observer.unobserve(sectionRef.current);
-      };
     }
   }, []);
 
@@ -139,7 +136,11 @@ function GetAppointment() {
       <Heading>Easily Can Get An Appointment</Heading>
       <VideoContainer>
         <VideoPlayer>
-          {isLoading && <LoadingSpinner><CircularProgress /></LoadingSpinner>}
+          {isLoading && (
+            <LoadingSpinner>
+              <CircularProgress />
+            </LoadingSpinner>
+          )}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: isPlaying ? 1 : 0 }}
