@@ -162,12 +162,12 @@ const MenubarStyledAvatar = styled(Avatar)(({ theme }) => ({
 const StyledAvatar = styled(MenubarStyledAvatar)(({ theme }) => ({
   [theme.breakpoints.down("md")]: {
     // "& .MuiAvatar-root": {
-      display: "none", // Hide the StyledAvatar component on medium screens
+    display: "none", // Hide the StyledAvatar component on medium screens
     // },
   },
   [theme.breakpoints.down("sm")]: {
     // "& .MuiAvatar-root": {
-      display: "none", // Hide the StyledAvatar component on small screens
+    display: "none", // Hide the StyledAvatar component on small screens
     // },
   },
 }));
@@ -180,7 +180,7 @@ const DrawerContainer = styled(Box)(({ theme }) => ({
 
 const Navbar = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [doctorImage, setDoctorImage] = useState<string>("");
+  const [profileImg, setProfileImg] = useState<string>("");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   useEffect(() => {
@@ -190,7 +190,7 @@ const Navbar = () => {
         fetchDoctorImage(session?.user.email);
       } else if (event === "SIGNED_OUT") {
         setUser(null);
-        setDoctorImage("");
+        setProfileImg("");
       }
     });
 
@@ -201,15 +201,22 @@ const Navbar = () => {
 
   const fetchDoctorImage = async (userEmail: string | undefined) => {
     if (userEmail) {
-      const { data, error } = await supabase
+      const { data: doctorData, error: doctorError } = await supabase
         .from("doctorInfo")
         .select("img")
-        .eq("email", userEmail);
+        .eq("email", userEmail)
+        .single();
 
-      if (error) {
-        console.error("Error fetching doctor image:", error);
+      const { data: patientData, error: patientError } = await supabase
+        .from("patientInfo")
+        .select("img")
+        .eq("email", userEmail)
+        .single();
+
+      if (doctorError && patientError) {
+        console.error("Error fetching user image:", doctorError, patientError);
       } else {
-        setDoctorImage(data?.[0]?.img || "");
+        setProfileImg(doctorData?.img || patientData?.img || "");
       }
     }
   };
@@ -242,11 +249,7 @@ const Navbar = () => {
 
       {user ? (
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <StyledAvatar
-            component={Link}
-            to="/profile"
-            src={doctorImage || ""}
-          />
+          <StyledAvatar component={Link} to="/profile" src={profileImg || ""} />
         </Box>
       ) : (
         <Box sx={{ display: { xs: "none", md: "flex" } }}>
@@ -270,13 +273,19 @@ const Navbar = () => {
           onClick={toggleDrawer(false)}
           onKeyDown={toggleDrawer(false)}
         >
-          <Box sx={{ display: "flex", justifyContent: "space-between", padding: "0 1rem"}}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              padding: "0 1rem",
+            }}
+          >
             {user && (
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 <MenubarStyledAvatar
                   component={Link}
                   to="/profile"
-                  src={doctorImage || ""}
+                  src={profileImg || ""}
                 />
               </Box>
             )}
@@ -340,8 +349,6 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-
 
 //below we fixed the avatar img prb but there is another prb occur
 
