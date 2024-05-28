@@ -482,7 +482,7 @@ function Info({
             required
             value={price}
             id="price"
-            label="Ticket Price"
+            label="Clinic Price"
             fullWidth
             onChange={(e) => setPrice(e.target.value)}
             sx={{ marginTop: 0 }}

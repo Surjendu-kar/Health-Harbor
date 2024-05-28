@@ -786,7 +786,7 @@ function PatientInfo({ user }) {
             />
           </Box>
 
-          <Box>
+          {/* <Box>
             <ColorButton
               variant="contained"
               sx={{ margin: "1.5rem 0 0.5rem 0.1rem" }}
@@ -815,7 +815,7 @@ function PatientInfo({ user }) {
               }
               disabled={!isEditMode}
             />
-          </Box>
+          </Box> */}
 
           <Box>
             <br />

@@ -98,7 +98,7 @@ function formatTime(time) {
 function Appointments({ user, fetchedData }: { user: User; fetchedData }) {
   const [appointments, setAppointments] = useState([]);
   const [appointmentDate, setAppointmentDate] = useState<string>("");
-  const [appointmentTime, setAppointmentTime] = useState<string>("");
+  const [appointmentTime, setAppointmentTime] = useState<string>(""); 
 
   useEffect(() => {
     if (fetchedData && fetchedData.bookAppointment) {

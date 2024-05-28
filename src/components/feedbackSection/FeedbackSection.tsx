@@ -387,12 +387,6 @@ const FeedbackSection: React.FC = ({ fetchedData }) => {
         .eq("email", fetchedData.email);
 
       if (updateError) throw updateError;
-
-      if (isAlreadyLiked) {
-        toast.success("Unlike successful!");
-      } else {
-        toast.success("Like successful!");
-      }
     } catch (error) {
       console.error("Error updating feedback likes:", error);
       toast.error("Error updating likes.");

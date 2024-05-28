@@ -1,5 +1,6 @@
 import { Box, Typography, styled } from "@mui/material";
 import LogoAnimation from "../lottieAnimation/LogoAnimation";
+import { useNavigate } from "react-router-dom";
 
 const MainContainer = styled(Box)(({ theme }) => ({
   marginTop: "5rem",
@@ -180,6 +181,11 @@ const ReserveTitle = styled("p")(({ theme }) => ({
 }));
 
 function Footer() {
+  const navigate = useNavigate();
+  const handleTitleClick = (path) => {
+    navigate(path);
+  };
+
   return (
     <MainContainer>
       <SecondMainContainer>
@@ -196,11 +202,14 @@ function Footer() {
 
         <MenuContainer>
           <Heading>Menu</Heading>
-          <Box>
-            <Title>Home</Title>
-            <Title>Services</Title>
-            <Title>Find a Doctor</Title>
-            <Title>Contact</Title>
+          <Box sx={{ cursor: "pointer" }}>
+            <Title onClick={() => handleTitleClick("/")}>Home</Title>
+            <Title onClick={() => handleTitleClick("/service")}>Services</Title>
+            <Title onClick={() => handleTitleClick("/find-a-doctor")}>
+              Find a Doctor
+            </Title>
+            <Title onClick={() => handleTitleClick("/contact")}>Contact</Title>
+            <Title onClick={() => handleTitleClick("/about-us")}>About</Title>
           </Box>
         </MenuContainer>
 
