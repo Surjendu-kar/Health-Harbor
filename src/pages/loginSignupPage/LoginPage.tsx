@@ -10,10 +10,12 @@ import {
   Button,
   Modal,
   IconButton,
+  InputAdornment,
 } from "@mui/material";
 import loginImg from "../../assets/loginImg/portrait-doctor.jpg";
 import { ToastContainer, toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const MainContainer = styled(Box)(() => ({
   display: "flex",
@@ -83,6 +85,7 @@ const TextTitle = styled(Typography)(({ theme }) => ({
   [theme.breakpoints.down("md")]: { fontSize: "0.6rem" },
   [theme.breakpoints.down("sm")]: { fontSize: "0.45rem" },
 }));
+
 const TextFieldBox = styled(Box)(({ theme }) => ({
   margin: "2rem 0 0",
   width: "90%",
@@ -133,6 +136,11 @@ const PasswordTextField = styled(UserTextField)(({ theme }) => ({
   marginTop: "0.8rem",
   [theme.breakpoints.down("md")]: { marginTop: "0.5rem" },
   [theme.breakpoints.down("sm")]: { marginTop: "0.3rem" },
+  "& .MuiOutlinedInput-root": {
+    "&:hover fieldset": {
+      borderColor: "transparent",
+    },
+  },
 }));
 
 const ButtonBox = styled(Box)(({ theme }) => ({
@@ -211,6 +219,19 @@ const CloseButton = styled(IconButton)(({ theme }) => ({
   },
 }));
 
+const IconButtonStyled = styled(IconButton)(({ theme }) => ({
+  [theme.breakpoints.down("md")]: {
+    '& svg': {
+      fontSize: "1.25rem",
+    }
+  },
+  [theme.breakpoints.down("sm")]: {
+    '& svg': {
+      fontSize: "1rem",
+    }
+  }
+}));
+
 export function LoginPage() {
   const [user, setUser] = useState<User | null>(null);
   const [email, setEmail] = useState("");
@@ -219,6 +240,7 @@ export function LoginPage() {
   const [openModal, setOpenModal] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
   const [isResetLoading, setIsResetLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -329,7 +351,7 @@ export function LoginPage() {
 
           <LoginContainer>
             <Box textAlign={"center"}>
-              <Heading>Hey Welcome !</Heading>
+              <Heading>Hey Welcome!</Heading>
               <Title>Login Your Account</Title>
             </Box>
 
@@ -350,10 +372,23 @@ export function LoginPage() {
                 id="password"
                 label="Password"
                 name="password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButtonStyled
+                        aria-label="toggle password visibility"
+                        onClick={() => setShowPassword(!showPassword)}
+                        edge="end"
+                      >
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                      </IconButtonStyled>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </TextFieldBox>
 

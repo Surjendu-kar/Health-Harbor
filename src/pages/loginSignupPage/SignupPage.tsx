@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import {
   Box,
   FormControl,
+  IconButton,
+  InputAdornment,
   InputLabel,
   MenuItem,
   Select,
@@ -15,6 +17,7 @@ import {
 import loginImg from "../../assets/loginImg/portrait-doctor.jpg";
 import { ToastContainer, toast } from "react-toastify";
 import { useTheme } from "@mui/material/styles";
+import { FaEyeSlash, FaEye } from 'react-icons/fa';
 
 const MainContainer = styled(Box)(() => ({
   display: "flex",
@@ -186,6 +189,24 @@ const PasswordTextField = styled(UserTextField)(({ theme }) => ({
   marginTop: "0.8rem",
   [theme.breakpoints.down("md")]: { marginTop: "0.5rem" },
   [theme.breakpoints.down("sm")]: { marginTop: "0.3rem" },
+  "& .MuiOutlinedInput-root": {
+    "&:hover fieldset": {
+      borderColor: "transparent",
+    },
+  },
+}));
+
+const IconButtonStyled = styled(IconButton)(({ theme }) => ({
+  [theme.breakpoints.down("md")]: {
+    '& svg': {
+      fontSize: "1.25rem",
+    }
+  },
+  [theme.breakpoints.down("sm")]: {
+    '& svg': {
+      fontSize: "1rem",
+    }
+  }
 }));
 
 const ButtonBox = styled(Box)(({ theme }) => ({
@@ -228,6 +249,8 @@ export function SignupPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const theme = useTheme();
   const navigate = useNavigate();
@@ -269,7 +292,7 @@ export function SignupPage() {
             "Sign up successful! Please check your email for confirmation."
           );
           setTimeout(() => {
-            navigate("/login");
+            navigate("/");
           }, 1000);
           setEmail("");
           setPassword("");
@@ -350,23 +373,50 @@ export function SignupPage() {
                 required
                 fullWidth
                 id="password"
-                label="Password"
+                label="Create a Password"
                 name="password"
-                type="password"
-                autoComplete="current-password"
+                type={showPassword ? 'text' : 'password'}
+                autoComplete="off"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButtonStyled
+                        aria-label="toggle password visibility"
+                        onClick={() => setShowPassword(!showPassword)}
+                        edge="end"
+                      >
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                      </IconButtonStyled>
+                    </InputAdornment>
+                  ),
+                }}
               />
+
               <PasswordTextField
                 required
                 fullWidth
                 id="confirm-password"
                 label="Confirm Password"
                 name="confirmPassword"
-                type="password"
-                autoComplete="new-password"
+                type={showConfirmPassword ? 'text' : 'password'}
+                autoComplete="off"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButtonStyled
+                        aria-label="toggle password visibility"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        edge="end"
+                      >
+                        {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                      </IconButtonStyled>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </TextFieldBox>
 
