@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
-import { Box, Typography, styled, Card } from "@mui/material";
+import { Box, Typography, styled, Card, CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-// import videoFile from '../../../assets/appointment_process.mp4';
 import { motion } from "framer-motion";
 
 const Heading = styled(Typography)(({ theme }) => ({
@@ -61,21 +60,22 @@ const GetAppointmentBtn = styled(Typography)(({ theme }) => ({
 }));
 
 const VideoContainer = styled(Card)(({ theme }) => ({
-  width: "700px",
-  // maxWidth: "600px",
+  width: "100%",
+  maxWidth: "800px",
   margin: "0 auto",
   boxShadow: theme.shadows[3],
   borderRadius: theme.shape.borderRadius,
   position: "relative",
-  padding: "0.5rem 0", // Add space on top and bottom of the video
+  padding: "0.5rem 0",
   [theme.breakpoints.down("sm")]: {
-    padding: "0.5rem 0", // Reduce space on smaller screens
+    padding: "0.5rem 0",
   },
 }));
 
 const VideoPlayer = styled(Box)(({ theme }) => ({
   position: "relative",
   overflow: "hidden",
+  paddingTop: "56.25%", // Maintain aspect ratio (16:9)
 }));
 
 const VideoOverlay = styled(Box)(({ theme }) => ({
@@ -128,6 +128,9 @@ function GetAppointment() {
         threshold: 0.5,
       });
       observer.observe(sectionRef.current);
+      return () => {
+        observer.unobserve(sectionRef.current);
+      };
     }
   }, []);
 
@@ -136,18 +139,25 @@ function GetAppointment() {
       <Heading>Easily Can Get An Appointment</Heading>
       <VideoContainer>
         <VideoPlayer>
-          {isLoading && <LoadingSpinner />}
+          {isLoading && <LoadingSpinner><CircularProgress /></LoadingSpinner>}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: isPlaying ? 1 : 0 }}
             transition={{ duration: 0.5 }}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+            }}
           >
             <ReactPlayer
               ref={playerRef}
               url={"https://youtu.be/1dI7qkKQBak"}
               controls={true}
               width="100%"
-              height="300px"
+              height="100%"
               playing={isPlaying}
               onReady={() => setIsLoading(false)}
             />
