@@ -1,21 +1,21 @@
-import { Box, Typography, styled } from "@mui/material";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+import ReactPlayer from "react-player";
+import { Box, Typography, styled, Card } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+// import videoFile from '../../../assets/appointment_process.mp4';
+import { motion } from "framer-motion";
 
 const Heading = styled(Typography)(({ theme }) => ({
   fontSize: "2.2rem",
   fontWeight: "bold",
   color: "#15285ce8",
   letterSpacing: "0.5px",
-  
-
   [theme.breakpoints.down("lg")]: {
     fontSize: "1.6rem",
   },
   [theme.breakpoints.down("md")]: {
     fontSize: "1.1rem",
     textAlign: "center",
-
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "1rem",
@@ -25,62 +25,18 @@ const Heading = styled(Typography)(({ theme }) => ({
   },
 }));
 
-const Title = styled(Typography)(({ theme }) => ({
-  fontSize: "1.2rem",
-  color: "#030d28ba",
-  paddingLeft: "5px",
-  margin: "1rem 0",
-  letterSpacing: "1px",
-
-  [theme.breakpoints.down("lg")]: {
-    fontSize: "0.9rem",
-    margin: "1rem 0",
-  },
-  [theme.breakpoints.down("md")]: {
-    fontSize: "0.7rem",
-    margin: "0.75rem 0",
-  },
-  [theme.breakpoints.down("sm")]: {
-    fontSize: "0.65rem",
-    paddingLeft: "1px",
-    margin: "0.5rem 0",
-    letterSpacing: "0.5px",
-  },
-}));
-
-const UnorderedList = styled("ul")(({ theme }) => ({
-  margin: 0,
-  paddingInlineStart: "20px",
-}));
-
-const ListItem = styled("li")(({ theme }) => ({
-  margin: 0,
-  color: "#000",
-  fontSize: "1.1rem",
-  [theme.breakpoints.down("lg")]: {
-    fontSize: "0.9rem",
-  },
-  [theme.breakpoints.down("md")]: {
-    fontSize: "0.75rem",
-  },
-  [theme.breakpoints.down("sm")]: {
-    fontSize: "0.75rem",
-  },
-}));
-
 const GetAppointmentBtn = styled(Typography)(({ theme }) => ({
   display: "inline",
   fontSize: "1.25rem",
   backgroundColor: "#deeaff8f",
   padding: "0.8rem",
   borderRadius: "7px",
-  // border: "1px solid black",
   boxShadow: "1px 5px 5px rgba(0, 0, 0, 0.2)",
   lineHeight: 2.5,
   cursor: "pointer",
   transition: "font-size 0.2s ease",
   letterSpacing: "0.85px",
-
+  marginTop: "4rem",
   "&:hover": {
     fontSize: "1.3rem",
     boxShadow: "1px 7px 4px rgba(0, 0, 0, 0.2)",
@@ -94,7 +50,6 @@ const GetAppointmentBtn = styled(Typography)(({ theme }) => ({
     padding: "0.55rem",
     borderRadius: "5px",
     marginLeft: "0.75rem",
-
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: "0.55rem",
@@ -105,40 +60,109 @@ const GetAppointmentBtn = styled(Typography)(({ theme }) => ({
   },
 }));
 
+const VideoContainer = styled(Card)(({ theme }) => ({
+  width: "100%",
+  maxWidth: "600px",
+  margin: "0 auto",
+  boxShadow: theme.shadows[3],
+  borderRadius: theme.shape.borderRadius,
+  position: "relative",
+  padding: "0.5rem 0", // Add space on top and bottom of the video
+  [theme.breakpoints.down("sm")]: {
+    padding: "0.5rem 0", // Reduce space on smaller screens
+  },
+}));
+
+const VideoPlayer = styled(Box)(({ theme }) => ({
+  position: "relative",
+  overflow: "hidden",
+}));
+
+const VideoOverlay = styled(Box)(({ theme }) => ({
+  position: "absolute",
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  backgroundImage:
+    "linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6))",
+  zIndex: 1,
+  pointerEvents: "none",
+}));
+
+const LoadingSpinner = styled(Box)(({ theme }) => ({
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  zIndex: 2,
+  "& .MuiCircularProgress-root": {
+    color: theme.palette.primary.main,
+  },
+}));
+
 function GetAppointment() {
   const navigate = useNavigate();
+  const playerRef = useRef(null);
+  const sectionRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const handleIntersection = (entries) => {
+    entries.forEach((entry) => {
+      if (playerRef.current) {
+        const player = playerRef.current;
+        if (entry.isIntersecting) {
+          setIsPlaying(true);
+          player.seekTo(0); // Reset video to start
+        } else {
+          setIsPlaying(false);
+        }
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (sectionRef.current) {
+      const observer = new IntersectionObserver(handleIntersection, {
+        threshold: 0.5,
+      });
+      observer.observe(sectionRef.current);
+      return () => {
+        observer.unobserve(sectionRef.current);
+      };
+    }
+  }, []);
+
   return (
-    <Box>
+    <Box ref={sectionRef}>
       <Heading>Easily Can Get An Appointment</Heading>
-      <Title>
-        <UnorderedList>
-          <ListItem>
-            Click on the <b>"Find Doctors"</b> or <b>"Get Appointment"</b>{" "}
-            button.
-          </ListItem>
-          <ListItem>
-            Search for doctors based on:
-            <UnorderedList>
-              <ListItem>Location</ListItem>
-              <ListItem>
-                Specialization (e.g. cardiology, urology, etc.)
-              </ListItem>
-            </UnorderedList>
-          </ListItem>
-          <ListItem>View search results.</ListItem>
-          <ListItem>
-            Click on a specific doctor to view detailed information, including:
-            <UnorderedList>
-              <ListItem>Education details</ListItem>
-              <ListItem>Experience</ListItem>
-              <ListItem>Others' feedbacks</ListItem>
-            </UnorderedList>
-          </ListItem>
-        </UnorderedList>
-      </Title>
-      <GetAppointmentBtn onClick={() => navigate("/find-a-doctor")}>
-        Get Appointment
-      </GetAppointmentBtn>
+      <VideoContainer>
+        <VideoPlayer>
+          {isLoading && <LoadingSpinner />}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isPlaying ? 1 : 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <ReactPlayer
+              ref={playerRef}
+              url={"https://youtu.be/1dI7qkKQBak"}
+              controls={true}
+              width="100%"
+              height="300px"
+              playing={isPlaying}
+              onReady={() => setIsLoading(false)}
+            />
+          </motion.div>
+          <VideoOverlay />
+        </VideoPlayer>
+      </VideoContainer>
+      <Box mt={2}>
+        <GetAppointmentBtn onClick={() => navigate("/find-a-doctor")}>
+          Get Appointment
+        </GetAppointmentBtn>
+      </Box>
     </Box>
   );
 }
