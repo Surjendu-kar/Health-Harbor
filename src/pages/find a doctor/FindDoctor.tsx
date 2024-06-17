@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Select, { components, StylesConfig } from 'react-select';
-import makeAnimated from 'react-select/animated';
+import Select, { components, StylesConfig } from "react-select";
+import makeAnimated from "react-select/animated";
 import {
   Input,
   Box,
@@ -9,12 +9,12 @@ import {
   styled,
   Skeleton,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import FetchAllDoctor from "./FetchAllDoctor";
 import DoctorCard from "../../components/doctorCard/DoctorCard";
 import "../../App.css";
-import '../../styles/react-select.css';
+import "../../styles/react-select.css";
 
 type DoctorInfo = {
   id: number;
@@ -211,66 +211,76 @@ const SkeletonStyle = styled(Skeleton)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: { width: "100px", height: "150px" },
 }));
 
+const SearchCity = styled(Select)(({ theme }) => ({
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.8rem",
+    '& div[class*="ValueContainer2"]': {
+      padding: "0px 2px",
+    },
+  },
+  '& div[class*="control"]': {
+    borderRadius: "20px !important",
+  },
+}));
+
+const SearchSpecialization = styled(Select)(({ theme }) => ({
+  [theme.breakpoints.down("sm")]: {
+    fontSize: "0.8rem",
+    '& div[class*="ValueContainer2"]': {
+      padding: "0px 2px",
+    },
+  },
+  '& div[class*="control"]': {
+    borderRadius: "20px !important",
+  },
+}));
+
+const Btn = styled(Button)(({ theme }) => ({
+  backgroundColor: "#1D2B53",
+  "&:hover": { backgroundColor: "#16324C" },
+  borderRadius: "20px",
+  [theme.breakpoints.down("sm")]: {
+    "&.MuiButton-root": {
+      fontSize: "0.5rem",
+      padding: "0.5rem 0.5rem",
+      // minWidth: "3rem",
+    },
+  },
+}));
+
 const cities = [
-  'Mumbai',
-  'Delhi',
-  'Bangalore',
-  'Hyderabad',
-  'Ahmedabad',
-  'Chennai',
-  'Kolkata',
-  'Surat',
-  'Pune',
-  'Jaipur',
-  'Lucknow',
-  'Kanpur',
-  'Nagpur',
-  'Indore',
-  'Thane',
-  'Bhopal',
-  'Visakhapatnam',
-  'Patna',
-  'Vadodara',
-  'Durgapur',
-  'Purulia',
-  'Salt Lake',
-  // Add more cities as needed
+  "Mumbai",
+  "Delhi",
+  "Bangalore",
+  "Hyderabad",
+  "Ahmedabad",
+  "Chennai",
+  "Kolkata",
+  "Surat",
+  "Pune",
+  "Jaipur",
+  "Lucknow",
+  "Kanpur",
+  "Nagpur",
+  "Indore",
+  "Thane",
+  "Bhopal",
+  "Visakhapatnam",
+  "Patna",
+  "Vadodara",
+  "Durgapur",
+  "Purulia",
 ];
 
 const specializations = [
-  'Cardiology',
-  'Dentist',
-  'Specialized',
-  'Urology',
-  'Neurology',
-  'Orthopedic',
-  'Stomach',
+  "Cardiology",
+  "Dentist",
+  "Specialized",
+  "Urology",
+  "Neurology",
+  "Orthopedic",
+  "Stomach",
 ];
-
-const styles: StylesConfig<{ value: string; label: string }, false> = {
-  control: (provided, state) => ({
-    ...provided,
-    border: '1px solid #ccc',
-    borderRadius: '20px',
-    boxShadow: state.isFocused ? '0 0 0 2px rgba(0, 119, 204, 0.25)' : null,
-    '&:hover': {
-      borderColor: '#aaa',
-    },
-  }),
-  menu: (provided) => ({
-    ...provided,
-    borderRadius: '8px',
-    boxShadow: '0 2px 6px rgba(0, 0, 0, 0.15)',
-  }),
-  option: (provided, state) => ({
-    ...provided,
-    backgroundColor: state.isSelected ? '#0077cc' : 'transparent',
-    color: state.isSelected ? '#fff' : '#333',
-    '&:hover': {
-      backgroundColor: state.isSelected ? null : '#f0f0f0',
-    },
-  }),
-};
 
 const animatedComponents = makeAnimated();
 
@@ -334,38 +344,35 @@ function FindDoctor() {
                 backgroundColor: "#fff",
               }}
             >
-              <Select
+              <SearchCity
                 options={cities.map((city) => ({ value: city, label: city }))}
-                onChange={(option) => setCity(option?.value || '')}
+                onChange={(option) => setCity(option?.value || "")}
                 placeholder="Search city"
                 isClearable
                 isSearchable
-                styles={styles}
                 components={animatedComponents}
               />
               {/* <span>| </span> */}
-              <Select
-                options={specializations.map((spec) => ({ value: spec, label: spec }))}
-                onChange={(option) => setSpecialization(option?.value || '')}
+              <SearchSpecialization
+                options={specializations.map((spec) => ({
+                  value: spec,
+                  label: spec,
+                }))}
+                onChange={(option) => setSpecialization(option?.value || "")}
                 placeholder="Select specialization"
                 isClearable
                 isSearchable
-                styles={styles}
                 components={animatedComponents}
               />
 
-              <Button
+              <Btn
                 type="submit"
                 variant="contained"
                 startIcon={<SearchIcon />}
-                sx={{
-                  backgroundColor: "#1D2B53",
-                  "&:hover": { backgroundColor: "#16324C" },
-                  borderRadius: "20px",
-                }}
+                sx={{}}
               >
                 Search
-              </Button>
+              </Btn>
             </Box>
           </SearchBox>
         </form>
