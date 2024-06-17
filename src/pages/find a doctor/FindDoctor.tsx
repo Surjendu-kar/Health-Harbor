@@ -129,7 +129,7 @@ const SearchBox = styled(Box)(({ theme }) => ({
     [theme.breakpoints.down("md")]: {
       padding: "0.01rem 0.1rem",
     },
-    [theme.breakpoints.down("sm")]: { padding: "0" },
+    [theme.breakpoints.down("sm")]: { padding: "3px" },
   },
 
   "& .MuiInput-root, & .MuiSelect-root": {
@@ -168,7 +168,7 @@ const SearchBox = styled(Box)(({ theme }) => ({
     },
     [theme.breakpoints.down("sm")]: {
       "& .MuiSvgIcon-root": {
-        fontSize: "0.5rem",
+        fontSize: "0.7rem",
       },
     },
   },
@@ -212,26 +212,70 @@ const SkeletonStyle = styled(Skeleton)(({ theme }) => ({
 }));
 
 const SearchCity = styled(Select)(({ theme }) => ({
+  '& div[class*="indicatorContainer"]': {
+    padding: "3px",
+  },
+  '& div[class*="control"]': {
+    minWidth: "100px",
+    width: "150px",
+    borderRadius: "20px !important",
+    [theme.breakpoints.down("sm")]: { minWidth: "50px", width: "100px" },
+  },
+  '& div[class*="menu"]': {
+    width: "150px",
+  },
   [theme.breakpoints.down("sm")]: {
     fontSize: "0.8rem",
     '& div[class*="ValueContainer2"]': {
       padding: "0px 2px",
     },
-  },
-  '& div[class*="control"]': {
-    borderRadius: "20px !important",
+    '& div[class*="control"]': {
+      fontSize: "0.65rem",
+      letterSpacing: "0.5px",
+    },
+    '& div[class*="clearIndicator"]': {
+      padding: "2px",
+      "& svg": {
+        fontSize: "0.8rem",
+      },
+    },
+    '& div[class*="indicatorContainer"]': {
+      padding: "0",
+    },
   },
 }));
 
 const SearchSpecialization = styled(Select)(({ theme }) => ({
+  '& div[class*="indicatorContainer"]': {
+    padding: "3px",
+  },
+  '& div[class*="control"]': {
+    minWidth: "200px",
+    width: "150px",
+    borderRadius: "20px !important",
+    [theme.breakpoints.down("sm")]: { minWidth: "50px", width: "140px" },
+  },
+  '& div[class*="menu"]': {
+    width: "150px",
+  },
   [theme.breakpoints.down("sm")]: {
     fontSize: "0.8rem",
     '& div[class*="ValueContainer2"]': {
       padding: "0px 2px",
     },
-  },
-  '& div[class*="control"]': {
-    borderRadius: "20px !important",
+    '& div[class*="control"]': {
+      fontSize: "0.65rem",
+      letterSpacing: "0.5px",
+    },
+    '& div[class*="clearIndicator"]': {
+      padding: "2px",
+      "& svg": {
+        fontSize: "0.8rem",
+      },
+    },
+    '& div[class*="indicatorContainer"]': {
+      padding: "0",
+    },
   },
 }));
 
@@ -242,8 +286,7 @@ const Btn = styled(Button)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: {
     "&.MuiButton-root": {
       fontSize: "0.5rem",
-      padding: "0.5rem 0.5rem",
-      // minWidth: "3rem",
+      padding: "0.7rem 0.5rem",
     },
   },
 }));
@@ -365,12 +408,7 @@ function FindDoctor() {
                 components={animatedComponents}
               />
 
-              <Btn
-                type="submit"
-                variant="contained"
-                startIcon={<SearchIcon />}
-                sx={{}}
-              >
+              <Btn type="submit" variant="contained" startIcon={<SearchIcon />}>
                 Search
               </Btn>
             </Box>
