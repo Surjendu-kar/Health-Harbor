@@ -8,7 +8,6 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
-  Typography,
 } from "@mui/material";
 import { Menu as MenuIcon, Close as CloseIcon } from "@mui/icons-material";
 import { styled } from "@mui/system";
@@ -112,6 +111,53 @@ const LogoLink = styled(StyledLink)(({ theme }) => ({
     margin: theme.spacing(0),
   },
 }));
+
+// const LogoLink = styled(StyledLink)(({ theme }) => ({
+//   fontSize: "1.15rem",
+//   color: "#e1e1e1",
+//   cursor: "pointer",
+//   position: "relative",
+//   border: "none",
+//   background: "none",
+//   transitionTimingFunction: "cubic-bezier(0.25, 0.8, 0.25, 1)",
+//   transitionDuration: "400ms",
+//   transitionProperty: "color",
+
+//   "&:hover, &:focus": {
+//     color: "#fff",
+//     "&::after": {
+//       width: "100%",
+//       left: "0%",
+//     },
+//   },
+
+//   "&::after": {
+//     content: '""',
+//     pointerEvents: "none",
+//     bottom: "-2px",
+//     left: "50%",
+//     position: "absolute",
+//     width: "0%",
+//     height: "2px",
+//     backgroundColor: "#fff",
+//     transitionTimingFunction: "cubic-bezier(0.25, 0.8, 0.25, 1)",
+//     transitionDuration: "400ms",
+//     transitionProperty: "width, left",
+//   },
+
+//   [theme.breakpoints.down("lg")]: {
+//     fontSize: "1.2rem",
+//   },
+//   [theme.breakpoints.down("md")]: {
+//     fontSize: "0.95rem",
+//     letterSpacing: "1.2px",
+//   },
+//   [theme.breakpoints.down("sm")]: {
+//     fontSize: "0.7rem",
+//     letterSpacing: "1px",
+//     margin: theme.spacing(0),
+//   },
+// }));
 
 const SignInLink = styled(StyledLink)(({ theme }) => ({
   fontSize: "1.15rem",
@@ -349,214 +395,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-//below we fixed the avatar img prb but there is another prb occur
-
-// import { Box, Avatar } from "@mui/material";
-// import { styled } from "@mui/system";
-// import { useEffect, useState } from "react";
-// import { Link } from "react-router-dom";
-// import { supabase } from "../../supabase/config";
-// import { User } from "@supabase/supabase-js";
-// import LogoAnimation from "../lottieAnimation/LogoAnimation";
-
-// const NavContainer = styled(Box)(() => ({
-//   display: "flex",
-//   justifyContent: "space-around",
-//   alignItems: "center",
-//   padding: "0.5rem 0",
-//   backgroundColor: "#1D2B53",
-//   width: "100%",
-// }));
-
-// const StyledLink = styled(Link)(({ theme }) => ({
-//   fontFamily: "sans-serif",
-//   margin: theme.spacing(0, 2),
-//   textDecoration: "none",
-//   color: "#fff",
-//   fontSize: "0.9  rem",
-//   letterSpacing: "1.5px",
-
-//   transition: "color 0.3s ease-in-out, font-size 0.3s ease-in-out",
-//   "&:hover": {
-//     fontSize: "1.05rem",
-//   },
-
-//   [theme.breakpoints.down("lg")]: {
-//     fontSize: "0.9rem",
-//     "&:hover": {
-//       fontSize: "1rem",
-//     },
-//   },
-//   [theme.breakpoints.down("md")]: {
-//     fontSize: "0.8rem",
-//     letterSpacing: "1.2px",
-//     "&:hover": {
-//       fontSize: "0.9rem",
-//     },
-//     margin: theme.spacing(0, 1),
-//   },
-//   [theme.breakpoints.down("sm")]: {
-//     fontSize: "0.53rem",
-//     letterSpacing: "0.7px",
-//     margin: theme.spacing(0, 0.5),
-
-//     "&:hover": {
-//       fontSize: "0.65rem",
-//     },
-//   },
-// }));
-
-// const MedicineStyle = styled(Box)(({ theme }) => ({
-//   display: "flex",
-//   alignItems: "center",
-//   width: "50px",
-//   height: "55px",
-//   [theme.breakpoints.down("lg")]: {
-//     width: "50px",
-//     height: "50px",
-//   },
-//   [theme.breakpoints.down("md")]: {
-//     width: "30px",
-//     height: "30px",
-//   },
-//   [theme.breakpoints.down("sm")]: { width: "27px", height: "27px" },
-// }));
-
-// const LogoLink = styled(StyledLink)(({ theme }) => ({
-//   fontSize: "1.15rem",
-//   margin: theme.spacing(0, 0.05),
-//   position: "relative",
-//   "&::after": {
-//     content: '""',
-//     position: "absolute",
-//     left: 0,
-//     bottom: 0,
-//     height: "1px",
-//     width: "0%",
-//     backgroundColor: "#fff",
-//     transition: "all ease 1s",
-//   },
-
-//   "&:hover::after": {
-//     width: "100%",
-//   },
-//   [theme.breakpoints.down("lg")]: {
-//     fontSize: "1.2rem",
-//   },
-//   [theme.breakpoints.down("md")]: {
-//     fontSize: "0.95rem",
-//     letterSpacing: "1.2px",
-//   },
-//   [theme.breakpoints.down("sm")]: {
-//     fontSize: "0.7rem",
-//     letterSpacing: "1px",
-//     margin: theme.spacing(0),
-//   },
-// }));
-
-// const StyledAvatar = styled(Avatar)(({ theme }) => ({
-//   width: "36px",
-//   height: "36px",
-//   border: "2px solid white",
-//   transition: "box-shadow 0.3s ease-in-out",
-//   "&:hover": {
-//     boxShadow:
-//       "0 4px 8px 0 rgba(255, 255, 255, 0.40), 0 6px 20px 0 rgba(255, 255, 255, 0.19)",
-//   },
-
-//   [theme.breakpoints.down("lg")]: {
-//     width: "33px",
-//     height: "33px",
-//   },
-//   [theme.breakpoints.down("md")]: {
-//     width: "25px",
-//     height: "25px",
-//   },
-//   [theme.breakpoints.down("sm")]: {
-//     width: "20px",
-//     height: "20px",
-//     border: "1px solid white",
-//   },
-// }));
-
-// const Navbar = () => {
-//   const [user, setUser] = useState<User | null>(null);
-//   const [doctorImage, setDoctorImage] = useState<string>("");
-
-//   useEffect(() => {
-//     const authListener = supabase.auth.onAuthStateChange((event, session) => {
-//       if (event === "SIGNED_IN") {
-//         setUser(session?.user ?? null);
-//         fetchUserImage(session?.user.email);
-//       } else if (event === "SIGNED_OUT") {
-//         setUser(null);
-//         setDoctorImage("");
-//       }
-//     });
-
-//     return () => {
-//       // authListener?.unsubscribe();
-//     };
-//   }, []);
-
-//   const fetchUserImage = async (userEmail: string | undefined) => {
-//     if (userEmail) {
-//       const { data: doctorData, error: doctorError } = await supabase
-//         .from("doctorInfo")
-//         .select("img")
-//         .eq("email", userEmail)
-//         .single();
-
-//       const { data: patientData, error: patientError } = await supabase
-//         .from("patientInfo")
-//         .select("img")
-//         .eq("email", userEmail)
-//         .single();
-
-//       if (doctorError && patientError) {
-//         console.error("Error fetching user image:", doctorError, patientError);
-//       } else {
-//         setDoctorImage(doctorData?.img || patientData?.img || "");
-//       }
-//     }
-//   };
-
-//   return (
-//     <NavContainer>
-//       <Box
-//         sx={{
-//           display: "flex",
-//           alignItems: "center",
-//           cursor: "pointer",
-//         }}
-//       >
-//         <MedicineStyle>
-//           <LogoAnimation />
-//         </MedicineStyle>
-//         <LogoLink to="/">HealthHarbor</LogoLink>
-//       </Box>
-
-//       <Box sx={{ display: "flex" }}>
-//         <StyledLink to="/find-a-doctor">Find a Doctor</StyledLink>
-//         <StyledLink to="/service">Services</StyledLink>
-//         <StyledLink to="/about-us">About us</StyledLink>
-//         <StyledLink to="/contact">Contact</StyledLink>
-//       </Box>
-
-//       {user ? (
-//         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-//           <StyledAvatar
-//             component={Link}
-//             to={"/profile"}
-//             src={doctorImage || ""}
-//           />
-//         </Box>
-//       ) : (
-//         <StyledLink to="/login">Signin</StyledLink>
-//       )}
-//     </NavContainer>
-//   );
-// };
-
-// export default Navbar;
