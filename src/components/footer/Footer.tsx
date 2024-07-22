@@ -1,6 +1,9 @@
 import { Box, Typography, styled } from "@mui/material";
-import LogoAnimation from "../lottieAnimation/LogoAnimation";
 import { useNavigate } from "react-router-dom";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const MainContainer = styled(Box)(({ theme }) => ({
   marginTop: "5rem",
@@ -159,6 +162,39 @@ const ReserveSection = styled(Box)(({ theme }) => ({
   },
 }));
 
+const SocialIcon = styled(Box)(({ theme }) => ({
+  "& svg": {
+    fontSize: "1.8rem",
+    margin: "0 0.2rem",
+    cursor: "pointer",
+    transition: "color 0.3s ease-in-out",
+    color: "#1D2B53",
+    "&:hover": {
+      color: theme.palette.primary.main,
+    },
+    [theme.breakpoints.down("lg")]: {
+      fontSize: "1.75rem",
+    },
+    [theme.breakpoints.down("md")]: {
+      fontSize: "1.5rem",
+    },
+    [theme.breakpoints.down("sm")]: {
+      margin: "0 0.1rem",
+      fontSize: "1.1rem",
+    },
+  },
+}));
+
+const HrDesign = styled("hr")(({ theme }) => ({
+  width: "60%",
+  opacity: "0.3",
+  [theme.breakpoints.down("lg")]: {},
+  [theme.breakpoints.down("md")]: {},
+  [theme.breakpoints.down("sm")]: {
+    margin: "0.25rem auto",
+  },
+}));
+
 const ReserveTitle = styled("p")(({ theme }) => ({
   letterSpacing: "1.5px",
   color: "#57535c",
@@ -178,6 +214,11 @@ const ReserveTitle = styled("p")(({ theme }) => ({
     letterSpacing: "0.5px",
     paddingBottom: "0.15rem",
   },
+}));
+
+const SocialLink = styled("a")(() => ({
+  color: "inherit",
+  textDecoration: "none",
 }));
 
 function Footer() {
@@ -247,7 +288,39 @@ function Footer() {
       </SecondMainContainer>
 
       <ReserveSection>
-        <hr style={{ width: "60%", opacity: "0.3" }} />
+        <SocialIcon>
+          <SocialLink
+            href="https://www.linkedin.com/in/surjendu-kar/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <LinkedInIcon />
+          </SocialLink>
+
+          <SocialLink
+            href="https://github.com/Surjendu-kar"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <GitHubIcon />
+          </SocialLink>
+          <SocialLink
+            href="https://itsmyreact-portfolio.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <AccountCircleIcon />
+          </SocialLink>
+
+          <SocialLink
+            href="https://www.facebook.com/rk.kar.313"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FacebookIcon />
+          </SocialLink>
+        </SocialIcon>
+        <HrDesign />
         <ReserveTitle>All rights reserved @2024</ReserveTitle>
       </ReserveSection>
     </MainContainer>
