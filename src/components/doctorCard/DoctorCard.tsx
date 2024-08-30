@@ -161,7 +161,7 @@ const DoctorCard = ({ doctor }) => {
       <CardMediaStyle component="img" image={doctor.img} alt={doctor.name} />
       <CardContentStyle>
         <Heading>{doctor.name}</Heading>
-        <Title variant="body2" color="text.secondary">
+        <Title variant="body2" color="text.secondary" fontWeight={550}>
           {doctor.specialization.charAt(0).toUpperCase() +
             doctor.specialization.slice(1)}{" "}
           ({degrees})
