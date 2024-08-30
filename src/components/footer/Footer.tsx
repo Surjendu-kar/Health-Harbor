@@ -1,14 +1,12 @@
 import { Box, Typography, styled } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const MainContainer = styled(Box)(({ theme }) => ({
   marginTop: "5rem",
   backgroundColor: "#e1edff",
   width: "100%",
+  overflow: "hidden",
   [theme.breakpoints.down("lg")]: {
     marginTop: "4rem",
   },
@@ -23,6 +21,7 @@ const SecondMainContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "space-around",
   padding: "5rem 5rem 2rem 5rem",
+
   [theme.breakpoints.down("lg")]: {
     padding: "2rem 2rem 1rem 2rem",
   },
@@ -30,7 +29,7 @@ const SecondMainContainer = styled(Box)(({ theme }) => ({
     padding: "2rem 2rem 1rem 2rem",
   },
   [theme.breakpoints.down("sm")]: {
-    padding: "1.5rem 0.75rem 0.5rem 0.35rem",
+    padding: "1.5rem 0rem 0.5rem",
   },
 }));
 
@@ -40,7 +39,7 @@ const HealthContainer = styled(Box)(({ theme }) => ({
     width: "25%",
   },
   [theme.breakpoints.down("sm")]: {
-    width: "25%",
+    width: "20%",
   },
 }));
 const MenuContainer = styled(Box)(({ theme }) => ({
@@ -68,17 +67,7 @@ const ContactContainer = styled(Box)(({ theme }) => ({
     width: "20%",
   },
   [theme.breakpoints.down("sm")]: {
-    width: "20%",
-  },
-}));
-
-const ContactBox = styled(Box)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  gap: theme.spacing(1),
-
-  [theme.breakpoints.down("sm")]: {
-    gap: theme.spacing(0.35),
+    width: "30%",
   },
 }));
 
@@ -162,7 +151,30 @@ const ReserveSection = styled(Box)(({ theme }) => ({
   },
 }));
 
-const SocialIcon = styled(Box)(({ theme }) => ({
+const HrDesign = styled("hr")(({ theme }) => ({
+  width: "60%",
+  opacity: "0.3",
+  [theme.breakpoints.down("lg")]: {},
+  [theme.breakpoints.down("md")]: {},
+  [theme.breakpoints.down("sm")]: {
+    margin: "0.25rem auto",
+  },
+}));
+
+const ContactBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  gap: theme.spacing(1),
+
+  [theme.breakpoints.down("sm")]: {
+    gap: theme.spacing(0.35),
+  },
+}));
+
+const SocialBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  gap: theme.spacing(1),
   "& svg": {
     fontSize: "1.8rem",
     margin: "0 0.2rem",
@@ -180,18 +192,11 @@ const SocialIcon = styled(Box)(({ theme }) => ({
     },
     [theme.breakpoints.down("sm")]: {
       margin: "0 0.1rem",
-      fontSize: "1.1rem",
+      fontSize: "0.7rem",
     },
   },
-}));
-
-const HrDesign = styled("hr")(({ theme }) => ({
-  width: "60%",
-  opacity: "0.3",
-  [theme.breakpoints.down("lg")]: {},
-  [theme.breakpoints.down("md")]: {},
   [theme.breakpoints.down("sm")]: {
-    margin: "0.25rem auto",
+    gap: theme.spacing(0),
   },
 }));
 
@@ -268,58 +273,48 @@ function Footer() {
         <ContactContainer>
           <Heading>Contact us</Heading>
           <ContactBox>
-            <Box>
+            <SocialBox>
+              <SocialLink
+                href="https://github.com/Surjendu-kar"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <GitHubIcon />
+              </SocialLink>
               <MailLink href="mailto:rahulkar9988@gmail.com">
                 rahulkar9988@gmail.com
               </MailLink>
-            </Box>
-            <Box>
+            </SocialBox>
+
+            <SocialBox>
+              <SocialLink
+                href="https://github.com/DEV-BRITI"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <GitHubIcon />
+              </SocialLink>
               <MailLink href="mailto:britisundar789j@gmail.com">
                 britisundar789j@gmail.com
               </MailLink>
-            </Box>
-            <Box>
+            </SocialBox>
+            <SocialBox>
+              <SocialLink
+                href="https://github.com/hitenagar09"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <GitHubIcon />
+              </SocialLink>
               <MailLink href="mailto:hitenagar@gmail.com">
                 hitenagar@gmail.com
               </MailLink>
-            </Box>
+            </SocialBox>
           </ContactBox>
         </ContactContainer>
       </SecondMainContainer>
 
       <ReserveSection>
-        <SocialIcon>
-          <SocialLink
-            href="https://www.linkedin.com/in/surjendu-kar/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <LinkedInIcon />
-          </SocialLink>
-
-          <SocialLink
-            href="https://github.com/Surjendu-kar"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <GitHubIcon />
-          </SocialLink>
-          <SocialLink
-            href="https://itsmyreact-portfolio.vercel.app/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <AccountCircleIcon />
-          </SocialLink>
-
-          <SocialLink
-            href="https://www.facebook.com/rk.kar.313"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <FacebookIcon />
-          </SocialLink>
-        </SocialIcon>
         <HrDesign />
         <ReserveTitle>All rights reserved @2024</ReserveTitle>
       </ReserveSection>

@@ -12,9 +12,20 @@ import Navbar from "./components/header/Navbar";
 import Footer from "./components/footer/Footer";
 import DoctorDetails from "./pages/find a doctor/DoctorDetails";
 import { SignupPage } from "./pages/loginSignupPage/SignupPage";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { ThemeProvider, createTheme, styled } from "@mui/material/styles";
 import FeedbackSection from "./components/feedbackSection/FeedbackSection";
 import ResetPassword from "./pages/loginSignupPage/ResetPassword";
+import { Box } from "@mui/material";
+
+const AppContainer = styled(Box)({
+  display: "flex",
+  flexDirection: "column",
+  minHeight: "100vh",
+});
+
+const ContentContainer = styled(Box)({
+  flex: 1,
+});
 
 const theme = createTheme();
 
@@ -48,21 +59,25 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Navbar />
-      <Routes>
-        <Route element={<Home />} path="/" />
-        <Route element={<LoginPage />} path="/login" />
-        <Route element={<SignupPage />} path="/signup" />
-        <Route element={<FindDoctor />} path="/find-a-doctor" />
-        <Route element={<DoctorDetails />} path="/doctor-details" />
-        <Route element={<FeedbackSection />} path="/feedback" />
-        <Route element={<Service />} path="/service" />
-        <Route element={<AboutUs />} path="/about-us" />
-        <Route element={<Contact />} path="/contact" />
-        <Route element={<ProfileDetails />} path="/profile" />
-        <Route element={<ResetPassword />} path="/reset" />
-      </Routes>
-      <Footer />
+      <AppContainer>
+        <Navbar />
+        <ContentContainer>
+          <Routes>
+            <Route element={<Home />} path="/" />
+            <Route element={<LoginPage />} path="/login" />
+            <Route element={<SignupPage />} path="/signup" />
+            <Route element={<FindDoctor />} path="/find-a-doctor" />
+            <Route element={<DoctorDetails />} path="/doctor-details" />
+            <Route element={<FeedbackSection />} path="/feedback" />
+            <Route element={<Service />} path="/service" />
+            <Route element={<AboutUs />} path="/about-us" />
+            <Route element={<Contact />} path="/contact" />
+            <Route element={<ProfileDetails />} path="/profile" />
+            <Route element={<ResetPassword />} path="/reset" />
+          </Routes>
+        </ContentContainer>
+        <Footer />
+      </AppContainer>
     </ThemeProvider>
   );
 };
