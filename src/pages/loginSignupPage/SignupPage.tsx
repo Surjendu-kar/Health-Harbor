@@ -283,7 +283,10 @@ export function SignupPage() {
       } else {
         const { error: updateError } = await supabase
           .from(selectedRole === "patient" ? "patientInfo" : "doctorInfo")
-          .insert({ email: email, role: selectedRole });
+          .insert(selectedRole === "patient" ? 
+            { email: email, role: selectedRole } : 
+            { email: email, role: selectedRole }
+          );
 
         if (updateError) {
           toast.error(updateError.message);

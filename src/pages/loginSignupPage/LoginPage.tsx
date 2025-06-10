@@ -283,15 +283,15 @@ export function LoginPage() {
 
       if (error) {
         toast.error(error.message);
-      } else if (data.length === 0) {
-        toast.error("Invalid email or password");
-      } else {
+      } else if (data?.user) {
         toast.success("Login successful.");
         setTimeout(() => {
           navigate("/");
         }, 1000);
         setEmail("");
         setPassword("");
+      } else {
+        toast.error("Invalid email or password");
       }
     } catch (error) {
       toast.error("An unexpected error occurred.");

@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography, styled } from "@mui/material";
 
-const Contain = styled(Typography)(() => ({
+const Contain = styled(Box)(() => ({
   margin: "1rem 0",
 }));
 
@@ -115,18 +115,18 @@ function ViewDetails({ fetchedData }) {
     <Box>
       {/* About */}
       <Contain>
-        <Heading>About</Heading>
-        <Title>{fetchedData.about}</Title>
+        <Heading variant="h6">About</Heading>
+        <Title variant="body1">{fetchedData.about}</Title>
       </Contain>
 
       {/* Education */}
       <Contain>
-        <Heading>Education</Heading>
+        <Heading variant="h6">Education</Heading>
         <Box>
           {qualificationsArray &&
             qualificationsArray.map((qualification, index) => (
               <EducationBox key={index}>
-                <DateText sx={{ color: "#009cff" }}>
+                <DateText variant="body2" component="div" sx={{ color: "#009cff" }}>
                   {new Date(qualification.startDate).toLocaleDateString(
                     "en-US",
                     { year: "numeric", month: "short" }
@@ -139,7 +139,7 @@ function ViewDetails({ fetchedData }) {
                       )
                     : "Present"}
                 </DateText>
-                <Title sx={{ color: "#000" }}>
+                <Title variant="body2" component="div" sx={{ color: "#000" }}>
                   {qualification.degree}, {qualification.university}
                 </Title>
               </EducationBox>
@@ -149,7 +149,7 @@ function ViewDetails({ fetchedData }) {
 
       {/* Experience */}
       <Contain>
-        <Heading>Experience</Heading>
+        <Heading variant="h6">Experience</Heading>
         <Box
           sx={{
             display: "flex",
@@ -161,7 +161,7 @@ function ViewDetails({ fetchedData }) {
           {experiencesArray &&
             experiencesArray.map((experience, index) => (
               <ExperienceBox key={index}>
-                <DateText sx={{ color: "#009cff" }}>
+                <DateText variant="body2" component="div" sx={{ color: "#009cff" }}>
                   {new Date(experience.startDate).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "short",
@@ -174,8 +174,12 @@ function ViewDetails({ fetchedData }) {
                       })
                     : "Present"}
                 </DateText>
-                <Title sx={{ color: "#000" }}>{experience.position}</Title>
-                <Title sx={{ color: "#000" }}>{experience.hospital}</Title>
+                <Title variant="body2" component="div" sx={{ color: "#000" }}>
+                  {experience.position}
+                </Title>
+                <Title variant="body2" component="div" sx={{ color: "#000" }}>
+                  {experience.hospital}
+                </Title>
               </ExperienceBox>
             ))}
         </Box>

@@ -351,23 +351,54 @@ function PatientInfo({ user }) {
     if (!file) return;
 
     try {
-      const { data, error } = await supabase.storage
-        .from("patientImg")
-        .upload(`avatar_${Date.now()}`, file, {
-          cacheControl: "3600",
-          upsert: false,
-        });
-
-      if (error) throw error;
-
-      if (data && data?.fullPath) {
-        const fullPath = `https://eraerhfcolqnyopznyyb.supabase.co/storage/v1/object/public/${data.fullPath}`;
-        setImgPath(fullPath);
+      const { data: { session } } = await supabase.auth.getSession();
+      console.log("Current session:", session);
+      if (!session) {
+        toast.error('Please login to upload files');
+        return;
       }
 
-      toast.success("Upload successful");
+      if (!file.type.startsWith('image/')) {
+        toast.error('Please upload an image file');
+        return;
+      }
+
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error('File size must be less than 2MB');
+        return;
+      }
+
+      // Create a unique filename
+      const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
+
+      const { data, error } = await supabase.storage
+        .from("patient-img")
+        .upload(fileName, file, {
+          cacheControl: "3600",
+          upsert: false,
+          contentType: file.type,
+          duplex: 'half'
+        });
+
+      if (error) {
+        console.error('Upload error:', error);
+        toast.error(error.message || 'Error uploading file');
+        return;
+      }
+
+      if (data) {
+        const { data: publicUrl } = supabase.storage
+          .from("patient-img")
+          .getPublicUrl(data.path);
+
+        if (publicUrl) {
+          setImgPath(publicUrl.publicUrl);
+          toast.success("Upload successful");
+        }
+      }
     } catch (error) {
-      console.log(error);
+      console.error('Error:', error);
+      toast.error('An unexpected error occurred');
     } finally {
       setIsLoading(false);
     }
@@ -465,20 +496,20 @@ function PatientInfo({ user }) {
             console.error("Error fetching patientInfo:", error);
             setIsEditMode(false);
           } else {
-            setName(data.name);
-            setPhone(data.phoneNo);
-            setGender(data.gender);
+            setName(data.name || "");
+            setPhone(data.phoneNo || "");
+            setGender(data.gender || "");
             setDateOfBirth(data.dateOfBirth ? dayjs(data.dateOfBirth) : null);
-            setAllergies(data.allergies);
-            setBloodGroup(data.bloodGroup);
-            setHeight(data.height);
-            setWeight(data.weight);
-            setAddress(data.address);
-            setCity(data.city);
-            setEmergencyContact(JSON.parse(data.emergencyContact || "[]"));
-            setInsuranceInfo(JSON.parse(data.insuranceInfo || "[]"));
-            setDocuments(data.documents);
-            setAbout(data.about);
+            setAllergies(data.allergies || "");
+            setBloodGroup(data.bloodGroup || "");
+            setHeight(data.height || "");
+            setWeight(data.weight || "");
+            setAddress(data.address || "");
+            setCity(data.city || "");
+            setEmergencyContact(JSON.parse(data.emergencyContact || "{}"));
+            setInsuranceInfo(JSON.parse(data.insuranceInfo || "{}"));
+            setDocuments(data.documents || []);
+            setAbout(data.about || "");
             setIsEditMode(!data.name);
             setImgPath(data.img || null);
           }

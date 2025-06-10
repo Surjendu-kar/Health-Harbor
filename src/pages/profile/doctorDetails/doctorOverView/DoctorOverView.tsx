@@ -5,7 +5,7 @@ import { supabase } from "../../../../supabase/config";
 import React, { useEffect, useRef, useState } from "react";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import ViewDetails from "../../../../components/viewDetails/ViewDetails";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
@@ -141,6 +141,8 @@ type DoctorInfo = {
   experiences: string[];
   timeSlot: string[];
   about: string;
+  img?: string;
+  approved?: string;
 };
 
 const ShowRating = styled(Rating)(({ theme }) => ({
@@ -175,23 +177,55 @@ function DoctorOverView({
     if (!file) return;
 
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      console.log("Current session:", session);
+      if (!session) {
+        toast.error('Please login to upload files');
+        return;
+      }
+
+      // First, check if the file is an image
+      if (!file.type.startsWith('image/')) {
+        toast.error('Please upload an image file');
+        return;
+      }
+
+      // Check file size (max 2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error('File size must be less than 2MB');
+        return;
+      }
+
+      // Create a unique filename with user ID as folder
+      const fileName = `${session.user.id}/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
+
       const { data, error } = await supabase.storage
         .from("user-profile-picture")
-        .upload(`avatar_${Date.now()}`, file, {
+        .upload(fileName, file, {
           cacheControl: "3600",
-          upsert: false,
+          upsert: true,
+          contentType: file.type
         });
 
-      if (error) throw error;
-
-      if (data && data?.fullPath) {
-        // const fullPath = `${process.env.REACT_APP_SUPABASE_URL}/storage/v1/object/public/${data.Key}`;
-        const fullPath = `https://eraerhfcolqnyopznyyb.supabase.co/storage/v1/object/public/${data.fullPath}`; //store it in env
-        setImgPath(fullPath);
+      if (error) {
+        console.error('Upload error:', error);
+        toast.error(error.message || 'Error uploading file');
+        return;
       }
-      toast.success("Upload successful");
+
+      if (data) {
+        const { data: publicUrl } = supabase.storage
+          .from("user-profile-picture")
+          .getPublicUrl(data.path);
+
+        if (publicUrl) {
+          setImgPath(publicUrl.publicUrl);
+          toast.success("Upload successful");
+        }
+      }
     } catch (error) {
-      console.log(error);
+      console.error('Error:', error);
+      toast.error('An unexpected error occurred');
     } finally {
       setIsLoading(false);
     }
@@ -204,12 +238,21 @@ function DoctorOverView({
           const { data, error } = await supabase
             .from("doctorInfo")
             .update({ img: imgPath })
-            .eq("email", user?.email);
+            .eq("email", user?.email)
+            .select();
 
-          if (error) throw error;
-          toast.success("Doctor information updated successfully");
+          if (error) {
+            console.error("Error updating image:", error);
+            toast.error("Failed to update profile image");
+            return;
+          }
+
+          if (data) {
+            console.log("Image updated successfully");
+          }
         } catch (error) {
-          console.error("Error updating data:", error);
+          console.error("Error updating image:", error);
+          toast.error("An unexpected error occurred");
         }
       };
 
@@ -227,9 +270,8 @@ function DoctorOverView({
             .eq("email", fetchedData.email)
             .single();
 
-          if (error) {
+          if (error && error.code !== 'PGRST116') {  // Only show error if it's not a "no rows returned" error
             console.error("Error fetching doctor info:", error);
-            toast.error("Failed to fetch doctor information.");
             return;
           }
 
@@ -243,12 +285,11 @@ function DoctorOverView({
               feedback.length > 0 ? totalRating / feedback.length : 3;
             setValue(averageRating);
           } else {
-            setValue(3);
+            setValue(3);  // Default rating when no feedback exists
           }
         } catch (error) {
           console.error("Error processing doctor info:", error);
-          toast.error("Error processing feedback data.");
-          setValue(3);
+          setValue(3);  // Set default rating on error
         }
       }
     };
@@ -257,105 +298,101 @@ function DoctorOverView({
   }, [fetchedData]);
 
   return (
-    <>
-      <ToastContainer />
-
-      <MainContainer>
-        {/* Img & Name */}
-        <ImgBox>
-          {/* Img */}
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
-            <Img
-              src={imgPath}
-              alt="profile-image"
-              style={{
-                opacity: isLoading ? 0.5 : 1,
-                filter: isLoading ? "blur(2px)" : "blur(0px)",
-              }}
-              onLoad={() => setIsLoading(false)}
-            />
-          </Box>
-
-          {user && fetchedData && (
-            <NameRatingBox>
-              {/* Name */}
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <Name>
-                  {fetchedData
-                    ? fetchedData.name
-                    : user?.user_metadata?.full_name}
-                </Name>
-                {fetchedData && fetchedData?.approved === "YES" ? (
-                  <CheckCircleIcon
-                    sx={{
-                      fontSize: {
-                        xs: "0.8rem", // Small screens
-                        sm: "1rem", // Medium screens
-                        md: "1.2rem", // Large screens
-                      },
-                    }}
-                  />
-                ) : (
-                  <CloseIcon
-                    sx={{
-                      fontSize: {
-                        xs: "0.5rem", // Small screens
-                        sm: "1.2rem", // Medium screens
-                        md: "1.4rem", // Large screens
-                      },
-                    }}
-                  />
-                )}
-              </Box>
-
-              {/* Rating */}
-              <ShowRating
-                name="read-only"
-                value={value}
-                precision={0.5}
-                readOnly
-              />
-              {fetchedData && (
-                <Box sx={{ display: "flex", gap: 1 }}>
-                  <AddressCity variant="body2">
-                    {fetchedData.address},
-                  </AddressCity>
-                  <AddressCity variant="body2">{fetchedData.city}</AddressCity>
-                </Box>
-              )}
-            </NameRatingBox>
-          )}
-        </ImgBox>
-
-        <label
-          htmlFor="upload-profile-img"
-          style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
-        >
-          <input
-            type="file"
-            name="upload-img"
-            id="upload-profile-img"
-            style={{ display: "none" }}
-            onChange={handleFileInput}
-            ref={uploadRef}
-          />
-          <ImgBtn
-            variant="contained"
-            tabIndex={-1}
-            startIcon={<CloudUploadIcon />}
-            onClick={() => {
-              if (uploadRef?.current) {
-                uploadRef.current.click();
-              }
+    <MainContainer>
+      {/* Img & Name */}
+      <ImgBox>
+        {/* Img */}
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+          <Img
+            src={imgPath}
+            alt="profile-image"
+            style={{
+              opacity: isLoading ? 0.5 : 1,
+              filter: isLoading ? "blur(2px)" : "blur(0px)",
             }}
-          >
-            {imgPath && imgPath !== defaultImg ? "Edit" : "Add photo"}
-          </ImgBtn>
-        </label>
+            onLoad={() => setIsLoading(false)}
+          />
+        </Box>
 
-        {user && fetchedData && <ViewDetails fetchedData={fetchedData} />}
-      </MainContainer>
-    </>
+        {user && fetchedData && (
+          <NameRatingBox>
+            {/* Name */}
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <Name>
+                {fetchedData
+                  ? fetchedData.name
+                  : user?.user_metadata?.full_name}
+              </Name>
+              {fetchedData && fetchedData?.approved === "YES" ? (
+                <CheckCircleIcon
+                  sx={{
+                    fontSize: {
+                      xs: "0.8rem", // Small screens
+                      sm: "1rem", // Medium screens
+                      md: "1.2rem", // Large screens
+                    },
+                  }}
+                />
+              ) : (
+                <CloseIcon
+                  sx={{
+                    fontSize: {
+                      xs: "0.5rem", // Small screens
+                      sm: "1.2rem", // Medium screens
+                      md: "1.4rem", // Large screens
+                    },
+                  }}
+                />
+              )}
+            </Box>
+
+            {/* Rating */}
+            <ShowRating
+              name="read-only"
+              value={value}
+              precision={0.5}
+              readOnly
+            />
+            {fetchedData && (
+              <Box sx={{ display: "flex", gap: 1 }}>
+                <AddressCity variant="body2">
+                  {fetchedData.address},
+                </AddressCity>
+                <AddressCity variant="body2">{fetchedData.city}</AddressCity>
+              </Box>
+            )}
+          </NameRatingBox>
+        )}
+      </ImgBox>
+
+      <label
+        htmlFor="upload-profile-img"
+        style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+      >
+        <input
+          type="file"
+          name="upload-img"
+          id="upload-profile-img"
+          style={{ display: "none" }}
+          onChange={handleFileInput}
+          ref={uploadRef}
+        />
+        <ImgBtn
+          variant="contained"
+          tabIndex={-1}
+          startIcon={<CloudUploadIcon />}
+          onClick={() => {
+            if (uploadRef?.current) {
+              uploadRef.current.click();
+            }
+          }}
+        >
+          {imgPath && imgPath !== defaultImg ? "Edit" : "Add photo"}
+        </ImgBtn>
+      </label>
+
+      {user && fetchedData && <ViewDetails fetchedData={fetchedData} />}
+    </MainContainer>
   );
 }
 

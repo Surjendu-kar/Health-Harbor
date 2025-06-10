@@ -1,4 +1,5 @@
 import { supabase } from "./config";
+import { PostgrestError } from "@supabase/supabase-js";
 
 type DoctorInfo = {
   id: number;
@@ -14,6 +15,7 @@ type DoctorInfo = {
   experiences: string[];
   timeSlot: string[];
   about: string;
+  role: string;
 };
 
 // Add a type for the parameter
@@ -23,7 +25,7 @@ interface FetchDataParams {
 
 async function FetchSpecificDoctor({ userEmail }: FetchDataParams): Promise<{
   data: DoctorInfo[] | null;
-  error: Error | null;
+  error: PostgrestError | null;
 }> {
   try {
     const { data, error } = await supabase
@@ -34,7 +36,7 @@ async function FetchSpecificDoctor({ userEmail }: FetchDataParams): Promise<{
     return { data, error };
   } catch (error) {
     console.error("Error fetching data:", error);
-    return { data: null, error: error as Error };
+    return { data: null, error: error as PostgrestError };
   }
 }
 

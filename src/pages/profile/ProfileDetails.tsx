@@ -42,6 +42,7 @@ type DoctorInfo = {
   experiences: string[];
   timeSlot: string[];
   about: string;
+  role: string;
 };
 const blurOut = keyframes`
   from {
@@ -75,12 +76,28 @@ function ProfileDetails() {
   useEffect(() => {
     if (!fetchedData && user?.email) {
       const fetchData = async () => {
-        const { data, error } = await FetchSpecificDoctor({
-          userEmail: user.email,
-        });
-        setIsLoading(false);
-        if (!error) {
-          setFetchedData(data[0]);
+        try {
+          const { data, error } = await FetchSpecificDoctor({
+            userEmail: user.email,
+          });
+          setIsLoading(false);
+          if (!error && data && data.length > 0) {
+            setFetchedData(data[0]);
+          } else {
+            // If no doctor data found, try to fetch from patientInfo
+            const { data: patientData, error: patientError } = await supabase
+              .from("patientInfo")
+              .select("*")
+              .eq("email", user.email)
+              .single();
+            
+            if (!patientError && patientData) {
+              setFetchedData(patientData);
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          setIsLoading(false);
         }
       };
 
@@ -88,7 +105,7 @@ function ProfileDetails() {
     }
   }, [user?.email, fetchedData]);
 
-  const handleMenuSelect = (component) => {
+  const handleMenuSelect = (component: string) => {
     setActiveComponent(component);
   };
 
@@ -115,14 +132,13 @@ function ProfileDetails() {
       <Sidebar onMenuSelect={handleMenuSelect} />
       {activeComponent === "overview" && fetchedData?.role === "doctor" ? (
         <DoctorOverView user={user} fetchedData={fetchedData} />
-      ) : activeComponent === "overview" && fetchedData?.role !== "doctor" ? (
+      ) : activeComponent === "overview" && fetchedData?.role === "patient" ? (
         <PatientAppointment user={user} />
       ) : activeComponent === "profile" && fetchedData?.role === "doctor" ? (
         <Info user={user} fetchedData={fetchedData} />
-      ) : activeComponent === "profile" && fetchedData?.role !== "doctor" ? (
+      ) : activeComponent === "profile" && fetchedData?.role === "patient" ? (
         <PatientInfo user={user} />
-      ) : activeComponent === "appointments" &&
-        fetchedData?.role === "doctor" ? (
+      ) : activeComponent === "appointments" && fetchedData?.role === "doctor" ? (
         <Appointments user={user} fetchedData={fetchedData} />
       ) : null}
     </MainContainer>
