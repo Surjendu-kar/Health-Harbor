@@ -23,7 +23,7 @@ import dayjs from "dayjs";
 import { Edit, Check } from "@mui/icons-material";
 
 const MainContainer = styled(Box)(({ theme }) => ({
-  width: "50%",
+  width: "65%",
   margin: "2rem 0",
   [theme.breakpoints.down("lg")]: {
     margin: "0",

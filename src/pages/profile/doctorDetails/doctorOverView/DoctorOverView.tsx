@@ -10,7 +10,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const MainContainer = styled(Box)(({ theme }) => ({
-  width: "50%",
+  width: "65%",
   margin: "2rem 0",
   [theme.breakpoints.down("lg")]: {
     margin: "0",

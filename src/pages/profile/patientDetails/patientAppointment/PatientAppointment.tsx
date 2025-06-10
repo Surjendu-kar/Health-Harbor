@@ -5,7 +5,7 @@ import { supabase } from "../../../../supabase/config";
 import CheckIcon from "@mui/icons-material/Check";
 
 const MainContainer = styled(Box)(() => ({
-  width: "50%",
+  width: "65%",
   margin: "2rem 0",
 }));
 

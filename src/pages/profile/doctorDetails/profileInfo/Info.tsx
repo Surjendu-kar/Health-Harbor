@@ -22,7 +22,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import LocationFields from "../../../../components/locationFields/LocationFields";
 
 const MainContainer = styled(Box)(({ theme }) => ({
-  width: "50%",
+  width: "65%",
   margin: "2rem 0",
   [theme.breakpoints.down("lg")]: {
     margin: "0",
