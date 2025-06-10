@@ -1,29 +1,11 @@
 {
-  "buildCommand": "npm run build",
-  "routes": [
+  "rewrites": [
     {
-      "src": "^/(_next|static)/",
-      "headers": {
-        "Cache-Control": "s-maxage=31536000,immutable"
-      },
-      "continue": true
-    },
-    {
-      "src": "/[^.]+",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ],
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/node",
-      "config": {
-        "build": {
-          "env": {
-            "NPM_FLAGS": "--platform=linux --arch=x64"
-          }
-        }
-      }
-    }
-  ]
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite"
 }
