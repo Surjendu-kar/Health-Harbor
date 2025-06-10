@@ -10,6 +10,7 @@ import Contact from '../pages/contactPage/Contact';
 import ProfileDetails from '../pages/profile/ProfileDetails';
 import ResetPassword from '../pages/loginSignupPage/ResetPassword';
 import FeedbackSection from '../components/feedbackSection/FeedbackSection';
+import ProtectedRoute from '../components/ProtectedRoute';
 
 function Routing() {
   return (
@@ -23,7 +24,14 @@ function Routing() {
       <Route path="/service" element={<Service />} />
       <Route path="/about-us" element={<AboutUs />} />
       <Route path="/contact" element={<Contact />} />
-      <Route path="/profile" element={<ProfileDetails />} />
+      <Route 
+        path="/profile" 
+        element={
+          <ProtectedRoute>
+            <ProfileDetails />
+          </ProtectedRoute>
+        } 
+      />
       <Route path="/reset" element={<ResetPassword />} />
     </Routes>
   );
