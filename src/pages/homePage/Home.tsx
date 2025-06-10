@@ -1,4 +1,5 @@
 import { Box, Typography, keyframes } from "@mui/material";
+import { motion } from "framer-motion";
 import HeroSection from "./heroSection/HeroSection";
 import SpecializationDesign from "../../components/specializationDesign/SpecializationDesign";
 import heart from "../../assets/specializationImgs/heart.gif";
@@ -17,7 +18,7 @@ import GetAppointmentAnimation from "../../components/lottieAnimation/GetAppoint
 import BestMedicalTreatmentAnimation from "../../components/lottieAnimation/BestMedicalTreatmentAnimation";
 import BestMedicalStatement from "./heroSection/BestMedicalStatement";
 
-const HeroBox = styled(Box)(({ theme }) => ({
+const HeroBox = styled(motion(Box))(({ theme }) => ({
   // margin: "5rem auto",
   // width: "90%",
   height: "90vh",
@@ -46,7 +47,7 @@ const HeroBox = styled(Box)(({ theme }) => ({
   },
 }));
 
-const SpecializationBox = styled(Box)(({ theme }) => ({
+const SpecializationBox = styled(motion(Box))(({ theme }) => ({
   margin: "0rem auto",
   backgroundColor: "#f3f8ffb1",
   borderRadius: "30px",
@@ -97,7 +98,7 @@ const Heading = styled(Typography)(({ theme }) => ({
   },
 }));
 
-const Specialization = styled(Box)(({ theme }) => ({
+const Specialization = styled(motion(Box))(({ theme }) => ({
   display: "flex",
   width: "90%",
   margin: "0 auto",
@@ -119,7 +120,7 @@ const Specialization = styled(Box)(({ theme }) => ({
   },
 }));
 
-const GetAppointmentBox = styled(Box)(({ theme }) => ({
+const GetAppointmentBox = styled(motion(Box))(({ theme }) => ({
   height: "80vh",
   backgroundColor: "#f3f8ffb1",
   borderRadius: "30px",
@@ -136,7 +137,7 @@ const GetAppointmentBox = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down("sm")]: { height: "65vh", padding: "1rem" },
 }));
 
-const BestMedicalBox = styled(Box)(({ theme }) => ({
+const BestMedicalBox = styled(motion(Box))(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
@@ -191,12 +192,26 @@ const BestMedicalContainer = styled(Box)(({ theme }) => ({
 function Home() {
   return (
     <Box>
-      <HeroBox>
+      <HeroBox
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+      >
         <HeroSection />
       </HeroBox>
 
-      <SpecializationBox>
-        <Specialization>
+      <SpecializationBox
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+      >
+        <Specialization
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
           <Box
             sx={{
               display: "flex",
@@ -209,6 +224,11 @@ function Home() {
           </Box>
 
           <Box
+            component={motion.div}
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.4 }}
             sx={{
               display: "flex",
               flexDirection: "column",
@@ -241,7 +261,12 @@ function Home() {
         </Specialization>
       </SpecializationBox>
 
-      <GetAppointmentBox>
+      <GetAppointmentBox
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+      >
         <Box>
           <GetAppointment />
         </Box>
@@ -250,7 +275,12 @@ function Home() {
         </Box>
       </GetAppointmentBox>
 
-      <BestMedicalBox>
+      <BestMedicalBox
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+      >
         <BestMedicalHeading>
           Consult with our best Doctor for proper Treatment
         </BestMedicalHeading>

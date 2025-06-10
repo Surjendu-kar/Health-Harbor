@@ -1,33 +1,24 @@
 import { Box, Typography, styled } from "@mui/material";
+import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import HeroAnimation from "../../../components/lottieAnimation/HeroAnimation";
 
 function HeroSection() {
   const navigate = useNavigate();
 
-  const MainContainer = styled(Box)(({ theme }) => ({
+  const MainContainer = styled(motion(Box))(({ theme }) => ({
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
     gap: theme.spacing(1),
     overflow: "hidden",
   }));
-  const AnimatedBox = styled(Box)(({ theme }) => ({
+
+  const AnimatedBox = styled(motion(Box))(({ theme }) => ({
     paddingLeft: "1rem",
-    "@keyframes scrollAnimation": {
-      "0%": {
-        transform: "translateX(-50%)",
-        opacity: 0,
-      },
-      "100%": {
-        transform: "translateX(0)",
-        opacity: 1,
-      },
-    },
-    animation: "scrollAnimation 1s ease-out forwards",
   }));
 
-  const Heading = styled(Typography)(({ theme }) => ({
+  const Heading = styled(motion(Typography))(({ theme }) => ({
     fontSize: "3.25rem",
     fontWeight: "bold",
     color: "#15285ce8",
@@ -45,7 +36,8 @@ function HeroSection() {
       marginBottom: "0.25rem",
     },
   }));
-  const Title = styled(Typography)(({ theme }) => ({
+
+  const Title = styled(motion(Typography))(({ theme }) => ({
     fontSize: "1.35rem",
     fontWeight: "bold",
     color: "#030d28ba",
@@ -66,24 +58,17 @@ function HeroSection() {
     },
   }));
 
-  const FindADoctor = styled(Typography)(({ theme }) => ({
+  const FindADoctor = styled(motion(Typography))(({ theme }) => ({
     display: "inline",
     fontSize: "1.25rem",
     backgroundColor: "#deeaff8f",
     padding: "0.8rem",
     borderRadius: "7px",
-    // border: "1px solid black",
     boxShadow: "1px 5px 5px rgba(0, 0, 0, 0.2)",
     lineHeight: 2.5,
     cursor: "pointer",
-    transition: "font-size 0.2s ease",
     letterSpacing: "0.9px",
 
-
-    "&:hover": {
-      fontSize: "1.3rem",
-      boxShadow: "1px 7px 4px rgba(0, 0, 0, 0.2)",
-    },
     [theme.breakpoints.down("lg")]: {
       fontSize: "1rem",
       padding: "0.7rem",
@@ -101,7 +86,7 @@ function HeroSection() {
     },
   }));
 
-  const ImageContainer = styled(Box)(({ theme }) => ({
+  const ImageContainer = styled(motion(Box))(({ theme }) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -113,16 +98,46 @@ function HeroSection() {
   }));
 
   return (
-    <MainContainer>
+    <MainContainer
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
+    >
       <AnimatedBox>
-        <Heading>Welcome to HealthHarbor</Heading>
-        <Title>Find and manage your healthcare appointments with ease.</Title>
-        <FindADoctor onClick={() => navigate("/find-a-doctor")}>
+        <Heading
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          Welcome to HealthHarbor
+        </Heading>
+        <Title
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+        >
+          Find and manage your healthcare appointments with ease.
+        </Title>
+        <FindADoctor
+          onClick={() => navigate("/find-a-doctor")}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          whileHover={{ 
+            scale: 1.05,
+            boxShadow: "1px 7px 4px rgba(0, 0, 0, 0.2)"
+          }}
+          whileTap={{ scale: 0.95 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+        >
           Find a Doctor
         </FindADoctor>
       </AnimatedBox>
 
-      <ImageContainer>
+      <ImageContainer
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8, delay: 0.4 }}
+      >
         <HeroAnimation />
       </ImageContainer>
     </MainContainer>
